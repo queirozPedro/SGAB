@@ -28,9 +28,15 @@ O Sistema de Gerenciamento de Acervo Bibliotecário (SGAB) é um software que te
 * <b> Alteração de Administradores </b>: A possibilidade de alteradar dados dos administradores do sistema.
 
 
-## Documento do Projeto
+## Requisitos Não Funcionais
+* <b> Notificações de Empréstimo Via E-mail </b>: Usuários que fizeram empréstimos são notificados via e-mail, com informações adicionais
+* <b> Notificações de Devolução Via E-mail </b>: Quando o usuário devolve o exemplar, ele recebe um e-mail que confirma a devolução
+* <b> Notificações de Atraso de Devolução Via E-mail </b>: Passado o prazo de devolução, o usuário recebe um e-mail que avisa o atrazo
+
+  
+## 📑 Documento do Projeto
 <a href= "https://docs.google.com/document/d/1iDARX8hfD6CvpUMOUtUOb-ttJYDn8J8OdbGw0ZdQWqE/edit?usp=sharing">
-Projetinho
+Sistema de Gerenciamento de Acervo Bibliotecário (SGAB)
 </a>
 
 
