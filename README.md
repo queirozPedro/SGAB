@@ -6,7 +6,7 @@ O Sistema de Gerenciamento de Acervo Bibliotecário (SGAB) é um software que te
 
 
 ## Requisitos Funcionais
-**Acervo** : O acervo fisico da biblioteca, onde podem ser realizadas leituras dentro do espaço da biblioteca ou exemplares podem ser retirados por usuários cadastrados no sistema.
+**Acervo** : O acervo físico da biblioteca, onde podem ser realizadas leituras dentro do espaço da biblioteca ou exemplares podem ser retirados por usuários cadastrados no sistema.
 * <b> Cadastro de Exemplares </b>: O Cadastro de novos volumes no acervo
 * <b> Remoção de Exemplares </b>: A Remoção de exemplares do acervo
 * <b> Alteração de Exemplares </b>: Alterações dos dados de exemplares
@@ -20,18 +20,18 @@ O Sistema de Gerenciamento de Acervo Bibliotecário (SGAB) é um software que te
 * <b> Empréstimo de Exemplares </b>: Usuários cadastrados no sistema estão aptos a retirar exemplares do acervo em condição de empréstimo
 * <b> Devolução de Exemplares </b>: A devolução de exemplares que foram emprestados
 * <b> Renovação de Empréstimo </b>: A renovação de um empréstimo, que aumenta o prazo de entrega de um exemplar
-* <b> Penalização por Devolução Fora do Prazo em Empréstimo </b>: Penalização aplicada ao usuário no caso de atrazo na devolução de um exemplar
+* <b> Penalização por Devolução Fora do Prazo em Empréstimo </b>: Penalização aplicada ao usuário no caso de atraso na devolução de um exemplar
 
-**Administradores** : São os usuários com permissão de administradores do sistema. Os funcinários da biblioteca.
+**Administradores** : São os usuários com permissão de administradores do sistema. Os funcionários da biblioteca.
 * <b> Cadastro de Administradores </b>: O cadastro de administradores do SGAB
 * <b> Remoção de Administradores </b>: A remoção de administradores dos sistema
-* <b> Alteração de Administradores </b>: A possibilidade de alteradar dados dos administradores do sistema.
+* <b> Alteração de Administradores </b>: A possibilidade de alterar dados dos administradores do sistema.
 
 
 ## Requisitos Não Funcionais
 * <b> Notificações de Empréstimo Via E-mail </b>: Usuários que fizeram empréstimos são notificados via e-mail, com informações adicionais
 * <b> Notificações de Devolução Via E-mail </b>: Quando o usuário devolve o exemplar, ele recebe um e-mail que confirma a devolução
-* <b> Notificações de Atraso de Devolução Via E-mail </b>: Passado o prazo de devolução, o usuário recebe um e-mail que avisa o atrazo
+* <b> Notificações de Atraso de Devolução Via E-mail </b>: Passado o prazo de devolução, o usuário recebe um e-mail que avisa o atraso
 
   
 ## 📑 Documento do Projeto
@@ -78,3 +78,6 @@ O Sistema de Gerenciamento de Acervo Bibliotecário (SGAB) é um software que te
     </td>
   </tr>
 </table> 
+
+
+
