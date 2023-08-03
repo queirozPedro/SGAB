@@ -35,13 +35,19 @@ O Sistema de Gerenciamento de Acervo Bibliotecário (SGAB) é um software que te
 
   
 ## 📑 Documento do Projeto
-<a href= "https://docs.google.com/document/d/1iDARX8hfD6CvpUMOUtUOb-ttJYDn8J8OdbGw0ZdQWqE/edit?usp=sharing">
-Sistema de Gerenciamento de Acervo Bibliotecário (SGAB)
-</a>
+<table>
+  Documento: 
+  <a href= "https://docs.google.com/document/d/1iDARX8hfD6CvpUMOUtUOb-ttJYDn8J8OdbGw0ZdQWqE/edit?usp=sharing">
+    Sistema de Gerenciamento de Acervo Bibliotecário (SGAB)
+  </a>
+</table>
+<table>
+  Apresentação: 
+  <a href="https://www.canva.com/design/DAFqe9jHT6s/8AqfwoRr9gzYGnxeYwapXA/edit">
+    Apresentação do SGAB
+  </a>
+</table>
 
-<a href= "https://www.canva.com/design/DAFqe9jHT6s/8AqfwoRr9gzYGnxeYwapXA/editutm_content=DAFqe9jHT6s&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
-Apresentação do SGAB
-</a>
 
 ## :handshake: Colaboradores
 <table>
