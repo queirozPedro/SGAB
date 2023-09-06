@@ -53,6 +53,8 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
   </a>
 </table>
 
+## Diagrama de Classes
+![Diagrama de Classes](https://raw.githubusercontent.com/CaraChaato/SGAB/main/Arquivos/Diagrama%20de%20Classes%20UML%20-%20Sistema%20de%20Biblioteca%20-%20Fundo%20Transparente.png)
 
 ## :handshake: Colaboradores
 <table>
