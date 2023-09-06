@@ -56,7 +56,7 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
 
 ## :handshake: Colaboradores
 <table>
-  <tr>
+  <tr align="center">
     <td align="center">
       <a href="https://github.com/LilPuppet">
         <img src="https://avatars.githubusercontent.com/u/100712081?v=4" width="100px;" alt="Foto de Lavinia Dantas no GitHub"/><br>
@@ -83,6 +83,3 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
     </td>
   </tr>
 </table> 
-
-
-
