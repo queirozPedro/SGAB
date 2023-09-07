@@ -39,6 +39,9 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
 * <b> [RNF003] Disponibilidade </b>: O SGAB deve estar sempre disponível para utilização, mesmo em cenários que a internet estiver instável.
 * <b> [RNF004] Desempenho </b>: Deve ser rápido, com tempo de inicialização inferior a 5 segundos.
   
+## Teste de Caixa Branca
+Levando em consideração a modularidade do sistema, e a disponibilidade de todo o código fonte, o tipo de teste escolhido foi o teste de caixa branca. O teste de caixa branca (também chamado de teste estrutural ou teste de caixa transparente), consiste em uma visualização lógica do código fonte, buscando erros ou inconsistências. Nesse teste é importante percorrer todos os caminhos do código, analisando sua complexidade e criando um grafo de fluxo de dados. 
+
 ## 📑 Documentação do Projeto
 <table>
   Documento do Projeto: 
@@ -57,8 +60,8 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
 ![Diagrama de Classes](https://raw.githubusercontent.com/CaraChaato/SGAB/main/Arquivos/Diagrama%20de%20Classes%20UML%20-%20Sistema%20de%20Biblioteca%20-%20Fundo%20Transparente.png)
 
 ## :handshake: Colaboradores
-<table>
-  <tr align="center">
+<table align="center">
+  <tr>
     <td align="center">
       <a href="https://github.com/LilPuppet">
         <img src="https://avatars.githubusercontent.com/u/100712081?v=4" width="100px;" alt="Foto de Lavinia Dantas no GitHub"/><br>
