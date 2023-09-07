@@ -40,7 +40,7 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
 * <b> [RNF004] Desempenho </b>: Deve ser rápido, com tempo de inicialização inferior a 5 segundos.
   
 ## Teste de Caixa Branca
-Levando em consideração a modularidade do sistema, e a disponibilidade de todo o código fonte, o tipo de teste escolhido foi o teste de caixa branca. O teste de caixa branca (também chamado de teste estrutural ou teste de caixa transparente), consiste em uma visualização lógica do código fonte, buscando erros ou inconsistências. Nesse teste é importante percorrer todos os caminhos do código, analisando sua complexidade e criando um grafo de fluxo de dados. 
+Levando em consideração a modularidade do sistema, e a disponibilidade de todo o código fonte, o tipo de teste escolhido foi o teste de caixa branca. O teste de caixa branca (também chamado de teste estrutural ou teste de caixa transparente), consiste em uma visualização lógica do código fonte, buscando erros ou inconsistências. Nesse teste é importante percorrer todos os caminhos do código, analisando sua complexidade e criando um grafo de fluxo de controle. 
 
 ## 📑 Documentação do Projeto
 <table>
