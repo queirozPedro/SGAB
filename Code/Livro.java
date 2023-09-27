@@ -1,127 +1,94 @@
+import java.sql.*;
+
 public class Livro {
-    private int idLivro;
+    // Table livro
+    private int idLivro; 
     private String titulo;
-    private String isbn;
-    private String autor;
-    private String dataDaPuplicacao;
-    private String editora;
     private String genero;
+    private String autor;
+    private String dataPublicacao;
     private String edicao;
-    private boolean livroDeAcervo;
-    private String dataDeEmprestimo;
-    private UsuarioCliente empretadoPara;
+    private String editor;
+    private String isbn;
 
+    // Table statuslivro
+    //      int idLivro;
+    private boolean livroAcervo;
+    private boolean livroDisponivel;
+
+    // Table empretimo
+    private int idUsuario;
+    //      int idLivro;
+    private String dataEmprestimo;
     
-    public Livro(int idLivro, String titulo, String isbn, String autor, String dataDaPuplicacao, String editora,
-            String genero, String edicao, boolean livroDeAcervo, String dataDeEmprestimo,
-            UsuarioCliente empretadoPara) {
+    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
+            String editor, String isbn, boolean livroAcervo, boolean livroDisponivel, int idUsuario,
+            String dataEmprestimo) {
         this.idLivro = idLivro;
         this.titulo = titulo;
-        this.isbn = isbn;
-        this.autor = autor;
-        this.dataDaPuplicacao = dataDaPuplicacao;
-        this.editora = editora;
         this.genero = genero;
+        this.autor = autor;
+        this.dataPublicacao = dataPublicacao;
         this.edicao = edicao;
-        this.livroDeAcervo = livroDeAcervo;
-        this.dataDeEmprestimo = dataDeEmprestimo;
-        this.empretadoPara = empretadoPara;
+        this.editor = editor;
+        this.isbn = isbn;
+        this.livroAcervo = livroAcervo;
+        this.livroDisponivel = livroDisponivel;
+        this.idUsuario = idUsuario;
+        this.dataEmprestimo = dataEmprestimo;
     }
 
-    public int getIdLivro() {
-        return idLivro;
-    }
-
-    public void setIdLivro(int idLivro) {
+    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao, String editor, String isbn) {
         this.idLivro = idLivro;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
         this.titulo = titulo;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
+        this.genero = genero;
+        this.autor = autor;
+        this.dataPublicacao = dataPublicacao;
+        this.edicao = edicao;
+        this.editor = editor;
         this.isbn = isbn;
     }
 
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
-    public String getDataDaPuplicacao() {
-        return dataDaPuplicacao;
-    }
-
-    public void setDataDaPuplicacao(String dataDaPuplicacao) {
-        this.dataDaPuplicacao = dataDaPuplicacao;
-    }
-
-    public String getEditora() {
-        return editora;
-    }
-
-    public void setEditora(String editora) {
-        this.editora = editora;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
+    public Livro(String titulo, String genero, String autor, String dataPublicacao, String edicao, String editor,
+            String isbn, boolean livroAcervo, boolean livroDisponivel, int idUsuario, String dataEmprestimo) {
+        this.titulo = titulo;
         this.genero = genero;
-    }
-
-    public String getEdicao() {
-        return edicao;
-    }
-
-    public void setEdicao(String edicao) {
+        this.autor = autor;
+        this.dataPublicacao = dataPublicacao;
         this.edicao = edicao;
+        this.editor = editor;
+        this.isbn = isbn;
+        this.livroAcervo = livroAcervo;
+        this.livroDisponivel = livroDisponivel;
+        this.idUsuario = idUsuario;
+        this.dataEmprestimo = dataEmprestimo;
     }
 
-    public boolean isLivroDeAcervo() {
-        return livroDeAcervo;
-    }
-
-    public void setLivroDeAcervo(boolean livroDeAcervo) {
-        this.livroDeAcervo = livroDeAcervo;
-    }
-
-    public String getDataDeEmprestimo() {
-        return dataDeEmprestimo;
-    }
-
-    public void setDataDeEmprestimo(String dataDeEmprestimo) {
-        this.dataDeEmprestimo = dataDeEmprestimo;
-    }
-
-    public UsuarioCliente getEmpretadoPara() {
-        return empretadoPara;
-    }
-
-    public void setEmpretadoPara(UsuarioCliente empretadoPara) {
-        this.empretadoPara = empretadoPara;
+    public static Livro BuscaLivro(int id){        
+        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+            if(connection != null){
+                String query = "Select * from livro where idLivro = ?";
+                PreparedStatement state = connection.prepareStatement(query);
+                state.setInt(1, id);
+                ResultSet result = state.executeQuery();
+                while (result.next()) {
+                    return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7), result.getString(8));
+                }
+            }
+            else
+                System.out.println("ERROOO!!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
     }
 
     @Override
     public String toString() {
-        return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", isbn=" + isbn + ", autor=" + autor
-                + ", dataDaPuplicacao=" + dataDaPuplicacao + ", editora=" + editora + ", genero=" + genero + ", edicao="
-                + edicao + ", livroDeAcervo=" + livroDeAcervo + ", dataDeEmprestimo=" + dataDeEmprestimo
-                + ", empretadoPara=" + empretadoPara + "]";
-    }
+        return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", genero=" + genero + ", autor=" + autor
+                + ", dataPublicacao=" + dataPublicacao + ", edicao=" + edicao + ", editor=" + editor + ", isbn="
+                + isbn + ", livroAcervo=" + livroAcervo + ", livroDisponivel=" + livroDisponivel + ", idUsuario="
+                + idUsuario + ", dataEmprestimo=" + dataEmprestimo + "]";
+    }        
 
 }

@@ -6,9 +6,11 @@ public class PostgreSQLConnection {
     private static PostgreSQLConnection instance; // Instancia de Banco de Dados
     private Connection connection; // Conectar o Banco 
 
-    private final String url = "salt.db.elephantsql.com"; // Url do Banco
-    private final String username = "pdhubmnq"; // Username do Banco
-    private final String password = "5rvDta-Ic9bjXJzKgfP4MW5zFFhQwiw5"; // Senha do Banco
+
+    private final String url = "jdbc:postgresql://salt.db.elephantsql.com:5432/pdhubmnq";
+    private final String username = "pdhubmnq";
+    private final String password = "5rvDta-Ic9bjXJzKgfP4MW5zFFhQwiw5";
+
 
     // Cria uma conexão com o Banco de Dados
     private PostgreSQLConnection() {
