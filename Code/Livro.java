@@ -48,8 +48,11 @@ public class Livro {
         this.livroDisponivel = livroDisponivel;
     }
 
-
-
+    /**
+     * Metodo de busca por id, exclusivo para adms
+     * @param id
+     * @return Livro
+     */
     public static Livro BuscaLivroId(int id){        
         try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
             String query = "Select * from livro where idLivro = ?";
