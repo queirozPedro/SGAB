@@ -77,8 +77,7 @@ public class Livro {
 
     public void inserirLivro(){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
-            String query = "INSERT INTO Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, livroAcervo, livroDisponivel)"
-                        + "VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, livroAcervo, livroDisponivel) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, titulo);
             state.setString(2, genero);
@@ -89,10 +88,9 @@ public class Livro {
             state.setString(7, isbn);
             state.setBoolean(8, livroAcervo);
             state.setBoolean(9, livroDisponivel);
-            state.executeQuery();
+            state.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("oi");
             System.out.println(e);
         }
 
