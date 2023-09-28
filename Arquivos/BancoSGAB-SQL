@@ -33,7 +33,7 @@ CREATE TABLE Livro (
     Titulo VARCHAR(50) NOT NULL,
     Genero VARCHAR(20) NOT NULL,
     Autor VARCHAR(255) NOT NULL,
-    DataPublicacao DATE NOT NULL,
+    DataPublicacao VARCHAR(10) NOT NULL,
     Edicao VARCHAR(50) NOT NULL,
     Editora VARCHAR(50) NOT NULL,
     ISBN VARCHAR(13) NOT NULL, 
@@ -44,7 +44,9 @@ CREATE TABLE Livro (
 CREATE TABLE Emprestimo (
     idusuario Serial,
     idlivro Serial,
-    DataEmprestimo DATE NOT NULL,
+    DataEmprestimo VARCHAR(10) NOT NULL,
     FOREIGN KEY (idusuario) REFERENCES Usuario(idusuario),
     FOREIGN KEY (idlivro) REFERENCES Livro(idlivro)
 );
+
+-- Drop table emprestimo, usuarioadm, usuariocliente, enderecousuario, livro, usuario;
