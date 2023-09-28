@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Livro {
     // Table livro
-    private int idLivro; 
+    private int idLivro;
     private String titulo;
     private String genero;
     private String autor;
@@ -15,10 +15,10 @@ public class Livro {
     private boolean livroDisponivel;
 
     // Table empretimo
-    private int idUsuario;
-    //      int idLivro;
-    private String dataEmprestimo;
-    
+    //private int idUsuario;
+    // int idLivro;
+    //private String dataEmprestimo;
+
     public Livro(String titulo, String genero, String autor, String dataPublicacao, String edicao, String editora,
             String isbn, boolean livroAcervo, boolean livroDisponivel, int idUsuario, String dataEmprestimo) {
         this.titulo = titulo;
@@ -30,12 +30,13 @@ public class Livro {
         this.isbn = isbn;
         this.livroAcervo = livroAcervo;
         this.livroDisponivel = livroDisponivel;
-        this.idUsuario = idUsuario;
-        this.dataEmprestimo = dataEmprestimo;
+        // this.idUsuario = idUsuario;
+        // this.dataEmprestimo = dataEmprestimo;
     }
 
-    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao, String editora,
-                String isbn, boolean livroAcervo, boolean livroDisponivel) {
+    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
+            String editora,
+            String isbn, boolean livroAcervo, boolean livroDisponivel) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -50,17 +51,20 @@ public class Livro {
 
     /**
      * Metodo de busca por id, exclusivo para adms
+     * 
      * @param id
      * @return Livro
      */
-    public static Livro BuscaLivroId(int id){        
-        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+    public static Livro BuscaLivroId(int id) {
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
             String query = "Select * from livro where idLivro = ?";
             PreparedStatement state = connection.prepareStatement(query);
             state.setInt(1, id);
             ResultSet result = state.executeQuery();
             while (result.next()) {
-                 return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7),result.getString(8), result.getBoolean(9), result.getBoolean(10));
+                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4),
+                        result.getString(5), result.getString(6), result.getString(7), result.getString(8),
+                        result.getBoolean(9), result.getBoolean(10));
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -68,22 +72,51 @@ public class Livro {
         return null;
     }
 
-    public static Livro BuscaLivroTitulo(String titulo){        
-        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {//tente fazer a conexão antes de executar a busca
-            String query = "Select * from livro where titulo = ?"; //Busca no banco de dados
+    public static Livro BuscaLivro(Scanner sc) {
+        System.out.println("Por que parametro deseja buscar o livro:\n1-Titulo;\n2-Autor;\n3-Genero;\n4-Voltar;");
+        int op = sc.nextInt();
+        String tipo, busca;
+        sc.nextLine();
+        switch (op) {
+            case 1:
+                tipo = "titulo";
+                System.out.println("titulo: ");
+                busca = sc.nextLine();
+                break;
+            case 2:
+                tipo = "autor";
+                System.out.println("Autor: ");
+                busca = sc.nextLine();
+                break;
+            case 3:
+                tipo = "genero";
+                System.out.println("Genero: ");
+                busca = sc.nextLine();
+                break;
+            case 4: // sair
+            default:
+                return null;
+        }
+
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+
+            String query = "Select * from livro where ? = ?"; // Busca no banco de dados
             PreparedStatement state = connection.prepareStatement(query);
-            state.setString(1, titulo);// Preenche o ? com o titulo
-            ResultSet result = state.executeQuery();//Resultados da execução da query.
-            while (result.next()) { //Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7),result.getString(8), result.getBoolean(9), result.getBoolean(10));
+            state.setString(1, tipo);
+            state.setString(2, busca);// Preenche o 2 ? com a busca
+            ResultSet result = state.executeQuery();// Resultados da execução da query.
+            
+            // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
+            while (result.next()) { 
+                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
             }
-        } catch (Exception e) { 
+        } catch (Exception e) {
             System.out.println(e);
         }
         return null;
     }
 
-    public void inserirLivro(){
+    public void inserirLivro() {
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
             String query = "INSERT INTO Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, livroAcervo, livroDisponivel) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement state = connection.prepareStatement(query);
@@ -103,7 +136,7 @@ public class Livro {
         }
     }
 
-    public void excluirLivro(){
+    public void excluirLivro() {
 
     }
 
@@ -112,7 +145,6 @@ public class Livro {
         return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", genero=" + genero + ", autor=" + autor
                 + ", dataPublicacao=" + dataPublicacao + ", edicao=" + edicao + ", editora=" + editora + ", isbn="
                 + isbn + ", livroAcervo=" + livroAcervo + ", livroDisponivel=" + livroDisponivel;
-    }        
+    }
 
-    
 }
