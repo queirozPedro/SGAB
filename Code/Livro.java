@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.Scanner;
 
 public class Livro {
     // Table livro
@@ -33,9 +34,8 @@ public class Livro {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
-            String editora, String isbn, boolean livroAcervo, boolean livroDisponivel, int idUsuario,
-            String dataEmprestimo) {
+    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao, String editora,
+                String isbn, boolean livroAcervo, boolean livroDisponivel) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -48,17 +48,7 @@ public class Livro {
         this.livroDisponivel = livroDisponivel;
     }
 
-    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
-            String editora, String isbn) {
-        this.idLivro = idLivro;
-        this.titulo = titulo;
-        this.genero = genero;
-        this.autor = autor;
-        this.dataPublicacao = dataPublicacao;
-        this.edicao = edicao;
-        this.editora = editora;
-        this.isbn = isbn;
-    }
+
 
     public static Livro BuscaLivroId(int id){        
         try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
@@ -67,9 +57,24 @@ public class Livro {
             state.setInt(1, id);
             ResultSet result = state.executeQuery();
             while (result.next()) {
-                 return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7), result.getString(8));
+                 return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7),result.getString(8), result.getBoolean(9), result.getBoolean(10));
             }
         } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public static Livro BuscaLivroTitulo(String titulo){        
+        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {//tente fazer a conexão antes de executar a busca
+            String query = "Select * from livro where titulo = ?"; //Busca no banco de dados
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, titulo);// Preenche o ? com o titulo
+            ResultSet result = state.executeQuery();//Resultados da execução da query.
+            while (result.next()) { //Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
+                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7),result.getString(8), result.getBoolean(9), result.getBoolean(10));
+            }
+        } catch (Exception e) { 
             System.out.println(e);
         }
         return null;
@@ -93,6 +98,9 @@ public class Livro {
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public void excluirLivro(){
 
     }
 
@@ -100,8 +108,8 @@ public class Livro {
     public String toString() {
         return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", genero=" + genero + ", autor=" + autor
                 + ", dataPublicacao=" + dataPublicacao + ", edicao=" + edicao + ", editora=" + editora + ", isbn="
-                + isbn + ", livroAcervo=" + livroAcervo + ", livroDisponivel=" + livroDisponivel + ", idUsuario="
-                + idUsuario + ", dataEmprestimo=" + dataEmprestimo + "]";
+                + isbn + ", livroAcervo=" + livroAcervo + ", livroDisponivel=" + livroDisponivel;
     }        
 
+    
 }
