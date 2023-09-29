@@ -100,9 +100,9 @@ public class Livro {
 
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
 
-            String query = "Select * from livro where "+ tipo +" = ?"; // Busca no banco de dados, neste caso, já que o ? é substituido por
+            String query = "Select * from livro where "+ tipo +" like ? "; // Busca no banco de dados, neste caso, já que o ? é substituido por
             PreparedStatement state = connection.prepareStatement(query); // 'algo', usamos a varivavel diretamente para a pesquisa ficar correta
-            state.setString(1, busca);
+            state.setString(1, "%" + busca + "%");
             ResultSet result = state.executeQuery();// Resultados da execução da query.
             
             // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
