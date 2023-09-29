@@ -73,29 +73,27 @@ public class Livro {
     }
 
     public static Livro BuscaLivro(Scanner sc) {
-        System.out.println("Por que parametro deseja buscar o livro:\n1-Titulo;\n2-Autor;\n3-Genero;\n4-Voltar;");
-        int op = sc.nextInt();
         String tipo, busca;
-        sc.nextLine();
+        System.out.println("Por que parametro deseja buscar o livro:\n1-Titulo;\n2-Autor;\n3-Genero;\n0-Voltar;");
+        int op = sc.nextInt();
 
         switch (op) {
             case 1:
-                tipo = "titulo";
-                System.out.println("titulo: ");
+                tipo = "Titulo";
+                System.out.print("Titulo: ");
                 busca = sc.nextLine();
                 break;
             case 2:
-                tipo = "autor";
-                System.out.println("Autor: ");
+                tipo = "Tutor";
+                System.out.print("Autor: ");
                 busca = sc.nextLine();
                 break;
             case 3:
-                tipo = "genero";
-                System.out.println("Genero: ");
+                tipo = "Genero";
+                System.out.print("Genero: ");
                 busca = sc.nextLine();
                 break;
-            case 4: // sair
-            default:
+            case 0: // sair
                 return null;
         }
 
