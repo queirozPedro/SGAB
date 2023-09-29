@@ -9,7 +9,7 @@ public class MainProjeto {
         // Livro livro = Livro.BuscaLivroId(5);
         // System.out.println(livro);
         Livro livro = Livro.BuscaLivro(sc);
-        System.out.println(livro);
+        System.out.println("oi"+ livro);
 
         sc.close();
     }

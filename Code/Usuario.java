@@ -1,72 +1,44 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 public class Usuario {
+
+    private String cpf;
     private String nome;
-    private int cpf;
     private String telefone;
     private String senha;
     private String email;
-    private String endereco;
 
-    public Usuario(String nome, int cpf, String telefone, String senha, String email, String endereco) {
-        this.nome = nome;
+    public Usuario( String cpf, String nome, String telefone, String senha, String email) {
         this.cpf = cpf;
+        this.nome = nome;
         this.telefone = telefone;
         this.senha = senha;
         this.email = email;
-        this.endereco = endereco;
     }
 
-    public String getNome() {
-        return nome;
+    public void insereUsuario(){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "INSERT Into usuario (cpf, nome, telefone, senha, email) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            state.setString(2, nome);
+            state.setString(3, telefone);
+            state.setString(4, senha);
+            state.setString(5, email);
+            state.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public int getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(int cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario [nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone + ", senha=" + senha + ", email="
-                + email + ", endereco=" + endereco + "]";
-    }
+    // public void buscaUsuarioId(){
+    //     try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+    //         String 
+    //         PreparedStatement state = connection.prepareStatement(query);
+    //     } catch (Exception e) {
+    //         // TODO: handle exception
+    //     }
+    // }
 
 }

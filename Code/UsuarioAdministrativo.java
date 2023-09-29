@@ -1,9 +1,8 @@
 public class UsuarioAdministrativo extends Usuario {
     private int idAdministrativo;
 
-    public UsuarioAdministrativo(String nome, int cpf, String telefone, String senha, String email, String endereco,
-        int idAdministrativo) {
-        super(nome, cpf, telefone, senha, email, endereco);
+    public UsuarioAdministrativo(String nome, String cpf, String telefone, String senha, String email, int idAdministrativo) {
+        super(nome, cpf, telefone, senha, email);
         this.idAdministrativo = idAdministrativo;
     }
 

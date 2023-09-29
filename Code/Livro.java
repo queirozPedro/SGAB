@@ -76,33 +76,33 @@ public class Livro {
         String tipo, busca;
         System.out.println("Por que parametro deseja buscar o livro:\n1-Titulo;\n2-Autor;\n3-Genero;\n0-Voltar;");
         int op = sc.nextInt();
-
+        sc.nextLine();
         switch (op) {
             case 1:
-                tipo = "Titulo";
+                tipo = "titulo";
                 System.out.print("Titulo: ");
                 busca = sc.nextLine();
                 break;
             case 2:
-                tipo = "Tutor";
+                tipo = "autor";
                 System.out.print("Autor: ");
                 busca = sc.nextLine();
                 break;
             case 3:
-                tipo = "Genero";
+                tipo = "genero";
                 System.out.print("Genero: ");
                 busca = sc.nextLine();
                 break;
             case 0: // sair
+            default:
                 return null;
         }
 
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
 
-            String query = "Select * from livro where ? like '%?%' "; // Busca no banco de dados
+            String query = "Select * from livro where "+ tipo +" = ?"; // Busca no banco de dados
             PreparedStatement state = connection.prepareStatement(query);
-            state.setString(1, tipo);
-            state.setString(2, busca);
+            state.setString(1, busca);
             ResultSet result = state.executeQuery();// Resultados da execução da query.
             
             // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
