@@ -39,4 +39,10 @@ CREATE TABLE Emprestimo (
     FOREIGN KEY (idlivro) REFERENCES Livro(idlivro)
 );
 
+CREATE TABLE Penalizacao(
+    idusuario Serial,
+    DataPenalizacao VARCHAR(10),
+    FOREIGN KEY (idusuario) REFERENCES Usuario(idusuario)
+)
+
 -- Drop table adm, cliente, endereco, livro, usuario;

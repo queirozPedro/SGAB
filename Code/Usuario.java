@@ -55,6 +55,7 @@ public class Usuario {
             while (result.next()) {
                 return new Usuario(result.getInt(1),result.getString(2), result.getString(3), result.getString(4), result.getString(5),result.getString(6));
             }
+            
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -76,6 +77,54 @@ public class Usuario {
     public String toString() {
         return "Usuario [idUsuario=" + idUsuario + ", cpf=" + cpf + ", nome=" + nome + ", telefone=" + telefone
                 + ", senha=" + senha + ", email=" + email + "]";
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     

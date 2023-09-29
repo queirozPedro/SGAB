@@ -1,32 +1,27 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 public class UsuarioCliente extends Usuario {
-    private int livrosEmprestados;
-    private int idCliente;
 
-    public UsuarioCliente(int idUsuario, String nome, String cpf, String telefone, String senha, String email, int livrosEmprestados, int idCliente) {
-        super(idUsuario, nome, cpf, telefone, senha, email);
-        this.livrosEmprestados = livrosEmprestados;
-        this.idCliente = idCliente;
+    public UsuarioCliente(int idUsuario, String cpf, String nome, String telefone, String senha, String email) {
+        super(idUsuario, cpf, nome, telefone, senha, email);
     }
 
-    public int getLivrosEmprestados() {
-        return livrosEmprestados;
-    }
-
-    public void setLivrosEmprestados(int livrosEmprestados) {
-        this.livrosEmprestados = livrosEmprestados;
-    }
-
-    public int getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+    public void insereCliente(Usuario usuario){
+        usuario.insereUsuario();
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "INSERT INTO Cliente";   
+            PreparedStatement state = connection.prepareStatement(query);
+            state.executeUpdate();
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
 
     @Override
     public String toString() {
-        return "UsuarioCliente [livrosEmprestados=" + livrosEmprestados + ", idCliente=" + idCliente + "]";
+        return super.toString();
     }
 
 }
