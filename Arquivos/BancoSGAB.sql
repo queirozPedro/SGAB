@@ -7,22 +7,12 @@ CREATE TABLE Usuario (
     email VARCHAR(75) NOT NULL
 );
 
-CREATE TABLE EnderecoUsuario (
-    idusuario Serial PRIMARY KEY,
-    Rua VARCHAR(50) NOT NULL,
-    Numero INT NOT NULL,
-    Cep VARCHAR(8) NOT NULL,
-    Uf VARCHAR(2) NOT NULL,
-    Cidade VARCHAR(50) NOT NULL,
-    FOREIGN KEY (idusuario) REFERENCES Usuario(idusuario)
-);
-
-CREATE TABLE UsuarioAdm (
+CREATE TABLE Adm (
     idusuario Serial PRIMARY KEY,
     FOREIGN KEY (idusuario) REFERENCES Usuario(idusuario)
 );
 
-CREATE TABLE UsuarioCliente (
+CREATE TABLE Cliente (
     idusuario Serial PRIMARY KEY,
     livrosEmprestados VARCHAR(3) NOT NULL, 
     FOREIGN KEY (idusuario) REFERENCES Usuario(idusuario)
@@ -49,4 +39,4 @@ CREATE TABLE Emprestimo (
     FOREIGN KEY (idlivro) REFERENCES Livro(idlivro)
 );
 
--- Drop table emprestimo, usuarioadm, usuariocliente, enderecousuario, livro, usuario;
+-- Drop table usuarioadm, usuariocliente, enderecousuario, livro, usuario;

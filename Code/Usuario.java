@@ -32,13 +32,13 @@ public class Usuario {
         }
     }
 
-    // public void buscaUsuarioId(){
-    //     try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-    //         String 
-    //         PreparedStatement state = connection.prepareStatement(query);
-    //     } catch (Exception e) {
-    //         // TODO: handle exception
-    //     }
-    // }
+    public void buscaUsuarioId(){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "SELECT "
+            PreparedStatement state = connection.prepareStatement(query);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
 
 }
