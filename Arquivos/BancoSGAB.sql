@@ -39,4 +39,4 @@ CREATE TABLE Emprestimo (
     FOREIGN KEY (idlivro) REFERENCES Livro(idlivro)
 );
 
--- Drop table usuarioadm, usuariocliente, enderecousuario, livro, usuario;
+-- Drop table adm, cliente, endereco, livro, usuario;
