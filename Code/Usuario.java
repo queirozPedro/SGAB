@@ -11,8 +11,18 @@ public class Usuario {
     private String senha;
     private String email;
 
+    public Usuario(){};
+
     public Usuario(int idUsuario, String cpf, String nome, String telefone, String senha, String email) {
         this.idUsuario = idUsuario;
+        this.cpf = cpf;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.senha = senha;
+        this.email = email;
+    }
+
+    public Usuario(String cpf, String nome, String telefone, String senha, String email) {
         this.cpf = cpf;
         this.nome = nome;
         this.telefone = telefone;
@@ -37,7 +47,7 @@ public class Usuario {
 
     public static Usuario buscaUsuarioId(int idUsuario){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "SELECT * From usuario where id = ?";
+            String query = "SELECT * From usuario where idusuario = ?";
             PreparedStatement state = connection.prepareStatement(query);
             state.setInt(1, idUsuario);
             ResultSet result = state.executeQuery();
@@ -51,14 +61,23 @@ public class Usuario {
         return null;
     }
 
-    public void removeUsuario(){
+    public static void removeUsuario(int idUsuario){
+        Usuario aux = buscaUsuarioId(idUsuario);
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "DELETE From usuario where id = ?";
             PreparedStatement state = connection.prepareStatement(query);
-            state.setInt(1, idUsuario);
+            state.setInt(1, aux.idUsuario);
             state.executeQuery();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Usuario [idUsuario=" + idUsuario + ", cpf=" + cpf + ", nome=" + nome + ", telefone=" + telefone
+                + ", senha=" + senha + ", email=" + email + "]";
+    }
+
+    
 }
