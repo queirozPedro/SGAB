@@ -62,11 +62,10 @@ public class Usuario {
     }
 
     public static void removeUsuario(int idUsuario){
-        Usuario aux = buscaUsuarioId(idUsuario);
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "DELETE From usuario where id = ?";
             PreparedStatement state = connection.prepareStatement(query);
-            state.setInt(1, aux.idUsuario);
+            state.setInt(1, idUsuario);
             state.executeQuery();
         } catch (Exception e) {
             System.out.println(e);
