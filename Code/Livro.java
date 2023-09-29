@@ -77,6 +77,7 @@ public class Livro {
         int op = sc.nextInt();
         String tipo, busca;
         sc.nextLine();
+
         switch (op) {
             case 1:
                 tipo = "titulo";
@@ -100,10 +101,10 @@ public class Livro {
 
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
 
-            String query = "Select * from livro where ? = '%?%' "; // Busca no banco de dados
+            String query = "Select * from livro where ? like '%?%' "; // Busca no banco de dados
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, tipo);
-            state.setString(2, busca);// Preenche o 2 ? com a busca
+            state.setString(2, busca);
             ResultSet result = state.executeQuery();// Resultados da execução da query.
             
             // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
