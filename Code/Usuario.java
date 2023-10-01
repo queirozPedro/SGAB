@@ -4,39 +4,29 @@ import java.sql.ResultSet;
 
 public class Usuario {
 
-    private int idUsuario;
     private String cpf;
     private String nome;
-    private String telefone;
     private String senha;
     private String email;
 
     public Usuario(){};
-
-    public Usuario(int idUsuario, String cpf, String nome, String telefone, String senha, String email) {
-        this.idUsuario = idUsuario;
+    public Usuario(String cpf, String nome, String senha, String email) {
         this.cpf = cpf;
         this.nome = nome;
-        this.telefone = telefone;
         this.senha = senha;
         this.email = email;
     }
 
-    public Usuario(String cpf, String nome, String telefone, String senha, String email) {
-        this.cpf = cpf;
-        this.nome = nome;
-        this.telefone = telefone;
-        this.senha = senha;
-        this.email = email;
-    }
-
+    /**
+     * Uma metodo que insere uma instância de Usuario no banco de dados
+     */
     public void insereUsuario(){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "INSERT Into usuario (cpf, nome, telefone, senha, email) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT Into usuario (cpf, nome, telefone, senha, email) VALUES (?, ?, ?, ?, ?)"; // remover telefone
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf);
             state.setString(2, nome);
-            state.setString(3, telefone);
+            state.setString(3, telefone); // Falta remover
             state.setString(4, senha);
             state.setString(5, email);
             state.executeUpdate();
@@ -45,14 +35,20 @@ public class Usuario {
         }
     }
 
-    public static Usuario buscaUsuarioId(int idUsuario){
+    /**
+     * Recebe um cpf de um usuario e retorna uma instância dele
+     * @param idUsuario
+     * @return Usuario
+     */
+    public static Usuario buscaUsuarioId(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "SELECT * From usuario where idusuario = ?";
+            String query = "SELECT * From usuario where idusuario = ?"; // trocar idusuario para cpf
             PreparedStatement state = connection.prepareStatement(query);
-            state.setInt(1, idUsuario);
+            state.setInt(1, idUsuario); // trocar pra cpf
             ResultSet result = state.executeQuery();
 
-            while (result.next()) {
+            while (result.next()) { 
+                // Esses get são na ordem que os dados estão no banco, consultar o SQL disponivel nos arquivos
                 return new Usuario(result.getInt(1),result.getString(2), result.getString(3), result.getString(4), result.getString(5),result.getString(6));
             }
             
@@ -62,29 +58,19 @@ public class Usuario {
         return null;
     }
 
-    public static void removeUsuario(int idUsuario){
+    /**
+     * Remove um usuário do banco com base em seu cpf
+     * @param cpf
+     */
+    public static void removeUsuario(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "DELETE From usuario where id = ?";
+            String query = "DELETE From usuario where id = ?"; // trocar aqui
             PreparedStatement state = connection.prepareStatement(query);
-            state.setInt(1, idUsuario);
+            state.setInt(1, idUsuario); // trocar pra cpf
             state.executeQuery();
         } catch (Exception e) {
             System.out.println(e);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario [idUsuario=" + idUsuario + ", cpf=" + cpf + ", nome=" + nome + ", telefone=" + telefone
-                + ", senha=" + senha + ", email=" + email + "]";
-    }
-
-    public int getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public String getCpf() {
@@ -103,14 +89,6 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
     public String getSenha() {
         return senha;
     }
@@ -125,6 +103,11 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario [cpf=" + cpf + ", nome=" + nome + ", senha=" + senha + ", email=" + email + "]";
     }
 
     
