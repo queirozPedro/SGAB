@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class Usuario {
 
@@ -8,6 +9,7 @@ public class Usuario {
     private String nome;
     private String senha;
     private String email;
+    private ArrayList<String> telefone;
 
     public Usuario(){};
     public Usuario(String cpf, String nome, String senha, String email) {
@@ -22,11 +24,11 @@ public class Usuario {
      */
     public void insereUsuario(){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "INSERT Into usuario (cpf, nome, telefone, senha, email) VALUES (?, ?, ?, ?, ?)"; // remover telefone
+            String query = "INSERT Into usuario (cpf, nome, telefone, senha, email) VALUES (?, ?, ?, ?, ?)"; // telefone vai ser armazenado em outra tabela do banco
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf);
             state.setString(2, nome);
-            state.setString(3, telefone); // Falta remover
+            state.setString(3, telefone); // Ele vai pra outra tabela
             state.setString(4, senha);
             state.setString(5, email);
             state.executeUpdate();
