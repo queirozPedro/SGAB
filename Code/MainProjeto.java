@@ -7,51 +7,26 @@ public class MainProjeto{
         boolean sair = false;
         int op;
 
-        // Isso aqui funciona pra identificar qual SO está sendo usado
-        String osName = System.getProperty("os.name").toLowerCase();
-        ProcessBuilder limpaTela;
-        if (osName.contains("windows")) {
-            limpaTela = new ProcessBuilder("cmd", "/c", "cls");
-        } else {
-            limpaTela = new ProcessBuilder("sh", "-c", "clear");
-        }
-        
-
         while (!sair) {
             //opções do MainProjeto principal
-            MainProjeto.MenuPrincipal();
-            op = sc.nextInt();
-            
+            LimpaTela();
+            MenuPrincipal();
+            op = sc.nextInt(); sc.nextLine();
             switch (op) {
                 case 1: // Usuário
-                    limpaTela.inheritIO().start().waitFor();
-                    System.out.println("Você escolheu a opção Usuário.");
-                    sc.nextLine();
+                    MenuUsuario(sc, op);
                     break;
                 case 2: // Cliente  
-                    limpaTela.inheritIO().start().waitFor();
-                    System.out.println("Você escolheu a opção Cliente.");
-                    sc.nextLine();
+                    MenuCliente(sc, op);
                     break;          
                 case 3: // Adm
-                    limpaTela.inheritIO().start().waitFor();
-                    System.out.println("Você escolheu a opção Administrador.");
-                    sc.nextLine();
+                    MenuAdm(sc, op);
                     break;
                 case 4: // Livro
-                    limpaTela.inheritIO().start().waitFor();
-                    System.out.println("Você escolheu a opção Livro.");
-                    sc.nextLine();
+                    MenuLivro(sc, op);
                     break;
                 case 5: // Emprestimo
-                    limpaTela.inheritIO().start().waitFor();
-                    System.out.println("Você escolheu a opção Empréstimo.");
-                    sc.nextLine();
-                    break;
-                case 6: // Voltar
-                    limpaTela.inheritIO().start().waitFor();
-                    System.out.println("Voltando ao MainProjeto anterior.");
-                    sc.nextLine();
+                    MenuEmprestimo(sc, op);
                     break;
                 case 0: // Sair
                     sair = true;
@@ -63,18 +38,99 @@ public class MainProjeto{
         }
         sc.close();
     }
+
     public static void MenuPrincipal(){
         System.out.println("-------------------------");
-        System.out.println("   MainProjeto Principal\n");
-        System.out.println("    1. Usuário");
-        System.out.println("    2. Cliente");
-        System.out.println("    3. Administrador");
-        System.out.println("    4. Livro");
-        System.out.println("    5. Empréstimo");
-        System.out.println("    6. Voltar");
-        System.out.println("    0. Sair");  
+        System.out.println("   Menu Principal\n");
+        System.out.println("    1 -> Usuário");
+        System.out.println("    2 -> Cliente");
+        System.out.println("    3 -> Administrador");
+        System.out.println("    4 -> Livro");
+        System.out.println("    5 -> Empréstimo");
+        System.out.println("    0 -> Sair");  
         System.out.println("-------------------------");
         System.out.println(" Digite uma opção: ");
+    }
+
+    public static void MenuUsuario(Scanner sc, int op) throws InterruptedException, IOException{
+        LimpaTela();
+        System.out.println("-------------------------");
+        System.out.println("   Menu Usuário\n");
+        System.out.println("    1 -> Inserir");
+        System.out.println("    2 -> Buscar");
+        System.out.println("    3 -> Editar");
+        System.out.println("    4 -> Remover");
+        System.out.println("    0 -> Voltar"); 
+        System.out.println("-------------------------");
+        System.out.println(" Digite uma opção: ");
+        op = sc.nextInt(); sc.nextLine();
+        
+    }
+
+    public static void MenuCliente(Scanner sc, int op) throws InterruptedException, IOException{
+        LimpaTela();
+        System.out.println("-------------------------");
+        System.out.println("   Menu Cliente\n");
+        System.out.println("    1 -> Inserir");
+        System.out.println("    2 -> Buscar");
+        System.out.println("    3 -> Editar");
+        System.out.println("    4 -> Remover");
+        System.out.println("    0 -> Voltar"); 
+        System.out.println("-------------------------");
+        System.out.println(" Digite uma opção: ");
+        op = sc.nextInt(); sc.nextLine();
+    }
+
+    public static void MenuAdm(Scanner sc, int op) throws InterruptedException, IOException{
+        LimpaTela();
+        System.out.println("-------------------------");
+        System.out.println("   Menu Adm\n");
+        System.out.println("    1 -> Inserir");
+        System.out.println("    2 -> Buscar");
+        System.out.println("    3 -> Editar");
+        System.out.println("    4 -> Remover");
+        System.out.println("    0 -> Voltar"); 
+        System.out.println("-------------------------");
+        System.out.println(" Digite uma opção: ");
+        op = sc.nextInt(); sc.nextLine();
+    }
+
+    public static void MenuLivro(Scanner sc, int op) throws InterruptedException, IOException{
+        LimpaTela();
+        System.out.println("-------------------------");
+        System.out.println("   Menu Livro\n");
+        System.out.println("    1 -> Inserir");
+        System.out.println("    2 -> Buscar");
+        System.out.println("    3 -> Editar");
+        System.out.println("    4 -> Remover");
+        System.out.println("    0 -> Voltar"); 
+        System.out.println("-------------------------");
+        System.out.println(" Digite uma opção: ");
+        op = sc.nextInt(); sc.nextLine();
+    }
+
+    public static void MenuEmprestimo(Scanner sc, int op) throws InterruptedException, IOException{
+        LimpaTela();
+        System.out.println("-------------------------");
+        System.out.println("   Menu Emprestimo\n");
+        System.out.println("    1 -> Inserir");
+        System.out.println("    2 -> Buscar");
+        System.out.println("    3 -> Editar");
+        System.out.println("    4 -> Remover");
+        System.out.println("    0 -> Voltar"); 
+        System.out.println("-------------------------");
+        System.out.println(" Digite uma opção: ");
+        op = sc.nextInt(); sc.nextLine();
+    }
+
+    public static void LimpaTela() throws InterruptedException, IOException{
+        // Isso aqui funciona pra identificar qual SO está sendo usado
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("windows")) {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } else {
+            new ProcessBuilder("sh", "-c", "clear").inheritIO().start().waitFor();
+        }
     }
 }
 
