@@ -4,14 +4,12 @@ import java.util.Scanner;
 public class MainProjeto{
     public static void main(String[] args) throws InterruptedException, IOException {
         Scanner sc = new Scanner(System.in);
-        boolean sair = false;
-        int op;
+        boolean sair = false; int op;
 
         while (!sair) {
             //opções do MainProjeto principal
-            LimpaTela();
-            MenuPrincipal();
-            op = sc.nextInt(); sc.nextLine();
+            op = MenuPrincipal(sc);
+            sc.nextLine();
             switch (op) {
                 case 1: // Usuário
                     MenuUsuario(sc, op);
@@ -39,7 +37,8 @@ public class MainProjeto{
         sc.close();
     }
 
-    public static void MenuPrincipal(){
+    public static int MenuPrincipal(Scanner sc) throws InterruptedException, IOException{
+        LimpaTela();
         System.out.println("-------------------------");
         System.out.println("   Menu Principal\n");
         System.out.println("    1 -> Usuário");
@@ -50,6 +49,7 @@ public class MainProjeto{
         System.out.println("    0 -> Sair");  
         System.out.println("-------------------------");
         System.out.println(" Digite uma opção: ");
+        return sc.nextInt();
     }
 
     public static void MenuUsuario(Scanner sc, int op) throws InterruptedException, IOException{
@@ -64,7 +64,23 @@ public class MainProjeto{
         System.out.println("-------------------------");
         System.out.println(" Digite uma opção: ");
         op = sc.nextInt(); sc.nextLine();
-        
+        switch (op) {
+            case 1:
+                
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                
+                break;
+            case 4:
+                
+                break;
+            case 0:
+            default:
+                break;
+        }
     }
 
     public static void MenuCliente(Scanner sc, int op) throws InterruptedException, IOException{
@@ -79,6 +95,23 @@ public class MainProjeto{
         System.out.println("-------------------------");
         System.out.println(" Digite uma opção: ");
         op = sc.nextInt(); sc.nextLine();
+        switch (op) {
+            case 1:
+                
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                
+                break;
+            case 4:
+                
+                break;
+            case 0:
+            default:
+                break;
+        }
     }
 
     public static void MenuAdm(Scanner sc, int op) throws InterruptedException, IOException{
@@ -93,6 +126,23 @@ public class MainProjeto{
         System.out.println("-------------------------");
         System.out.println(" Digite uma opção: ");
         op = sc.nextInt(); sc.nextLine();
+        switch (op) {
+            case 1:
+                
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                
+                break;
+            case 4:
+                
+                break;
+            case 0:
+            default:
+                break;
+        }
     }
 
     public static void MenuLivro(Scanner sc, int op) throws InterruptedException, IOException{
@@ -107,6 +157,23 @@ public class MainProjeto{
         System.out.println("-------------------------");
         System.out.println(" Digite uma opção: ");
         op = sc.nextInt(); sc.nextLine();
+        switch (op) {
+            case 1:
+                
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                
+                break;
+            case 4:
+                
+                break;
+            case 0:
+            default:
+                break;
+        }
     }
 
     public static void MenuEmprestimo(Scanner sc, int op) throws InterruptedException, IOException{
@@ -121,6 +188,23 @@ public class MainProjeto{
         System.out.println("-------------------------");
         System.out.println(" Digite uma opção: ");
         op = sc.nextInt(); sc.nextLine();
+        switch (op) {
+            case 1:
+                
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                
+                break;
+            case 4:
+                
+                break;
+            case 0:
+            default:
+                break;
+        }
     }
 
     public static void LimpaTela() throws InterruptedException, IOException{
