@@ -24,7 +24,7 @@ CREATE TABLE Cliente (
 );
 
 CREATE TABLE Livro (
-    idlivro Serial PRIMARY KEY,
+    idLivro Serial PRIMARY KEY,
     Titulo VARCHAR(50) NOT NULL,
     Genero VARCHAR(20) NOT NULL,
     Autor VARCHAR(255) NOT NULL,
@@ -32,18 +32,18 @@ CREATE TABLE Livro (
     Edicao VARCHAR(50) NOT NULL,
     Editora VARCHAR(50) NOT NULL,
     ISBN VARCHAR(13) NOT NULL, 
-    LivroAcervo Bool NOT NULL,
-    LivroDisponivel Bool NOT NULL
+    quantLivros int NOT NULL,
+    quantDisponiveis int NOT NULL
 );
 
 CREATE TABLE Emprestimo (
     cpf VARCHAR(11),
-    idlivro Serial,
+    idLivro Serial,
     DataEmprestimo Date NOT NULL,
     DataPrevista Date NOT NULL,
     DataDevolucao Date NOT NULL,
     FOREIGN KEY (cpf) REFERENCES Usuario(cpf),
-    FOREIGN KEY (idlivro) REFERENCES Livro(idlivro)
+    FOREIGN KEY (idLivro) REFERENCES Livro(idLivro)
 );
 
 -- CREATE TABLE Penalizacao(
