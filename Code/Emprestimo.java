@@ -1,19 +1,20 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Emprestimo {
     private String cpf;
     private int idLivro;
-    private String dataEmpretimo;
+    private String dataEmprestimo;
     private String dataPrevista;
     private String dataDevolucao;
     
 
-    public Emprestimo(String cpf, int idLivro, String dataEmpretimo, String dataPrevista, String dataDevolucao) {
+    public Emprestimo(String cpf, int idLivro, String dataEmprestimo, String dataPrevista, String dataDevolucao) {
         this.cpf = cpf;
         this.idLivro = idLivro;
-        this.dataEmpretimo = dataEmpretimo;
+        this.dataEmprestimo = dataEmprestimo;
         this.dataPrevista = dataPrevista;
         this.dataDevolucao = dataDevolucao;
     }
@@ -34,12 +35,12 @@ public class Emprestimo {
         this.idLivro = idLivro;
     }
 
-    public String getDataEmpretimo() {
-        return dataEmpretimo;
+    public String getDataEmprestimo() {
+        return dataEmprestimo;
     }
 
-    public void setDataEmpretimo(String dataEmpretimo) {
-        this.dataEmpretimo = dataEmpretimo;
+    public void setDataEmprestimo(String dataEmpretimo) {
+        this.dataEmprestimo = dataEmpretimo;
     }
 
     public String getDataPrevista() {
@@ -88,5 +89,18 @@ public class Emprestimo {
         return null;
     }
 
-    
+    public void inserirEmprestimo() {
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+            String query = "INSERT INTO Emprestimo (cpf, idLivro, dataEmprestimo, dataPrevista, dataDevolução) VALUES  (?, ?, ?, ?, ?)";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            state.setInt(2, idLivro);
+            state.setString(3, dataEmprestimo);
+            state.setString(4, dataPrevista);
+            state.setString(5, dataDevolucao);
+            state.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 }
