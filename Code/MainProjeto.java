@@ -3,54 +3,55 @@ import java.util.Scanner;
 
 public class MainProjeto{
     public static void main(String[] args) throws InterruptedException, IOException {
-        Scanner entrada = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         boolean sair = false;
         int op;
 
         // Isso aqui funciona pra identificar qual SO está sendo usado
         String osName = System.getProperty("os.name").toLowerCase();
-        String limpar1, limpar2, limpar3;
+        ProcessBuilder limpaTela;
         if (osName.contains("windows")) {
-            limpar1 = "cmd";
-            limpar2 = "/c";
-            limpar3 = "cls";
+            limpaTela = new ProcessBuilder("cmd", "/c", "cls");
         } else {
-            limpar1 = "sh";
-            limpar2 = "-c";
-            limpar3 = "clear";
+            limpaTela = new ProcessBuilder("sh", "-c", "clear");
         }
-        // Isso aqui é pra limpar a tela
-        ProcessBuilder limpatela = new ProcessBuilder(limpar1, limpar2, limpar3);
+        
 
         while (!sair) {
             //opções do MainProjeto principal
             MainProjeto.MenuPrincipal();
-            op = entrada.nextInt();
+            op = sc.nextInt();
             
             switch (op) {
                 case 1: // Usuário
-                    limpatela.inheritIO().start().waitFor();
+                    limpaTela.inheritIO().start().waitFor();
                     System.out.println("Você escolheu a opção Usuário.");
+                    sc.nextLine();
                     break;
                 case 2: // Cliente  
-                    limpatela.inheritIO().start().waitFor();
+                    limpaTela.inheritIO().start().waitFor();
                     System.out.println("Você escolheu a opção Cliente.");
+                    sc.nextLine();
                     break;          
                 case 3: // Adm
-                    limpatela.inheritIO().start().waitFor();
+                    limpaTela.inheritIO().start().waitFor();
                     System.out.println("Você escolheu a opção Administrador.");
+                    sc.nextLine();
                     break;
                 case 4: // Livro
-                    limpatela.inheritIO().start().waitFor();
+                    limpaTela.inheritIO().start().waitFor();
                     System.out.println("Você escolheu a opção Livro.");
+                    sc.nextLine();
                     break;
                 case 5: // Emprestimo
-                    limpatela.inheritIO().start().waitFor();
+                    limpaTela.inheritIO().start().waitFor();
                     System.out.println("Você escolheu a opção Empréstimo.");
+                    sc.nextLine();
                     break;
                 case 6: // Voltar
-                    limpatela.inheritIO().start().waitFor();
+                    limpaTela.inheritIO().start().waitFor();
                     System.out.println("Voltando ao MainProjeto anterior.");
+                    sc.nextLine();
                     break;
                 case 0: // Sair
                     sair = true;
@@ -60,7 +61,7 @@ public class MainProjeto{
                     return;
             }
         }
-        entrada.close();
+        sc.close();
     }
     public static void MenuPrincipal(){
         System.out.println("-------------------------");
