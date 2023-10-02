@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Livro {
-    // Table livro
+
     private int idLivro;
     private String titulo;
     private String genero;
@@ -13,11 +13,6 @@ public class Livro {
     private String isbn;
     private boolean livroAcervo;
     private boolean livroDisponivel;
-
-    // Table emprestimo
-    //private int idUsuario;
-    // int idLivro;
-    //private String dataEmprestimo;
 
     public Livro(int idLivro, String titulo, String genero, String autor, Date dataPublicacao, String edicao,
             String editora, String isbn, boolean livroAcervo, boolean livroDisponivel) {
@@ -34,8 +29,7 @@ public class Livro {
     }
 
     /**
-     * Metodo de busca por id, exclusivo para adms
-     * 
+     * Metodo de busca por id
      * @param id
      * @return Livro
      */
@@ -47,9 +41,7 @@ public class Livro {
             ResultSet result = state.executeQuery(); //recebe a tabela com as respostas da pesquisa
             while (result.next()) {// enquanto houverem respostas, imprima-as
                 // Corrigir a questão da Data
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4),
-                        result.getString(5), result.getString(6), result.getString(7), result.getString(8),
-                        result.getBoolean(9), result.getBoolean(10));
+                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
             }
         } catch (Exception e) {//se der erro, mostre qual foi
             System.out.println(e);
@@ -93,8 +85,9 @@ public class Livro {
             
             // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
             while (result.next()) {  
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
+                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));    
             }
+            
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -108,7 +101,7 @@ public class Livro {
             state.setString(1, titulo);
             state.setString(2, genero);
             state.setString(3, autor);
-            state.setString(4, dataPublicacao);
+            state.setDate(4, dataPublicacao);
             state.setString(5, edicao);
             state.setString(6, editora);
             state.setString(7, isbn);
