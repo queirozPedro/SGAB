@@ -1,5 +1,4 @@
 import java.sql.*;
-import java.util.Scanner;
 
 public class Livro {
 
@@ -50,31 +49,7 @@ public class Livro {
     }
 
 
-    public static Livro BuscaLivro(Scanner sc) {
-        String tipo, busca;
-        System.out.println("Por que parametro deseja buscar o livro:\n1-Titulo;\n2-Autor;\n3-Genero;\n0-Voltar;");
-        int op = sc.nextInt();
-        sc.nextLine();
-        switch (op) {//escolhendo o tipo de busca, que será usada na pesquisa posteriormente
-            case 1:
-                tipo = "titulo";
-                System.out.print("Titulo: ");
-                busca = sc.nextLine();//recebendo o que queremos buscar
-                break;
-            case 2:
-                tipo = "autor";
-                System.out.print("Autor: ");
-                busca = sc.nextLine();
-                break;
-            case 3:
-                tipo = "genero";
-                System.out.print("Genero: ");
-                busca = sc.nextLine();
-                break;
-            case 0: // sair
-            default:
-                return null;
-        }
+    public static Livro BuscaLivro(String tipo, String busca) {
 
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
 
@@ -114,8 +89,15 @@ public class Livro {
         }
     }
 
-    public void excluirLivro() {
-
+    public static void excluirLivro(int idLivro) {
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+            String query = "Delete From livro where idLivro = ?"; 
+            PreparedStatement state = connection.prepareStatement(query); 
+            state.setInt(1, idLivro);
+            state.executeQuery(); 
+        } catch (Exception e) {//se der erro, mostre qual foi
+            System.out.println(e);
+        }
     }
 
     @Override
