@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class Usuario {
+
     private String cpf;
     private String nome;
     private String senha;
@@ -102,11 +103,9 @@ public class Usuario {
     public void setEmail(String email) {
         this.email = email;
     }
-
     @Override
     public String toString() {
-        return "Usuario [cpf=" + cpf + ", nome=" + nome + ", senha=" + senha + ", email=" + email + "]";
+        return "Usuario [cpf=" + cpf + ", nome=" + nome + ", senha=" + senha + ", email=" + email + ", telefone="
+                + telefone + "]";
     }
-
-    
 }

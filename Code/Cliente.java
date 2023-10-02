@@ -22,7 +22,7 @@ public class Cliente extends Usuario {
             state.executeUpdate();
             
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e);
         }
     }
 
