@@ -1,15 +1,14 @@
 import java.sql.*;
-import java.util.ArrayList;
-
 public class Usuario {
 
     private String cpf;
     private String nome;
     private String senha;
     private String email;
-    private ArrayList<Date> telefone;
+    private String[] telefone = new String[2];
 
     public Usuario(){};
+
     public Usuario(String cpf, String nome, String senha, String email) {
         this.cpf = cpf;
         this.nome = nome;
@@ -17,18 +16,37 @@ public class Usuario {
         this.email = email;
     }
 
+    public Usuario(String cpf, String nome, String senha, String email, String[] telefone) {
+        this.cpf = cpf;
+        this.nome = nome;
+        this.senha = senha;
+        this.email = email;
+        this.telefone = telefone;
+    }
+
     /**
      * Uma metodo que insere uma instância de Usuario no banco de dados
      */
     public void insereUsuario(){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "INSERT Into usuario (cpf, nome, senha, email) VALUES (?, ?, ?, ?)"; // telefone vai ser armazenado em outra tabela do banco
+            String query = "INSERT Into usuario (cpf, nome, senha, email) VALUES (?, ?, ?, ?)"; 
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf);
             state.setString(2, nome);
             state.setString(3, senha);
             state.setString(4, email);
             state.executeUpdate();
+            System.out.println("Oi");
+            for (int i = 0; i < 2; i++) {
+                if(telefone[i] != null){
+                    query = "INSERT Into telefone (cpf, numero) VALUES (?, ?)"; 
+                    state = connection.prepareStatement(query);
+                    state.setString(1, cpf);
+                    state.setString(2, telefone[i]);
+                    state.executeUpdate();
+                }
+            }
+            System.out.println("Usuário cadastrado com sucesso!!");
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -14,8 +14,7 @@ public class Cliente extends Usuario {
         this.idCliente = idCliente;
     }
 
-    public void insereCliente(Usuario usuario){
-        usuario.insereUsuario();
+    public void insereCliente(){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "INSERT INTO Cliente";   
             PreparedStatement state = connection.prepareStatement(query);

@@ -66,7 +66,41 @@ public class MainProjeto{
         op = sc.nextInt(); sc.nextLine();
         switch (op) {
             case 1:
-                
+                LimpaTela();
+                System.out.println("Insira os dados do Usuário: ");
+                System.out.print("Nome: ");
+                String nome = sc.nextLine();
+                System.out.print("Cpf: ");
+                String cpf = sc.nextLine();
+                System.out.print("Email: ");
+                String email = sc.nextLine();
+                System.out.print("Senha: ");
+                String senha = sc.nextLine();
+                System.out.println("Telefone");
+                System.out.println(" 1 -> Inserir 1");
+                System.out.println(" 2 -> Inserir 2");
+                System.out.print( " >> ");
+                String[] telefone = new String[2];
+                op = sc.nextInt(); sc.nextLine();
+                switch (op) {
+                    case 2:
+                        System.out.print("Telefone 1:");
+                        telefone[0] = sc.nextLine();
+                        sc.nextLine();
+                        System.out.print("Telefone 2:");
+                        telefone[1] = sc.nextLine();
+                        sc.nextLine();
+                        break;
+                    case 1:
+                    default:
+                        System.out.print("Telefone:");
+                        telefone[0] = sc.nextLine();
+                        sc.nextLine();
+                        break;
+                    }
+                Usuario usuario = new Usuario(cpf, nome, senha, email, telefone);
+                usuario.insereUsuario();
+                sc.nextLine();
                 break;
             case 2:
                 
