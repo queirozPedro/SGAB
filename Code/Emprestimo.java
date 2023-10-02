@@ -103,4 +103,15 @@ public class Emprestimo {
             System.out.println(e);
         }
     }
+
+    public static void devolverLivro(int idLivro) {
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+            String query = "Delete From emprestimo where idLivro = ?"; 
+            PreparedStatement state = connection.prepareStatement(query); 
+            state.setInt(1, idLivro);
+            state.executeQuery(); 
+        } catch (Exception e) {//se der erro, mostre qual foi
+            System.out.println(e);
+        }
+    }
 }
