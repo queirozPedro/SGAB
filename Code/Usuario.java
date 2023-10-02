@@ -1,6 +1,4 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class Usuario {
@@ -9,7 +7,7 @@ public class Usuario {
     private String nome;
     private String senha;
     private String email;
-    private ArrayList<String> telefone;
+    private ArrayList<Date> telefone;
 
     public Usuario(){};
     public Usuario(String cpf, String nome, String senha, String email) {
@@ -24,13 +22,12 @@ public class Usuario {
      */
     public void insereUsuario(){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "INSERT Into usuario (cpf, nome, telefone, senha, email) VALUES (?, ?, ?, ?, ?)"; // telefone vai ser armazenado em outra tabela do banco
+            String query = "INSERT Into usuario (cpf, nome, senha, email) VALUES (?, ?, ?, ?)"; // telefone vai ser armazenado em outra tabela do banco
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf);
             state.setString(2, nome);
-            state.setString(3, telefone); // Ele vai pra outra tabela
-            state.setString(4, senha);
-            state.setString(5, email);
+            state.setString(3, senha);
+            state.setString(4, email);
             state.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
@@ -44,14 +41,14 @@ public class Usuario {
      */
     public static Usuario buscaUsuarioId(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "SELECT * From usuario where idusuario = ?"; // trocar idusuario para cpf
+            String query = "SELECT * From usuario where cpf = ?"; 
             PreparedStatement state = connection.prepareStatement(query);
-            state.setInt(1, idUsuario); // trocar pra cpf
+            state.setString(1, cpf); 
             ResultSet result = state.executeQuery();
 
             while (result.next()) { 
                 // Esses get são na ordem que os dados estão no banco, consultar o SQL disponivel nos arquivos
-                return new Usuario(result.getInt(1),result.getString(2), result.getString(3), result.getString(4), result.getString(5),result.getString(6));
+                return new Usuario(result.getString(1),result.getString(2), result.getString(3), result.getString(4));
             }
             
         } catch (Exception e) {
@@ -66,9 +63,9 @@ public class Usuario {
      */
     public static void removeUsuario(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "DELETE From usuario where id = ?"; // trocar aqui
+            String query = "DELETE From usuario where cpf = ?"; 
             PreparedStatement state = connection.prepareStatement(query);
-            state.setInt(1, idUsuario); // trocar pra cpf
+            state.setString(1, cpf); 
             state.executeQuery();
         } catch (Exception e) {
             System.out.println(e);
