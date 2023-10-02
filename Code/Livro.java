@@ -1,42 +1,20 @@
 import java.sql.*;
-import java.util.Scanner;
 
 public class Livro {
-    // Table livro
+
     private int idLivro;
     private String titulo;
     private String genero;
     private String autor;
-    private String dataPublicacao;
+    private Date dataPublicacao;
     private String edicao;
     private String editora;
     private String isbn;
     private boolean livroAcervo;
     private boolean livroDisponivel;
 
-    // Table empretimo
-    //private int idUsuario;
-    // int idLivro;
-    //private String dataEmprestimo;
-
-    public Livro(String titulo, String genero, String autor, String dataPublicacao, String edicao, String editora,
-            String isbn, boolean livroAcervo, boolean livroDisponivel, int idUsuario, String dataEmprestimo) {
-        this.titulo = titulo;
-        this.genero = genero;
-        this.autor = autor;
-        this.dataPublicacao = dataPublicacao;
-        this.edicao = edicao;
-        this.editora = editora;
-        this.isbn = isbn;
-        this.livroAcervo = livroAcervo;
-        this.livroDisponivel = livroDisponivel;
-        // this.idUsuario = idUsuario;
-        // this.dataEmprestimo = dataEmprestimo;
-    }
-
-    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
-            String editora,
-            String isbn, boolean livroAcervo, boolean livroDisponivel) {
+    public Livro(int idLivro, String titulo, String genero, String autor, Date dataPublicacao, String edicao,
+            String editora, String isbn, boolean livroAcervo, boolean livroDisponivel) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -50,8 +28,7 @@ public class Livro {
     }
 
     /**
-     * Metodo de busca por id, exclusivo para adms
-     * 
+     * Metodo de busca por id
      * @param id
      * @return Livro
      */
@@ -62,9 +39,8 @@ public class Livro {
             state.setInt(1, id); //preenche os ? com as informações desejadas
             ResultSet result = state.executeQuery(); //recebe a tabela com as respostas da pesquisa
             while (result.next()) {// enquanto houverem respostas, imprima-as
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4),
-                        result.getString(5), result.getString(6), result.getString(7), result.getString(8),
-                        result.getBoolean(9), result.getBoolean(10));
+                // Corrigir a questão da Data
+                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
             }
         } catch (Exception e) {//se der erro, mostre qual foi
             System.out.println(e);
@@ -72,31 +48,8 @@ public class Livro {
         return null;
     }
 
-    public static Livro BuscaLivro(Scanner sc) {
-        String tipo, busca;
-        System.out.println("Por que parametro deseja buscar o livro:\n1-Titulo;\n2-Autor;\n3-Genero;\n0-Voltar;");
-        int op = sc.nextInt();
-        sc.nextLine();
-        switch (op) {//escolhendo o tipo de busca, que será usada na pesquisa posteriormente
-            case 1:
-                tipo = "titulo";
-                System.out.print("Titulo: ");
-                busca = sc.nextLine();//recebendo o que queremos buscar
-                break;
-            case 2:
-                tipo = "autor";
-                System.out.print("Autor: ");
-                busca = sc.nextLine();
-                break;
-            case 3:
-                tipo = "genero";
-                System.out.print("Genero: ");
-                busca = sc.nextLine();
-                break;
-            case 0: // sair
-            default:
-                return null;
-        }
+
+    public static Livro BuscaLivro(String tipo, String busca) {
 
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
 
@@ -106,9 +59,10 @@ public class Livro {
             ResultSet result = state.executeQuery();// Resultados da execução da query.
             
             // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
-            while (result.next()) { 
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
+            while (result.next()) {  
+                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));    
             }
+            
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -122,7 +76,7 @@ public class Livro {
             state.setString(1, titulo);
             state.setString(2, genero);
             state.setString(3, autor);
-            state.setString(4, dataPublicacao);
+            state.setDate(4, dataPublicacao);
             state.setString(5, edicao);
             state.setString(6, editora);
             state.setString(7, isbn);
@@ -135,8 +89,15 @@ public class Livro {
         }
     }
 
-    public void excluirLivro() {
-
+    public static void excluirLivro(int idLivro) {
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+            String query = "Delete From livro where idLivro = ?"; 
+            PreparedStatement state = connection.prepareStatement(query); 
+            state.setInt(1, idLivro);
+            state.executeQuery(); 
+        } catch (Exception e) {//se der erro, mostre qual foi
+            System.out.println(e);
+        }
     }
 
     @Override

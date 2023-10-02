@@ -1,21 +1,26 @@
 CREATE TABLE Usuario (
-    idusuario Serial PRIMARY KEY,
-    cpf VARCHAR(11) NOT NULL,
+    cpf VARCHAR(11) NOT NULL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
-    telefone VARCHAR(11) NOT NULL,
     senha VARCHAR(50) NOT NULL,
     email VARCHAR(75) NOT NULL
 );
 
+CREATE TABLE Telefone(
+    cpf VARCHAR(11),
+    numero VARCHAR(11) NOT NULL,
+    FOREIGN KEY (cpf) REFERENCES Usuario(cpf)
+);
+
 CREATE TABLE Adm (
-    idusuario Serial PRIMARY KEY,
-    FOREIGN KEY (idusuario) REFERENCES Usuario(idusuario)
+    idAdm Serial PRIMARY KEY,
+    cpf VARCHAR(11),
+    FOREIGN KEY (cpf) REFERENCES Usuario(cpf)
 );
 
 CREATE TABLE Cliente (
-    idusuario Serial PRIMARY KEY,
-    livrosEmprestados VARCHAR(3) NOT NULL, 
-    FOREIGN KEY (idusuario) REFERENCES Usuario(idusuario)
+    idCliente Serial PRIMARY KEY,
+    cpf VARCHAR(11),
+    FOREIGN KEY (cpf) REFERENCES Usuario(cpf)
 );
 
 CREATE TABLE Livro (
@@ -23,7 +28,7 @@ CREATE TABLE Livro (
     Titulo VARCHAR(50) NOT NULL,
     Genero VARCHAR(20) NOT NULL,
     Autor VARCHAR(255) NOT NULL,
-    DataPublicacao VARCHAR(10) NOT NULL,
+    DataPublicacao Date NOT NULL,
     Edicao VARCHAR(50) NOT NULL,
     Editora VARCHAR(50) NOT NULL,
     ISBN VARCHAR(13) NOT NULL, 
@@ -32,11 +37,18 @@ CREATE TABLE Livro (
 );
 
 CREATE TABLE Emprestimo (
-    idusuario Serial,
+    cpf VARCHAR(11),
     idlivro Serial,
-    DataEmprestimo VARCHAR(10) NOT NULL,
-    FOREIGN KEY (idusuario) REFERENCES Usuario(idusuario),
+    DataEmprestimo Date NOT NULL,
+    DataPrevista Date NOT NULL,
+    DataDevolucao Date NOT NULL,
+    FOREIGN KEY (cpf) REFERENCES Usuario(cpf),
     FOREIGN KEY (idlivro) REFERENCES Livro(idlivro)
 );
 
--- Drop table adm, cliente, endereco, livro, usuario;
+-- CREATE TABLE Penalizacao(
+--     idCliente Serial,
+--     motivoPenalizacao VARCHAR(100) NOT NULL,
+--     FimPenalizacao Date NOT NULL,
+--     FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente)
+-- )
