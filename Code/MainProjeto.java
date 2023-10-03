@@ -208,7 +208,6 @@ public class MainProjeto{
         switch (op) {
             case 1:
                 LimpaTela();
-                
                 System.out.println("Insira os dados do livro");
                 System.out.print("Titulo: ");
                 String titulo = sc.nextLine();
@@ -225,11 +224,12 @@ public class MainProjeto{
                 System.out.println("ISBN: ");
                 String isbn = sc.nextLine();
                 System.out.println("quantLivros: ");
-                String quantLivros = sc.nextLine();
+                int quantLivros = sc.nextInt();
                 System.out.println("quantDisponivel: ");
-                String quantDisponivel = sc.nextLine();
-
-                Livro livroAux = new Livro(titulo, genero, autor, data, edicao, editora, isbn, 5, 4);
+                int quantDisponivel = sc.nextInt();
+                Livro livroAux = new Livro(titulo, genero, autor, data, edicao, editora, isbn, quantLivros, quantDisponivel);
+                livroAux.inserirLivro();
+                sc.nextLine();
                 break;
             case 2:
                 

@@ -89,13 +89,14 @@ public class Livro {
      */
     public void inserirLivro() {
                 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date dataPub = null;
+
         try {
-            java.util.Date utilDate = dateFormat.parse(data);
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            System.out.println("Você digitou a data: " + sqlDate);
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date utilDate = formatoData.parse(dataPublicacao);
+            dataPub = new Date(utilDate.getTime());
         } catch (ParseException e) {
-            System.out.println("Formato de data inválido. Certifique-se de usar o formato (dd/MM/yyyy).");
+            System.err.println("Erro ao converter a data");
         }
 
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
@@ -104,7 +105,7 @@ public class Livro {
             state.setString(1, titulo);
             state.setString(2, genero);
             state.setString(3, autor);
-            state.setDate(4, sqlDate);
+            state.setDate(4, dataPub);
             state.setString(5, edicao);
             state.setString(6, editora);
             state.setString(7, isbn);
