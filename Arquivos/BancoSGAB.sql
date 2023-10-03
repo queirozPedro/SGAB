@@ -2,7 +2,7 @@ CREATE TABLE Usuario (
     cpf VARCHAR(11) NOT NULL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     senha VARCHAR(50) NOT NULL,
-    email VARCHAR(75) NOT NULL
+    email VARCHAR(75) NOT NULL,
 );
 
 CREATE TABLE Telefone(
@@ -46,9 +46,3 @@ CREATE TABLE Emprestimo (
     FOREIGN KEY (idLivro) REFERENCES Livro(idLivro)
 );
 
--- CREATE TABLE Penalizacao(
---     idCliente Serial,
---     motivoPenalizacao VARCHAR(100) NOT NULL,
---     FimPenalizacao Date NOT NULL,
---     FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente)
--- )
