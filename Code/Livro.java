@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class Livro {
 
@@ -6,15 +8,28 @@ public class Livro {
     private String titulo;
     private String genero;
     private String autor;
-    private Date dataPublicacao;
+    private String dataPublicacao; // Date
     private String edicao;
     private String editora;
     private String isbn;
-    private boolean livroAcervo;
-    private boolean livroDisponivel;
+    private int quantLivros;
+    private int quantDisponivel;
+    
+    public Livro(String titulo, String genero, String autor, String dataPublicacao, String edicao, String editora,
+            String isbn, int quantLivros, int quantDisponivel) {
+        this.titulo = titulo;
+        this.genero = genero;
+        this.autor = autor;
+        this.dataPublicacao = dataPublicacao;
+        this.edicao = edicao;
+        this.editora = editora;
+        this.isbn = isbn;
+        this.quantLivros = quantLivros;
+        this.quantDisponivel = quantDisponivel;
+    }
 
-    public Livro(int idLivro, String titulo, String genero, String autor, Date dataPublicacao, String edicao,
-            String editora, String isbn, boolean livroAcervo, boolean livroDisponivel) {
+    public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
+            String editora, String isbn, int quantLivros, int quantDisponivel) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -23,8 +38,8 @@ public class Livro {
         this.edicao = edicao;
         this.editora = editora;
         this.isbn = isbn;
-        this.livroAcervo = livroAcervo;
-        this.livroDisponivel = livroDisponivel;
+        this.quantLivros = quantLivros;
+        this.quantDisponivel = quantDisponivel;
     }
 
     /**
@@ -40,7 +55,7 @@ public class Livro {
             ResultSet result = state.executeQuery(); //recebe a tabela com as respostas da pesquisa
             while (result.next()) {// enquanto houverem respostas, imprima-as
                 // Corrigir a questão da Data
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
+                //return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
             }
         } catch (Exception e) {//se der erro, mostre qual foi
             System.out.println(e);
@@ -60,7 +75,7 @@ public class Livro {
             
             // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
             while (result.next()) {  
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));    
+                //return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));    
             }
             
         } catch (Exception e) {
@@ -69,24 +84,38 @@ public class Livro {
         return null;
     }
 
+    /**
+     * Medoto que insere uma instância de Livro no banco de dados
+     */
     public void inserirLivro() {
+                
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            java.util.Date utilDate = dateFormat.parse(data);
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            System.out.println("Você digitou a data: " + sqlDate);
+        } catch (ParseException e) {
+            System.out.println("Formato de data inválido. Certifique-se de usar o formato (dd/MM/yyyy).");
+        }
+
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
             String query = "INSERT INTO Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, livroAcervo, livroDisponivel) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, titulo);
             state.setString(2, genero);
             state.setString(3, autor);
-            state.setDate(4, dataPublicacao);
+            state.setDate(4, sqlDate);
             state.setString(5, edicao);
             state.setString(6, editora);
             state.setString(7, isbn);
-            state.setBoolean(8, livroAcervo);
-            state.setBoolean(9, livroDisponivel);
+            state.setInt(8, quantLivros);
+            state.setInt(9, quantDisponivel);
             state.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println(e);
         }
+
     }
 
     public static void excluirLivro(int idLivro) {
@@ -104,7 +133,9 @@ public class Livro {
     public String toString() {
         return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", genero=" + genero + ", autor=" + autor
                 + ", dataPublicacao=" + dataPublicacao + ", edicao=" + edicao + ", editora=" + editora + ", isbn="
-                + isbn + ", livroAcervo=" + livroAcervo + ", livroDisponivel=" + livroDisponivel;
+                + isbn + ", quantLivros=" + quantLivros + ", quantDisponivel=" + quantDisponivel + "]";
     }
+
+
 
 }

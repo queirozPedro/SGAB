@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.util.Scanner;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class MainProjeto{
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -7,8 +9,8 @@ public class MainProjeto{
         boolean sair = false; int op;
 
         while (!sair) {
-            //opções do MainProjeto principal
-            op = MenuPrincipal(sc);
+            //opções do MainProjeto Testes
+            op = MenuTestes(sc);
             sc.nextLine();
             switch (op) {
                 case 1: // Usuário
@@ -37,10 +39,10 @@ public class MainProjeto{
         sc.close();
     }
 
-    public static int MenuPrincipal(Scanner sc) throws InterruptedException, IOException{
+    public static int MenuTestes(Scanner sc) throws InterruptedException, IOException{
         LimpaTela();
         System.out.println("-------------------------");
-        System.out.println("   Menu Principal\n");
+        System.out.println("   Menu Testes\n");
         System.out.println("    1 -> Usuário");
         System.out.println("    2 -> Cliente");
         System.out.println("    3 -> Administrador");
@@ -179,6 +181,18 @@ public class MainProjeto{
         }
     }
 
+
+    // idLivro Serial PRIMARY KEY,
+    // Titulo VARCHAR(50),
+    // Genero VARCHAR(20),
+    // Autor VARCHAR(255),
+    // DataPublicacao Date,
+    // Edicao VARCHAR(50),
+    // Editora VARCHAR(50),
+    // ISBN VARCHAR(13), 
+    // quantLivros int,
+    // quantDisponivel int
+
     public static void MenuLivro(Scanner sc, int op) throws InterruptedException, IOException{
         LimpaTela();
         System.out.println("-------------------------");
@@ -193,7 +207,29 @@ public class MainProjeto{
         op = sc.nextInt(); sc.nextLine();
         switch (op) {
             case 1:
+                LimpaTela();
                 
+                System.out.println("Insira os dados do livro");
+                System.out.print("Titulo: ");
+                String titulo = sc.nextLine();
+                System.out.print("Genero: ");
+                String genero = sc.nextLine();
+                System.out.print("Autor: ");
+                String autor = sc.nextLine();
+                System.out.print("Data da Publicacao (dd/MM/yyyy): ");
+                String data = sc.nextLine();
+                System.out.println("Edicao: ");
+                String edicao = sc.nextLine();
+                System.out.println("Editora: ");
+                String editora = sc.nextLine();
+                System.out.println("ISBN: ");
+                String isbn = sc.nextLine();
+                System.out.println("quantLivros: ");
+                String quantLivros = sc.nextLine();
+                System.out.println("quantDisponivel: ");
+                String quantDisponivel = sc.nextLine();
+
+                Livro livroAux = new Livro(titulo, genero, autor, data, edicao, editora, isbn, 5, 4);
                 break;
             case 2:
                 
