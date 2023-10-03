@@ -180,7 +180,6 @@ public class MainProjeto{
         }
     }
 
-
     // idLivro Serial PRIMARY KEY,
     // Titulo VARCHAR(50),
     // Genero VARCHAR(20),
@@ -233,7 +232,7 @@ public class MainProjeto{
                 sc.nextLine();
                 break;
             case 2:
-                
+
                 break;
             case 3:
                 
@@ -288,28 +287,3 @@ public class MainProjeto{
         }
     }
 }
-
-    // String tipo, busca;
-    // System.out.println("Por que parametro deseja buscar o livro:\n1-Titulo;\n2-Autor;\n3-Genero;\n0-Voltar;");
-    // int op = sc.nextInt();
-    // sc.nextLine();
-    // switch (op) {//escolhendo o tipo de busca, que será usada na pesquisa posteriormente
-    //     case 1:
-    //         tipo = "titulo";
-    //         System.out.print("Titulo: ");
-    //         busca = sc.nextLine();//recebendo o que queremos buscar
-    //         break;
-    //     case 2:
-    //         tipo = "autor";
-    //         System.out.print("Autor: ");
-    //         busca = sc.nextLine();
-    //         break;
-    //     case 3:
-    //         tipo = "genero";
-    //         System.out.print("Genero: ");
-    //         busca = sc.nextLine();
-    //         break;
-    //     case 0: // sair
-    //     default:
-    //         return null;
-    // }
