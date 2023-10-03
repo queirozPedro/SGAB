@@ -8,25 +8,12 @@ public class Livro {
     private String titulo;
     private String genero;
     private String autor;
-    private String dataPublicacao; // Date
+    private java.sql.Date dataPublicacao; // Date
     private String edicao;
     private String editora;
     private String isbn;
     private int quantLivros;
     private int quantDisponivel;
-    
-    public Livro(String titulo, String genero, String autor, String dataPublicacao, String edicao, String editora,
-            String isbn, int quantLivros, int quantDisponivel) {
-        this.titulo = titulo;
-        this.genero = genero;
-        this.autor = autor;
-        this.dataPublicacao = dataPublicacao;
-        this.edicao = edicao;
-        this.editora = editora;
-        this.isbn = isbn;
-        this.quantLivros = quantLivros;
-        this.quantDisponivel = quantDisponivel;
-    }
 
     public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
             String editora, String isbn, int quantLivros, int quantDisponivel) {
@@ -34,13 +21,41 @@ public class Livro {
         this.titulo = titulo;
         this.genero = genero;
         this.autor = autor;
-        this.dataPublicacao = dataPublicacao;
+        setDataPublicacao(dataPublicacao);
         this.edicao = edicao;
         this.editora = editora;
         this.isbn = isbn;
         this.quantLivros = quantLivros;
         this.quantDisponivel = quantDisponivel;
     }
+
+
+    public Livro(String titulo, String genero, String autor, String dataPublicacao, String edicao, String editora,
+            String isbn, int quantLivros, int quantDisponivel) {
+        this.titulo = titulo;
+        this.genero = genero;
+        this.autor = autor;
+        setDataPublicacao(dataPublicacao);
+        this.edicao = edicao;
+        this.editora = editora;
+        this.isbn = isbn;
+        this.quantLivros = quantLivros;
+        this.quantDisponivel = quantDisponivel;
+    }
+
+
+    public void setDataPublicacao(String dataPublicacao) {
+
+        try {
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date utilDate = formatoData.parse(dataPublicacao);
+            this.dataPublicacao = new Date(utilDate.getTime());
+            } catch (ParseException e) {
+                System.err.println("Erro ao converter a data");
+            }
+
+    }
+
 
     /**
      * Metodo de busca por id
@@ -88,24 +103,14 @@ public class Livro {
      * Medoto que insere uma instância de Livro no banco de dados
      */
     public void inserirLivro() {
-                
-        Date dataPub = null;
-
-        try {
-            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date utilDate = formatoData.parse(dataPublicacao);
-            dataPub = new Date(utilDate.getTime());
-        } catch (ParseException e) {
-            System.err.println("Erro ao converter a data");
-        }
 
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
-            String query = "INSERT INTO Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, livroAcervo, livroDisponivel) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, quantLivros, quantDisponivel) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, titulo);
             state.setString(2, genero);
             state.setString(3, autor);
-            state.setDate(4, dataPub);
+            state.setDate(4, dataPublicacao);
             state.setString(5, edicao);
             state.setString(6, editora);
             state.setString(7, isbn);
@@ -136,7 +141,5 @@ public class Livro {
                 + ", dataPublicacao=" + dataPublicacao + ", edicao=" + edicao + ", editora=" + editora + ", isbn="
                 + isbn + ", quantLivros=" + quantLivros + ", quantDisponivel=" + quantDisponivel + "]";
     }
-
-
 
 }

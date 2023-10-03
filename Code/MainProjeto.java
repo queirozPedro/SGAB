@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.util.Scanner;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 
 public class MainProjeto{
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -216,7 +215,7 @@ public class MainProjeto{
                 System.out.print("Autor: ");
                 String autor = sc.nextLine();
                 System.out.print("Data da Publicacao (dd/MM/yyyy): ");
-                String data = sc.nextLine();
+                String dataPublicacao = sc.nextLine();
                 System.out.println("Edicao: ");
                 String edicao = sc.nextLine();
                 System.out.println("Editora: ");
@@ -227,8 +226,10 @@ public class MainProjeto{
                 int quantLivros = sc.nextInt();
                 System.out.println("quantDisponivel: ");
                 int quantDisponivel = sc.nextInt();
-                Livro livroAux = new Livro(titulo, genero, autor, data, edicao, editora, isbn, quantLivros, quantDisponivel);
+                Livro livroAux = new Livro(titulo, genero, autor, dataPublicacao, edicao, editora, isbn, quantLivros, quantDisponivel);
                 livroAux.inserirLivro();
+                System.out.println(livroAux);
+                sc.nextLine();
                 sc.nextLine();
                 break;
             case 2:
