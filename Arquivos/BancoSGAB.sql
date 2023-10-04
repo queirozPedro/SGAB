@@ -6,6 +6,7 @@ CREATE TABLE Usuario (
 );
 
 CREATE TABLE Telefone(
+    idTelefone Serial PRIMARY KEY,
     cpf VARCHAR(11),
     numero VARCHAR(11) NOT NULL,
     FOREIGN KEY (cpf) REFERENCES Usuario(cpf)
