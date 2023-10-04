@@ -57,6 +57,7 @@ public class Usuario {
      * @param idUsuario
      * @return Usuario
      */
+
     public static Usuario buscaUsuario(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "SELECT * From usuario where cpf = ?"; 
@@ -85,6 +86,46 @@ public class Usuario {
             state.executeQuery();
         } catch (Exception e) {
             System.out.println(e);
+        }
+    }
+
+    public void editarUsuario(String cpf, String nome, String senha, String email, String telefone1, String telefone2, String telefone3 ){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "UPDATE Usuario SET nome = ?, senha = ?, email = ? WHERE cpf = ?";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, nome);
+            state.setString(2, senha);
+            state.setString(3, email);
+            state.setString(4, cpf);
+            int linhasAfetadas = state.executeUpdate();
+
+            if(linhasAfetadas > 0){
+                System.out.println ("Os dados do usuário foram atualizados com sucesso!");
+            }else{
+                System.out.println ("Não foi possivel encontrar um usuário para atualizar!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editarTelefones(String cpf, String telefone1, String telefone2, String telefone3 ){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "UPDATE telefone SET telefone1 = ?, telefone2 = ?, telefone3 = ? WHERE cpf = ?";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, telefone1);
+            state.setString(2, telefone2);
+            state.setString(3, telefone3);
+            state.setString(4, cpf);
+            int linhasAfetadas = state.executeUpdate();
+
+            if(linhasAfetadas > 0){
+                System.out.println ("Os dados do usuário foram atualizados com sucesso!");
+            }else{
+                System.out.println ("Não foi possivel encontrar um usuário para atualizar!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
