@@ -117,6 +117,29 @@ public class Usuario {
         return null;
     }
 
+    /**
+     * Método confirmaCredencial: Método que recebe um email e uma senha e retorna o usuário que seja correspondente
+     * aos dois. Obs.: O Método não trata dados, portanto o email e senha devem ser recebidos no formato correto.
+     * @param email
+     * @param senha
+     * @return Usuario
+     */
+    public static Usuario confirmaCredencial(String email, String senha){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            
+            // Remove o usuário da tabela Usuario
+            String query = "SELECT cpf From usuario where email = ? AND senha = ?"; 
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, email); 
+            state.setString(2, senha); 
+            ResultSet result = state.executeQuery();
+            return buscaUsuario(result.getString(1));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        return null;
+    }
 
     //
     public void editarUsuario(String cpf, String nome, String senha, String email, String telefone1, String telefone2, String telefone3 ){
