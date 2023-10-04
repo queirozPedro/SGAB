@@ -74,7 +74,7 @@ public class Livro {
     /**
      * Medoto que insere uma instância de Livro no banco de dados
      */
-    public void inserirLivro() {
+    public void cadastrarLivro() {
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
             String query = "INSERT INTO Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, quantLivros, quantDisponivel) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement state = connection.prepareStatement(query);
@@ -175,6 +175,32 @@ public class Livro {
             state.executeQuery(); 
         } catch (Exception e) {//se der erro, mostre qual foi
             System.out.println(e);
+        }
+    }
+
+    public void editarLivro(int idLivro, String novoTitulo, String novoGenero, String novoAutor, Date novaDataPublicacao, String novaEdicao, String novaEditora, int novoIsbn, int novoQuantLivros, int novoQuantDisponivel){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "UPDATE Livro SET titulo = ?, genero = ?, autor = ?, dataPublicacao = ?, edicao = ?, editora = ?, isbn = ?, quantLivros = ?, quantDisponivel = ? WHERE idLivro = ?";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, novoTitulo);
+            state.setString(2, novoGenero);
+            state.setString(3, novoAutor);
+            state.setDate(4, novaDataPublicacao);
+            state.setString(5, novaEdicao);
+            state.setString(6, novaEditora);
+            state.setInt(7, novoIsbn);
+            state.setInt(8, novoQuantLivros);
+            state.setInt(9, novoQuantDisponivel);
+            state.setInt(10, idLivro);
+            int linhasAfetadas = state.executeUpdate();
+
+            if(linhasAfetadas > 0){
+                System.out.println ("Os dados do livro foram atualizadis com sucesso!");
+            }else{
+                System.out.println ("Não foi possivel encontrar um livro para atualizar!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

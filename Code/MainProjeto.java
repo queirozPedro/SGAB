@@ -226,7 +226,7 @@ public class MainProjeto{
                 System.out.println("quantDisponivel: ");
                 int quantDisponivel = sc.nextInt();
                 Livro livroAux = new Livro(titulo, genero, autor, dataPublicacao, edicao, editora, isbn, quantLivros, quantDisponivel);
-                livroAux.inserirLivro();
+                livroAux.cadastrarLivro();
                 System.out.println(livroAux);
                 sc.nextLine();
                 sc.nextLine();
