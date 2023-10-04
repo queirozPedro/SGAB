@@ -57,7 +57,7 @@ Levando em consideração a modularidade do sistema, e a disponibilidade de todo
 </table>
 
 ## Diagrama de Classes
-![Diagrama de Classes](https://raw.githubusercontent.com/CaraChaato/SGAB/main/Arquivos/Diagrama%20de%20Classes%20UML%20-%20Sistema%20de%20Biblioteca%20-%20Fundo%20Transparente.png)
+![Diagrama de Classes](https://raw.githubusercontent.com/CaraChaato/SGAB/main/Arquivos/Diagrama%20de%20Classes%20-%20SGAB.png)
 
 ## :handshake: Colaboradores
 <table align="center">
