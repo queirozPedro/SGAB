@@ -1,9 +1,10 @@
 import java.sql.*;
 public class Cliente extends Usuario {
     private int idCliente;
-
     
-    public Cliente(int idCliente) {
+
+    public Cliente(int idCliente, Usuario usuario) {
+        super(usuario.getCpf(), usuario.getNome(), usuario.getSenha(), usuario.getEmail());
         this.idCliente = idCliente;
     }
 
@@ -13,13 +14,43 @@ public class Cliente extends Usuario {
     }
 
     public void insereCliente(){
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "INSERT INTO Cliente";   
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){            
+            super.insereUsuario();
+            String query = "INSERT INTO Cliente (cpf) VALUES (?)";
             PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, super.getCpf());
             state.executeUpdate();
-            
         } catch (Exception e) {
             System.out.println(e);
+        }
+    }
+
+    public static Cliente BuscaCliente(String cpf){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "SELECT * from cliente where cpf = ?";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            ResultSet result = state.executeQuery();
+
+            while (result.next()) {
+                return new Cliente(result.getInt(1), Usuario.buscaUsuario(result.getString(2)));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);    
+        }
+        return null;
+    }
+
+    public static void removeCliente(String cpf){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+            String query = "Delete from Cliente where cpf = ?";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            state.executeQuery();
+            Usuario.removeUsuario();
+        } catch (Exception e) {
+            System.out.println(e); 
         }
     }
 

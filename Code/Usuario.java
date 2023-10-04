@@ -57,7 +57,7 @@ public class Usuario {
      * @param idUsuario
      * @return Usuario
      */
-    public static Usuario buscaUsuarioId(String cpf){
+    public static Usuario buscaUsuario(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "SELECT * From usuario where cpf = ?"; 
             PreparedStatement state = connection.prepareStatement(query);
@@ -90,6 +90,8 @@ public class Usuario {
         }
     }
 
+    
+
     public String getCpf() {
         return cpf;
     }
@@ -121,9 +123,19 @@ public class Usuario {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    
     @Override
     public String toString() {
         return "Usuario [cpf=" + cpf + ", nome=" + nome + ", senha=" + senha + ", email=" + email + ", telefone="
                 + telefone + "]";
+    }
+
+    public void setTelefone(String[] telefone) {
+        this.telefone = telefone;
+    }
+
+    public String[] getTelefone() {
+        return telefone;
     }
 }
