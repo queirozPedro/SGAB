@@ -48,7 +48,7 @@ public class Cliente extends Usuario {
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf);
             state.executeQuery();
-            Usuario.removeUsuario();
+            Usuario.removeUsuario(cpf);
         } catch (Exception e) {
             System.out.println(e); 
         }

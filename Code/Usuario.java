@@ -63,12 +63,10 @@ public class Usuario {
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf); 
             ResultSet result = state.executeQuery();
-
             while (result.next()) { 
                 // Esses get são na ordem que os dados estão no banco, consultar o SQL disponivel nos arquivos
                 return new Usuario(result.getString(1),result.getString(2), result.getString(3), result.getString(4));
             }
-            
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -89,8 +87,6 @@ public class Usuario {
             System.out.println(e);
         }
     }
-
-    
 
     public String getCpf() {
         return cpf;
