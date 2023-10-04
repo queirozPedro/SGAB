@@ -1,94 +1,124 @@
 import java.sql.*;
+import java.util.ArrayList;
 public class Usuario {
 
     private String cpf;
     private String nome;
     private String senha;
     private String email;
-    private String[] telefone = new String[2];
+    private ArrayList<String> telefone;
 
-    public Usuario(){};
-
-    public Usuario(String cpf, String nome, String senha, String email) {
-        this.cpf = cpf;
-        this.nome = nome;
-        this.senha = senha;
-        this.email = email;
-    }
-
-    public Usuario(String cpf, String nome, String senha, String email, String[] telefone) {
-        this.cpf = cpf;
-        this.nome = nome;
-        this.senha = senha;
-        this.email = email;
-        this.telefone = telefone;
+    public Usuario(String cpf, String nome, String senha, String email, ArrayList<String> telefone) {
+        setCpf(cpf);
+        setNome(nome);
+        setSenha(senha);
+        setEmail(email);
+        setTelefone(telefone);
     }
 
     /**
-     * Uma metodo que insere uma instância de Usuario no banco de dados
+     * Método criarConta: Responsável por criar uma nova conta de Usuário no banco de dados sistema.
+     * Obs.: Recebe uma instancia da Classe Usuario com dados já formatados corretamente,a falta 
+     * dessa formatação pode causar erros.
      */
-    public void insereUsuario(){
+    public void criarConta(){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "INSERT Into usuario (cpf, nome, senha, email) VALUES (?, ?, ?, ?)"; 
-            PreparedStatement state = connection.prepareStatement(query);
-            state.setString(1, cpf);
-            state.setString(2, nome);
-            state.setString(3, senha);
-            state.setString(4, email);
-            state.executeUpdate();
-            System.out.println("Oi");
-            for (int i = 0; i < 2; i++) {
-                if(telefone[i] != null){
-                    query = "INSERT Into telefone (cpf, numero) VALUES (?, ?)"; 
-                    state = connection.prepareStatement(query);
-                    state.setString(1, cpf);
-                    state.setString(2, telefone[i]);
-                    state.executeUpdate();
+            
+            // Checa se o usuário com esse cpf já existe no sistema. Se for null não existe.
+            if(buscaUsuario(cpf) == null){
+                // Insere o usuário na tabela Usuario
+                String query = "INSERT Into usuario (cpf, nome, senha, email) VALUES (?, ?, ?, ?)"; 
+                PreparedStatement state = connection.prepareStatement(query);
+                state.setString(1, cpf);
+                state.setString(2, nome);
+                state.setString(3, senha);
+                state.setString(4, email);
+                state.executeUpdate();
+
+                // Insere os telefones dele na tabela Telefone com base em seu cpf
+                for (int i = 0; i < telefone.size(); i++) {
+                    if(telefone.get(i) != null){
+                        query = "INSERT Into telefone (cpf, numero) VALUES (?, ?)"; 
+                        state = connection.prepareStatement(query);
+                        state.setString(1, cpf);
+                        state.setString(2, telefone.get(i));
+                        state.executeUpdate();
+                    }
                 }
             }
-            System.out.println("Usuário cadastrado com sucesso!!");
+            else
+                System.out.println("ERRO! Este usuário já está cadastrado no sistema!");
+
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     /**
-     * Recebe um cpf de um usuario e retorna uma instância dele
-     * @param idUsuario
+     * Método excluirConta: Método que recebe um cpf de um usário e remove ele do banco de dados do sistema.
+     * Obs.: O Método não trata dados, portanto o cpf deve ser recebido no formato correto.
+     * @param cpf
+     */
+    public static void excluirConta(String cpf){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            
+            // Remove o usuário da tabela Usuario
+            String query = "DELETE From usuario where cpf = ?"; 
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, cpf); 
+            state.executeQuery();
+
+            // Remove os telefones endereçados ao usuário removido
+            query = "DELETE From telefone where cpf = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, cpf); 
+            state.executeQuery();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+
+    /**
+     * Método buscaUsuario: Responsável por retornar um Usuário do banco de dados de acordo com seu cpf.
+     * Obs.: O Método não trata dados, portanto o cpf deve ser recebido no formato correto. Retorna
+     * null caso não encontre.
+     * @param cpf
      * @return Usuario
      */
-
     public static Usuario buscaUsuario(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            
+            // Busca o usuário na tabela usuario usando o cpf
             String query = "SELECT * From usuario where cpf = ?"; 
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf); 
             ResultSet result = state.executeQuery();
-            while (result.next()) { 
-                // Esses get são na ordem que os dados estão no banco, consultar o SQL disponivel nos arquivos
-                return new Usuario(result.getString(1),result.getString(2), result.getString(3), result.getString(4));
+            
+            // Usando o mesmo cpf, ele busca os telefones, deixando-os organizados em ordem crescente
+            ArrayList<String> telefone = new ArrayList<String>();
+            query = "SELECT numero FROM telefone WHERE cpf = ? ORDER BY idTelefone";
+            state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            ResultSet result2 = state.executeQuery();
+
+            // Aplica cada tupla obtida com esse cpf em um ArrayList de String para telefone
+            while(result2.next()){
+                telefone.add(result2.getString(3));
             }
+
+            // Retorna o usuário
+            return new Usuario(result.getString(1), result.getString(2), result.getString(3), result.getString(4), telefone);
+
         } catch (Exception e) {
             System.out.println(e);
         }
         return null;
     }
 
-    /**
-     * Remove um usuário do banco com base em seu cpf
-     * @param cpf
-     */
-    public static void removeUsuario(String cpf){
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "DELETE From usuario where cpf = ?"; 
-            PreparedStatement state = connection.prepareStatement(query);
-            state.setString(1, cpf); 
-            state.executeQuery();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
 
+    //
     public void editarUsuario(String cpf, String nome, String senha, String email, String telefone1, String telefone2, String telefone3 ){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "UPDATE Usuario SET nome = ?, senha = ?, email = ? WHERE cpf = ?";
@@ -160,19 +190,14 @@ public class Usuario {
     public void setEmail(String email) {
         this.email = email;
     }
-
     
+    public void setTelefone(ArrayList<String> telefone) {
+        this.telefone = telefone;
+    }
+
     @Override
     public String toString() {
         return "Usuario [cpf=" + cpf + ", nome=" + nome + ", senha=" + senha + ", email=" + email + ", telefone="
                 + telefone + "]";
-    }
-
-    public void setTelefone(String[] telefone) {
-        this.telefone = telefone;
-    }
-
-    public String[] getTelefone() {
-        return telefone;
     }
 }
