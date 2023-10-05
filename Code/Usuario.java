@@ -105,7 +105,7 @@ public class Usuario {
 
             // Aplica cada tupla obtida com esse cpf em um ArrayList de String para telefone
             while(result2.next()){
-                telefone.add(result2.getString(3));
+                telefone.add(result2.getString(1));
             }
 
             // Retorna o usuário
