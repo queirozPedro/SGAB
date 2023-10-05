@@ -10,52 +10,11 @@ public class Emprestimo {
     private String dataPrevista;
     private String dataDevolucao;
     
-
     public Emprestimo(String cpf, int idLivro, String dataEmprestimo, String dataPrevista, String dataDevolucao) {
         this.cpf = cpf;
         this.idLivro = idLivro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataPrevista = dataPrevista;
-        this.dataDevolucao = dataDevolucao;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public int getIdLivro() {
-        return idLivro;
-    }
-
-    public void setIdLivro(int idLivro) {
-        this.idLivro = idLivro;
-    }
-
-    public String getDataEmprestimo() {
-        return dataEmprestimo;
-    }
-
-    public void setDataEmprestimo(String dataEmpretimo) {
-        this.dataEmprestimo = dataEmpretimo;
-    }
-
-    public String getDataPrevista() {
-        return dataPrevista;
-    }
-
-    public void setDataPrevista(String dataPrevista) {
-        this.dataPrevista = dataPrevista;
-    }
-
-    public String getDataDevolucao() {
-        return dataDevolucao;
-    }
-
-    public void setDataDevolucao(String dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
 
@@ -114,4 +73,45 @@ public class Emprestimo {
             System.out.println(e);
         }
     }
+    
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public int getIdLivro() {
+        return idLivro;
+    }
+
+    public void setIdLivro(int idLivro) {
+        this.idLivro = idLivro;
+    }
+
+    public String getDataEmprestimo() {
+        return dataEmprestimo;
+    }
+
+    public void setDataEmprestimo(String dataEmpretimo) {
+        this.dataEmprestimo = dataEmpretimo;
+    }
+
+    public String getDataPrevista() {
+        return dataPrevista;
+    }
+
+    public void setDataPrevista(String dataPrevista) {
+        this.dataPrevista = dataPrevista;
+    }
+
+    public String getDataDevolucao() {
+        return dataDevolucao;
+    }
+
+    public void setDataDevolucao(String dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
+
 }
