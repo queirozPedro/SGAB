@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MenuTeste {
@@ -50,7 +51,7 @@ public class MenuTeste {
         System.out.println("    4 -> Livro");
         System.out.println("    5 -> Emprestimo");
         System.out.println("    0 -> Voltar");
-        System.out.println("Digite uma opção: ");
+        System.out.print("Digite uma opção: ");
         return sc.nextInt();
     }
 
@@ -62,7 +63,7 @@ public class MenuTeste {
         System.out.println("    3 -> Editar");
         System.out.println("    4 -> Remover");
         System.out.println("    0 -> Voltar");
-        System.out.println(" Digite uma opção: ");
+        System.out.print(" Digite uma opção: ");
         op = sc.nextInt();
         sc.nextLine();
         switch (op) {
@@ -77,30 +78,30 @@ public class MenuTeste {
                 String email = sc.nextLine();
                 System.out.print("Senha: ");
                 String senha = sc.nextLine();
-                System.out.println("Telefone");
-                System.out.println(" 1 -> Inserir 1");
-                System.out.println(" 2 -> Inserir 2");
-                System.out.print(" >> ");
-                String[] telefone = new String[2];
-                op = sc.nextInt();
-                sc.nextLine();
+                ArrayList<String> telefone = new ArrayList<String>();
+                String aux;
+                System.out.println("\nTelefone");
+                System.out.println(" 1 -> Inserir 1 telefone");
+                System.out.println(" 2 -> Inserir 2 telefones");
+                op = sc.nextInt(); sc.nextLine();
                 switch (op) {
                     case 2:
-                        System.out.print("Telefone 1:");
-                        telefone[0] = sc.nextLine();
-                        sc.nextLine();
-                        System.out.print("Telefone 2:");
-                        telefone[1] = sc.nextLine();
-                        sc.nextLine();
+                        System.out.print("\nTelefone 1: ");
+                        aux = sc.nextLine();
+                        telefone.add(aux);
+                        System.out.print("Telefone 2: ");
+                        aux = sc.nextLine();
+                        telefone.add(aux);
                         break;
                     case 1:
                     default:
-                        System.out.print("Telefone:");
-                        telefone[0] = sc.nextLine();
-                        sc.nextLine();
+                        System.out.print("\nTelefone: ");
+                        aux = sc.nextLine();
+                        telefone.add(aux);
                         break;
                 }
-                Usuario usuario = new Usuario(cpf, nome, senha, email, null);
+                
+                Usuario usuario = new Usuario(cpf, nome, senha, email, telefone);
                 usuario.criarConta();
                 sc.nextLine();
                 break;
@@ -128,7 +129,7 @@ public class MenuTeste {
         System.out.println("    3 -> Editar");
         System.out.println("    4 -> Remover");
         System.out.println("    0 -> Voltar");
-        System.out.println(" Digite uma opção: ");
+        System.out.print(" Digite uma opção: ");
         op = sc.nextInt();
         sc.nextLine();
         switch (op) {
@@ -158,7 +159,7 @@ public class MenuTeste {
         System.out.println("    3 -> Editar");
         System.out.println("    4 -> Remover");
         System.out.println("    0 -> Voltar");
-        System.out.println(" Digite uma opção: ");
+        System.out.print(" Digite uma opção: ");
         op = sc.nextInt();
         sc.nextLine();
         switch (op) {
@@ -189,7 +190,7 @@ public class MenuTeste {
         System.out.println("    3 -> Editar");
         System.out.println("    4 -> Remover");
         System.out.println("    0 -> Voltar");
-        System.out.println(" Digite uma opção: ");
+        System.out.print(" Digite uma opção: ");
         op = sc.nextInt();
         sc.nextLine();
         switch (op) {
@@ -246,7 +247,7 @@ public class MenuTeste {
         System.out.println("    3 -> Editar");
         System.out.println("    4 -> Remover");
         System.out.println("    0 -> Voltar");
-        System.out.println(" Digite uma opção: ");
+        System.out.print(" Digite uma opção: ");
         op = sc.nextInt();
         sc.nextLine();
         switch (op) {
