@@ -99,8 +99,8 @@ public class MainProjeto{
                         sc.nextLine();
                         break;
                     }
-                Usuario usuario = new Usuario(cpf, nome, senha, email, telefone);
-                usuario.insereUsuario();
+                Usuario usuario = new Usuario(cpf, nome, senha, email, null);
+                usuario.criarConta();
                 sc.nextLine();
                 break;
             case 2:

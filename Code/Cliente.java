@@ -4,18 +4,18 @@ public class Cliente extends Usuario {
     
 
     public Cliente(int idCliente, Usuario usuario) {
-        super(usuario.getCpf(), usuario.getNome(), usuario.getSenha(), usuario.getEmail());
+        super(usuario.getCpf(), usuario.getNome(), usuario.getSenha(), usuario.getEmail(), null);
         this.idCliente = idCliente;
     }
 
     public Cliente(String cpf, String nome, String senha, String email, int idCliente) {
-        super(cpf, nome, senha, email);
+        super(cpf, nome, senha, email, null);
         this.idCliente = idCliente;
     }
 
     public void insereCliente(){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){            
-            super.insereUsuario();
+            super.criarConta();
             String query = "INSERT INTO Cliente (cpf) VALUES (?)";
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, super.getCpf());
@@ -48,7 +48,7 @@ public class Cliente extends Usuario {
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf);
             state.executeQuery();
-            Usuario.removeUsuario(cpf);
+            Usuario.excluirConta(cpf);
         } catch (Exception e) {
             System.out.println(e); 
         }
@@ -85,7 +85,7 @@ public class Cliente extends Usuario {
                 updateStatement.executeUpdate();
     
                 // retorna um usuario modificado
-                return new Usuario(cpf, nome, email, senha);
+                return new Usuario(cpf, nome, senha, email, null);
             }
     
             // caso não tenha um usuario cm o msm nome ou cpf, continua o registro
@@ -98,7 +98,7 @@ public class Cliente extends Usuario {
             insertStatement.executeUpdate();
     
             // registro ok, retorna um novo usuario 
-            return new Usuario(cpf, nome, email, senha);
+            return new Usuario(cpf, nome, senha, email, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
