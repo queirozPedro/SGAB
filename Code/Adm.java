@@ -12,6 +12,11 @@ public class Adm extends Usuario {
         this.idAdm = idAdm;
     }
 
+    public Adm(Usuario usuario) {
+        super(usuario.getCpf(), usuario.getNome(), usuario.getSenha(), usuario.getEmail(), usuario.getTelefone());
+    }
+
+
     public Adm(String cpf, String nome, String senha, String email, String telefone) {
         super(cpf, nome, senha, email, telefone);
     }
