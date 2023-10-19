@@ -65,7 +65,7 @@ public class MainProjeto {
                 System.out.println(" 0 -> Voltar");
                 System.out.print(" >> ");
 
-                switch (Integer.valueOf(MenuPrincipal(sc))) {
+                switch (Integer.valueOf(sc.nextLine())) {
                     case 1:
                         LimpaTela();
                         System.out.println(" < Login >");
@@ -73,13 +73,12 @@ public class MainProjeto {
                         String email = sc.nextLine();
                         System.out.print("Senha: ");
                         String senha = sc.nextLine();
-                        Usuario usuario = Usuario.loginUsuario(email, senha);
-                        if (usuario != null) {
-                            Adm admin = Adm.loginAdm(email, senha);
-                            if (admin != null) {
-                                menuAdmin(admin, sc);
+                        
+                        if (Usuario.loginUsuario(email, senha) != null) {
+                            if (Adm.loginAdm(email, senha) != null) {
+                                menuAdmin(Adm.loginAdm(email, senha), sc);
                             } else {
-                                menuUsuario(usuario, sc);
+                                menuUsuario(Usuario.loginUsuario(email, senha), sc);
                             }
                         } else {
                             LimpaTela();
@@ -262,7 +261,8 @@ public class MainProjeto {
                                             usuario.getCpf(),
                                             idLivro,
                                             dataEmprestimo,
-                                            dataPrevista);
+                                            dataPrevista,
+                                            null);
                                     emprestimo.criarEmprestimo();
                                 } else {
                                     System.out.println(" Empréstimo Cancelado por Invalidação!");
