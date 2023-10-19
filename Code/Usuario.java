@@ -123,7 +123,7 @@ public class Usuario {
      * @param email
      * @param telefone
      */
-    public void editarUsuario(String nome, String senha, String email, String telefone) {
+    public void editarUsuario(String campo, String valor) {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
 
@@ -131,21 +131,14 @@ public class Usuario {
          * Primeiro checa se algum desses dados foi recebido e aplica valores
          * locais aos que forem null.
          */
-        setNome(nome != null ? nome : getNome());
-        setSenha(senha != null ? senha : getSenha());
-        setEmail(email != null ? email : getEmail());
-        setTelefone(telefone != null ? telefone : getTelefone());
 
         try {
 
             // Atualiza nome, senha e email na tabela usuario na posição do cpf usado.
-            String query = "UPDATE Usuario SET nome = ?, senha = ?, email = ?, telefone = ? WHERE cpf = ?";
+            String query = "UPDATE Usuario SET "+ campo +" = ? WHERE cpf = ?";
             state = connection.prepareStatement(query);
-            state.setString(1, this.nome);
-            state.setString(2, this.senha);
-            state.setString(3, this.email);
-            state.setString(4, this.telefone);
-            state.setString(5, this.cpf);
+            state.setString(1, valor);
+            state.setString(2, getCpf());
             state.executeUpdate();
             state.close();
 
