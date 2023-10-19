@@ -39,8 +39,8 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
 * <b> [RNF003] Disponibilidade </b>: O SGAB deve estar sempre disponível para utilização, mesmo em cenários que a internet estiver instável.
 * <b> [RNF004] Desempenho </b>: Deve ser rápido, com tempo de inicialização inferior a 5 segundos.
   
-## Teste de Caixa Branca
-Levando em consideração a modularidade do sistema, e a disponibilidade de todo o código fonte, o tipo de teste escolhido foi o teste de caixa branca. O teste de caixa branca (também chamado de teste estrutural ou teste de caixa transparente), consiste em uma visualização lógica do código fonte, buscando erros ou inconsistências. Nesse teste é importante percorrer todos os caminhos do código, analisando sua complexidade e criando um grafo de fluxo de controle. 
+## Teste de Caixa Cinza
+Levando em consideração a modularidade do sistema, e a disponibilidade de todo o código fonte, o tipo de teste escolhido foi o teste de caixa cinza. Os testes de caixa cinza são um tipo de teste de software que combina elementos dos testes de caixa preta (onde o teste é realizado sem conhecimento interno do código) e dos testes de caixa branca (onde o teste é realizado com conhecimento total do código). No teste de caixa cinza, os testadores têm algum conhecimento parcial do código-fonte ou da estrutura interna do software, permitindo-lhes projetar casos de teste mais eficazes com base nesse entendimento limitado. Isso ajuda a identificar falhas no software de maneira mais abrangente do que nos testes de caixa preta, mas sem a complexidade dos testes de caixa branca.
 
 ## 📑 Documentação do Projeto
 <table>
