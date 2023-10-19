@@ -11,9 +11,7 @@ public class MainProjeto {
         boolean sair = false;
 
         while (!sair) {
-
             try {
-
                 switch (Integer.valueOf(MenuPrincipal(sc))) {
                     case 1: // Usuário
                         MenuLogin(sc);
@@ -28,10 +26,8 @@ public class MainProjeto {
                     default:
                         break;
                 }
-
             } catch (NumberFormatException e) {
             }
-
         }
         sc.close();
     }
@@ -73,7 +69,7 @@ public class MainProjeto {
                         String email = sc.nextLine();
                         System.out.print("Senha: ");
                         String senha = sc.nextLine();
-                        
+
                         if (Usuario.loginUsuario(email, senha) != null) {
                             if (Adm.loginAdm(email, senha) != null) {
                                 menuAdmin(Adm.loginAdm(email, senha), sc);
@@ -121,7 +117,6 @@ public class MainProjeto {
                 System.out.println(" 1 -> Registrar-se");
                 System.out.println(" 0 -> Voltar");
                 System.out.print(" >> ");
-
                 switch (Integer.valueOf(sc.nextLine())) {
                     case 1:
                         String nome = null, cpf = null, email = null, senha = null, senhaConfirma = null,
@@ -213,7 +208,6 @@ public class MainProjeto {
                         editarPerfil(sc, usuario);
                         break;
                     case 2: // buscarLivro
-
                         ArrayList<Livro> listaLivro = new ArrayList<>();
                         LimpaTela();
                         System.out.println(" < Pesquisar Livros > ");
@@ -231,7 +225,6 @@ public class MainProjeto {
 
                         break;
                     case 3: // realizarEmprestimo
-
                         LimpaTela();
                         System.out.println(" < Realizar Emprestimo >");
                         System.out.print(" id do Livro: ");
@@ -250,10 +243,8 @@ public class MainProjeto {
                                 if (Adm.loginAdm(email, senha) != null) {
 
                                     LocalDate dataAtual = LocalDate.now();
-
                                     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                                     String dataEmprestimo = dataAtual.format(formato);
-
                                     LocalDate dataprev = dataAtual.plusDays(7);
                                     String dataPrevista = dataprev.format(formato);
 
@@ -264,6 +255,7 @@ public class MainProjeto {
                                             dataPrevista,
                                             null);
                                     emprestimo.criarEmprestimo();
+
                                 } else {
                                     System.out.println(" Empréstimo Cancelado por Invalidação!");
                                 }
@@ -272,11 +264,8 @@ public class MainProjeto {
                             }
                             System.out.print(" Aperte Enter para Continuar! ");
                             sc.nextLine();
-                        } else {
-                            break;
                         }
                         break;
-
                     case 4:
                         LimpaTela();
                         System.out.println(" < Meus Emprestimos > ");
@@ -423,6 +412,7 @@ public class MainProjeto {
                     System.out.println(" 1 -> Excluir ");
                     System.out.println(" 0 -> Sair");
                     System.out.print(" > ");
+
                     switch (Integer.valueOf(sc.nextLine())) {
                         case 1:
                             System.out.print("Insira o email: ");
@@ -458,99 +448,104 @@ public class MainProjeto {
      * @throws IOException
      */
     public static void editarPerfil(Scanner sc, Usuario usuario) throws InterruptedException, IOException {
-        try {
-            LimpaTela();
-            System.out.println(" < Meu Perfil >");
-            System.out.println(usuario.mostrarPerfil());
-            System.out.println("\n 1 -> Editar Perfil");
-            System.out.println(" 2 -> Excluir Conta");
-            System.out.println(" 0 -> Sair");
-            System.out.print(" > ");
-            switch (Integer.valueOf(sc.nextLine())) {
-                case 1:
-                    LimpaTela();
-                    System.out.println(" Qual dado quer editar?");
-                    System.out.println(" 1 -> Nome");
-                    System.out.println(" 2 -> Email");
-                    System.out.println(" 3 -> Senha");
-                    System.out.println(" 4 -> Telefone");
-                    System.out.println(" 0 -> Voltar");
-                    System.out.print(" > ");
-                    switch (Integer.valueOf(sc.nextLine())) {
-                        case 1:
-                            System.out.print(" Novo Nome: ");
-                            String nome = sc.nextLine();
-                            if (ValidarDados.validarNome(nome)) {
-                                usuario.editarUsuario("nome", nome);
-                                usuario.setNome(nome);
-                            } else
-                                System.out.println(" Formato inválido ");
-                            break;
-                        case 2:
-                            System.out.print(" Novo Email: ");
-                            String email = sc.nextLine();
-                            if (ValidarDados.validarEmail(email)) {
-                                usuario.editarUsuario("email", email);
-                                usuario.setEmail(email);
-                            } else
-                                System.out.println(" Formato inválido ");
-                            break;
-                        case 3:
-                            System.out.print(" Nova Senha: ");
-                            String senha = sc.nextLine();
-                            if (ValidarDados.validarSenha(senha)) {
-                                usuario.editarUsuario("senha", senha);
-                                usuario.setSenha(senha);
-                            } else
-                                System.out.println(" Formato inválido ");
-                            break;
-                        case 4:
-                            System.out.print(" Novo Telefone: ");
-                            String telefone = sc.nextLine();
-                            if (ValidarDados.validarTelefone(telefone)) {
-                                usuario.editarUsuario("telefone", telefone);
-                                usuario.setTelefone(telefone);
-                            } else
-                                System.out.println(" Formato inválido ");
-                            break;
-                        case 0:
-                        default:
-                            System.out.print("\n Aperte Enter para Continuar! ");
-                            sc.nextLine();
-                            break;
-                    }
-                    break;
-                case 2:
-                    LimpaTela();
-                    System.out.println(" < Excluir Conta >");
-                    System.out.println(" 1 -> Excluir ");
-                    System.out.println(" 0 -> Sair");
-                    System.out.print(" > ");
-                    switch (Integer.valueOf(sc.nextLine())) {
-                        case 1:
-                            LimpaTela();
-                            System.out.println(" < Excluir Conta >");
-                            System.out.print(" Email: ");
-                            String email = sc.nextLine();
-                            System.out.print(" Senha: ");
-                            String senha = sc.nextLine();
-                            if (Usuario.loginUsuario(email, senha) != null) {
-                                Usuario.excluirConta(usuario.getCpf());
-                                System.out.println("Conta Excluida!");
-                                return;
-                            } else
-                                System.out.println(" Email ou Senha Incorretos");
-                        default:
-                            System.out.print("\n Aperte Enter para Continuar! ");
-                            sc.nextLine();
-                            break;
-                    }
-                    return;
-                case 0:
-                    break;
+        boolean sair = false;
+
+        do {
+            try {
+                LimpaTela();
+                System.out.println(" < Meu Perfil >");
+                System.out.println(usuario.mostrarPerfil());
+                System.out.println("\n 1 -> Editar Perfil");
+                System.out.println(" 2 -> Excluir Conta");
+                System.out.println(" 0 -> Sair");
+                System.out.print(" > ");
+                switch (Integer.valueOf(sc.nextLine())) {
+                    case 1:
+                        LimpaTela();
+                        System.out.println(" Qual dado quer editar?");
+                        System.out.println(" 1 -> Nome");
+                        System.out.println(" 2 -> Email");
+                        System.out.println(" 3 -> Senha");
+                        System.out.println(" 4 -> Telefone");
+                        System.out.println(" 0 -> Voltar");
+                        System.out.print(" > ");
+                        switch (Integer.valueOf(sc.nextLine())) {
+                            case 1:
+                                System.out.print(" Novo Nome: ");
+                                String nome = sc.nextLine();
+                                if (ValidarDados.validarNome(nome)) {
+                                    usuario.editarUsuario("nome", nome);
+                                    usuario.setNome(nome);
+                                } else
+                                    System.out.println(" Formato inválido ");
+                                break;
+                            case 2:
+                                System.out.print(" Novo Email: ");
+                                String email = sc.nextLine();
+                                if (ValidarDados.validarEmail(email)) {
+                                    usuario.editarUsuario("email", email);
+                                    usuario.setEmail(email);
+                                } else
+                                    System.out.println(" Formato inválido ");
+                                break;
+                            case 3:
+                                System.out.print(" Nova Senha: ");
+                                String senha = sc.nextLine();
+                                if (ValidarDados.validarSenha(senha)) {
+                                    usuario.editarUsuario("senha", senha);
+                                    usuario.setSenha(senha);
+                                } else
+                                    System.out.println(" Formato inválido ");
+                                break;
+                            case 4:
+                                System.out.print(" Novo Telefone: ");
+                                String telefone = sc.nextLine();
+                                if (ValidarDados.validarTelefone(telefone)) {
+                                    usuario.editarUsuario("telefone", telefone);
+                                    usuario.setTelefone(telefone);
+                                } else
+                                    System.out.println(" Formato inválido ");
+                                break;
+                            case 0:
+                            default:
+                                System.out.print("\n Aperte Enter para Continuar! ");
+                                sc.nextLine();
+                                break;
+                        }
+                        break;
+                    case 2:
+                        LimpaTela();
+                        System.out.println(" < Excluir Conta >");
+                        System.out.println(" 1 -> Excluir ");
+                        System.out.println(" 0 -> Sair");
+                        System.out.print(" > ");
+                        switch (Integer.valueOf(sc.nextLine())) {
+                            case 1:
+                                LimpaTela();
+                                System.out.println(" < Excluir Conta >");
+                                System.out.print(" Email: ");
+                                String email = sc.nextLine();
+                                System.out.print(" Senha: ");
+                                String senha = sc.nextLine();
+                                if (Usuario.loginUsuario(email, senha) != null) {
+                                    Usuario.excluirConta(usuario.getCpf());
+                                    System.out.println("Conta Excluida!");
+                                    return;
+                                } else
+                                    System.out.println(" Email ou Senha Incorretos");
+                            default:
+                                System.out.print("\n Aperte Enter para Continuar! ");
+                                sc.nextLine();
+                                break;
+                        }
+                        return;
+                    case 0:
+                        sair = true;
+                        break;
+                }
+            } catch (NumberFormatException e) {
             }
-        } catch (NumberFormatException e) {
-        }
+        } while (!sair);
     }
 
     /**
@@ -1304,12 +1299,12 @@ public class MainProjeto {
                         // System.out.println(" < Empréstimos Atrazados > ");
                         // emprestimos = Emprestimo.listarAtrazados();
                         // if (emprestimos.size() != 0) {
-                        //     System.out.println(" - Empréstimos -");
-                        //     for (int i = 0; i < emprestimos.size(); i++) {
-                        //         System.out.println(emprestimos.get(i).toString());
-                        //     }
+                        // System.out.println(" - Empréstimos -");
+                        // for (int i = 0; i < emprestimos.size(); i++) {
+                        // System.out.println(emprestimos.get(i).toString());
+                        // }
                         // } else {
-                        //     System.out.println(" Sem Emprestimos Cadastrados! ");
+                        // System.out.println(" Sem Emprestimos Cadastrados! ");
                         // }
                         // System.out.print(" Aperte Enter para Continuar! ");
                         // sc.nextLine();
