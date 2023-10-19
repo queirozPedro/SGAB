@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,24 +9,24 @@ public class MainProjeto {
     public static void main(String[] args) throws InterruptedException, IOException {
         Scanner sc = new Scanner(System.in);
         boolean sair = false;
-        int op;
 
         while (!sair) {
 
             try {
-                op = Integer.valueOf(MenuPrincipal(sc));
 
-                switch (op) {
+                switch (Integer.valueOf(MenuPrincipal(sc))) {
                     case 1: // Usuário
-                        MenuLogin(sc, op);
+                        MenuLogin(sc);
                         break;
                     case 2: // Cliente
-                        MenuCadastro(sc, op);
+                        MenuCadastro(sc);
                         break;
                     case 0: // Sair
                         sair = true;
                         System.out.println("\n     - Finalizando -\n");
                         return;
+                    default:
+                        break;
                 }
 
             } catch (NumberFormatException e) {
@@ -46,27 +48,24 @@ public class MainProjeto {
 
     /**
      * Menu de login, responsável por logar um usuário e diferenciar Usuários de
-     * Adms,
-     * direcionando eles para seus respectivos menus.
+     * Adms, direcionando eles para seus respectivos menus.
      * 
      * @param sc
-     * @param op
      * @throws InterruptedException
      * @throws IOException
      */
-    public static void MenuLogin(Scanner sc, int op) throws InterruptedException, IOException {
+    public static void MenuLogin(Scanner sc) throws InterruptedException, IOException {
         int out = 3;
-        try {
-            boolean sair = false;
-            do {
+        boolean sair = false;
+        do {
+            try {
                 LimpaTela();
                 System.out.println(" ===  Menu Login  ===");
                 System.out.println(" 1 -> Realizar Login");
                 System.out.println(" 0 -> Voltar");
                 System.out.print(" >> ");
-                op = Integer.valueOf(sc.nextLine());
 
-                switch (op) {
+                switch (Integer.valueOf(MenuPrincipal(sc))) {
                     case 1:
                         LimpaTela();
                         System.out.println(" < Login >");
@@ -97,96 +96,99 @@ public class MainProjeto {
                     case 0:
                         sair = true;
                         break;
+                    default:
+                        break;
                 }
-            } while (!sair);
-
-        } catch (NumberFormatException e) {
-        }
+            } catch (NumberFormatException e) {
+            }
+        } while (!sair);
 
     }
 
     /**
      * Menu de Cadastro, onde usuários são capazes de criar suas próprias contas
-     * para acessar
-     * o sistema do acervo.
+     * para acessar o sistema do acervo.
      * 
      * @param sc
-     * @param op
      * @throws InterruptedException
      * @throws IOException
      */
-    public static void MenuCadastro(Scanner sc, int op) throws InterruptedException, IOException {
-        try {
-            LimpaTela();
-            System.out.println(" ===  Tela de Cadastro  ===");
-            System.out.println(" 1 -> Registrar-se");
-            System.out.println(" 0 -> Voltar");
-            System.out.print(" >> ");
+    public static void MenuCadastro(Scanner sc) throws InterruptedException, IOException {
+        boolean sair = false;
+        do {
+            try {
+                LimpaTela();
+                System.out.println(" ===  Tela de Cadastro  ===");
+                System.out.println(" 1 -> Registrar-se");
+                System.out.println(" 0 -> Voltar");
+                System.out.print(" >> ");
 
-            switch (Integer.valueOf(sc.nextLine())) {
-                case 1:
-                    boolean sair = false;
-                    String nome = null, cpf = null, email = null, senha = null, senhaConfirma = null, telefone = null;
-
-                    do {
-                        LimpaTela();
-                        System.out.println(" < Cadastro >");
-                        if (!validarNome(nome)) {
-                            System.out.print(" Nome: ");
-                            nome = sc.nextLine();
-                        } else {
-                            System.out.println(" Nome: " + nome);
-                            if (!validarCpf(cpf)) {
-                                System.out.print(" Cpf (11 digitos): ");
-                                cpf = sc.nextLine();
+                switch (Integer.valueOf(sc.nextLine())) {
+                    case 1:
+                        String nome = null, cpf = null, email = null, senha = null, senhaConfirma = null,
+                                telefone = null;
+                        do {
+                            LimpaTela();
+                            System.out.println(" < Cadastro >");
+                            if (!ValidarDados.validarNome(nome)) {
+                                System.out.print(" Nome: ");
+                                nome = sc.nextLine();
                             } else {
-                                System.out.println(" Cpf: " + cpf);
-                                if (!validarEmail(email)) {
-                                    System.out.print(" Email: ");
-                                    email = sc.nextLine();
+                                System.out.println(" Nome: " + nome);
+                                if (!ValidarDados.validarCpf(cpf)) {
+                                    System.out.print(" Cpf (11 digitos): ");
+                                    cpf = sc.nextLine();
                                 } else {
-                                    System.out.println(" Email: " + email);
-                                    if (!validarSenha(senha)) {
-                                        System.out.print(" Senha (minimo de 6 digitos): ");
-                                        senha = sc.nextLine();
-                                        System.out.print(" Confirme a Senha: ");
-                                        senhaConfirma = sc.nextLine();
-                                        if (!senha.equals(senhaConfirma)) {
-                                            senha = null;
-                                        }
+                                    System.out.println(" Cpf: " + cpf);
+                                    if (!ValidarDados.validarEmail(email)) {
+                                        System.out.print(" Email: ");
+                                        email = sc.nextLine();
                                     } else {
-                                        System.out.println(" Senha: " + senha);
-                                        if (!validarTelefone(telefone)) {
-                                            System.out.print(" Telefone (11 digitos)): ");
-                                            telefone = sc.nextLine();
-                                        } else {
-                                            System.out.println(" Telefone: " + telefone);
-                                            System.out.print(" Cadastrar Conta (1 -> Sim, 2 - > Não): ");
-                                            if (Integer.valueOf(sc.nextLine()) == 1) {
-                                                Usuario usuario = new Usuario(cpf, nome, senha, email, telefone);
-                                                usuario.criarConta();
+                                        System.out.println(" Email: " + email);
+                                        if (!ValidarDados.validarSenha(senha)) {
+                                            System.out.print(" Senha (minimo de 6 digitos): ");
+                                            senha = sc.nextLine();
+                                            System.out.print(" Confirme a Senha: ");
+                                            senhaConfirma = sc.nextLine();
+                                            if (!senha.equals(senhaConfirma)) {
+                                                senha = null;
                                             }
-                                            System.out.print(" Aperte Enter para Continuar! ");
-                                            sc.nextLine();
-                                            sair = true;
+                                        } else {
+                                            System.out.println(" Senha: " + senha);
+                                            if (!ValidarDados.validarTelefone(telefone)) {
+                                                System.out.print(" Telefone (11 digitos)): ");
+                                                telefone = sc.nextLine();
+                                            } else {
+                                                System.out.println(" Telefone: " + telefone);
+                                                System.out.print(" Cadastrar Conta (1 -> Sim, 2 - > Não): ");
+                                                if (Integer.valueOf(sc.nextLine()) == 1) {
+                                                    Usuario usuario = new Usuario(cpf, nome, senha, email, telefone);
+                                                    usuario.criarConta();
+                                                }
+                                                System.out.print(" Aperte Enter para Continuar! ");
+                                                sc.nextLine();
+                                                sair = true;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                    } while (!sair);
-                    break;
-                case 0:
-                    return;
+                        } while (!sair);
+                        sair = false;
+                        break;
+                    case 0:
+                        return;
+                }
+            } catch (NumberFormatException e) {
             }
-        } catch (NumberFormatException e) {
-        }
+
+        } while (!sair);
     }
 
     /**
      * Menu de Usuário, para onde você vem depois de logar, aqui você pode
-     * vizualizar e editar seu perfil,
-     * pesquisar por livros no acervo e realizar emprestimos.
+     * vizualizar e editar seu perfil, pesquisar por livros no acervo
+     * e realizar emprestimos.
      * 
      * @param usuario
      * @param sc
@@ -195,6 +197,7 @@ public class MainProjeto {
      */
     public static void menuUsuario(Usuario usuario, Scanner sc) throws InterruptedException, IOException {
         boolean sair = false;
+        int idLivro;
         do {
             try {
                 LimpaTela();
@@ -202,6 +205,7 @@ public class MainProjeto {
                 System.out.println(" 1 -> Exibir Perfil");
                 System.out.println(" 2 -> Pesquisar por Livros");
                 System.out.println(" 3 -> Pedir Emprestimo");
+                System.out.println(" 4 -> Meus Emprestimos");
                 System.out.println(" 0 -> Sair da Conta");
                 System.out.print(" > ");
 
@@ -210,10 +214,82 @@ public class MainProjeto {
                         editarPerfil(sc, usuario);
                         break;
                     case 2: // buscarLivro
-                        // Falta Implementar
+
+                        ArrayList<Livro> listaLivro = new ArrayList<>();
+                        LimpaTela();
+                        System.out.println(" < Pesquisar Livros > ");
+                        System.out.print(" > ");
+                        listaLivro = Livro.pesquisarLivro(sc.nextLine());
+                        if (listaLivro != null) {
+                            for (int i = 0; i < listaLivro.size(); i++) {
+                                System.out.println(listaLivro.get(i).toString() + "\n");
+                            }
+                        } else
+                            System.out.println(" Livro não Encontrado! ");
+
+                        System.out.print(" Aperte Enter para Continuar");
+                        sc.nextLine();
+
                         break;
                     case 3: // realizarEmprestimo
-                        // Falta Implementar
+
+                        LimpaTela();
+                        System.out.println(" < Realizar Emprestimo >");
+                        System.out.print(" id do Livro: ");
+                        idLivro = Integer.valueOf(sc.nextLine());
+                        if (Livro.buscaLivroId(idLivro) != null) {
+                            Livro livro = Livro.buscaLivroId(idLivro);
+                            System.out.println(livro.toString());
+                            System.out.print(" Continuar (1 -> Sim, 2 -> Não): ");
+                            if (Integer.valueOf(sc.nextLine()) == 1) {
+
+                                System.out.println("\n < Credenciais do Administrador >");
+                                System.out.print(" Email: ");
+                                String email = sc.nextLine();
+                                System.out.print(" Senha: ");
+                                String senha = sc.nextLine();
+                                if (Adm.loginAdm(email, senha) != null) {
+
+                                    LocalDate dataAtual = LocalDate.now();
+
+                                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                    String dataEmprestimo = dataAtual.format(formato);
+
+                                    LocalDate dataprev = dataAtual.plusDays(7);
+                                    String dataPrevista = dataprev.format(formato);
+
+                                    Emprestimo emprestimo = new Emprestimo(
+                                            usuario.getCpf(),
+                                            idLivro,
+                                            dataEmprestimo,
+                                            dataPrevista);
+                                    emprestimo.criarEmprestimo();
+                                } else {
+                                    System.out.println(" Empréstimo Cancelado por Invalidação!");
+                                }
+                            } else {
+                                System.out.println(" Livro Não Encontrado!");
+                            }
+                            System.out.print(" Aperte Enter para Continuar! ");
+                            sc.nextLine();
+                        } else {
+                            break;
+                        }
+                        break;
+
+                    case 4:
+                        LimpaTela();
+                        System.out.println(" < Meus Emprestimos > ");
+                        ArrayList<Emprestimo> emprestimos = Emprestimo.buscaMeusEmprestimos(usuario.getCpf());
+                        if (emprestimos.size() != 0) {
+                            for (int i = 0; i < emprestimos.size(); i++) {
+                                System.out.println(emprestimos.get(i).toString());
+                            }
+                        } else {
+                            System.out.println(" Sem Emprestimos Cadastrados! ");
+                        }
+                        System.out.print(" Aperte Enter para Continuar! ");
+                        sc.nextLine();
                         break;
                     case 0:
                         sair = true;
@@ -227,8 +303,7 @@ public class MainProjeto {
 
     /**
      * O menu do Administrador, que dispõe de opções para vizualizar e editar seu
-     * perfil,
-     * manter usuários, manter acervo, e gerenciar os emprestimos.
+     * perfil, manter usuários, manter acervo, e gerenciar os emprestimos.
      * 
      * @param admin
      * @param sc
@@ -252,119 +327,13 @@ public class MainProjeto {
                         editarPerfil(sc, admin);
                         break;
                     case 2:
-                        manterUsuarios(sc);
+                        manterUsuarios(sc, admin);
                         break;
-                    case 3:
-                        LimpaTela();
-                        System.out.println(" < Manter Acervo >");
-                        System.out.println(" 1 -> Cadastrar");
-                        System.out.println(" 2 -> Buscar");
-                        System.out.println(" 3 -> Listar");
-                        System.out.println(" 4 -> Editar");
-                        System.out.println(" 5 -> Excluir");
-                        System.out.println(" 0 -> Voltar");
-                        switch (Integer.valueOf(sc.nextLine())) {
-                            case 1:
-                                LimpaTela();
-                                System.out.println("Insira os dados do livro");
-                                System.out.print("Titulo: ");
-                                String titulo = sc.nextLine();
-                                System.out.print("Genero: ");
-                                String genero = sc.nextLine();
-                                System.out.print("Autor: ");
-                                String autor = sc.nextLine();
-                                System.out.print("Data da Publicacao (dd/MM/yyyy): ");
-                                String dataPublicacao = sc.nextLine();
-                                System.out.println("Edicao: ");
-                                String edicao = sc.nextLine();
-                                System.out.println("Editora: ");
-                                String editora = sc.nextLine();
-                                System.out.println("ISBN: ");
-                                String isbn = sc.nextLine();
-                                System.out.println("quantLivros: ");
-                                int quantLivros = sc.nextInt();
-                                System.out.println("quantDisponivel: ");
-                                int quantDisponivel = sc.nextInt();
-                                Livro livro = new Livro(quantLivros, titulo, genero, autor, dataPublicacao, edicao,
-                                        editora, isbn, quantLivros, quantDisponivel);
-
-                                livro.cadastrarLivro();
-
-                                System.out.println(livro);
-                                sc.nextLine();
-                                break;
-                            case 2:
-                                Livro buscaLivro = null;
-                                ArrayList<Livro> livrosBuscados = new ArrayList<>();
-                                LimpaTela();
-                                System.out.println(" < Busca de Livro> ");
-                                System.out.println(" 1 -> Buscar por ID");
-                                System.out.println(" 2 -> Buscar por Titulo");
-                                System.out.println(" 3 -> Buscar por Genero");
-                                System.out.println(" 4 -> Buscar por Autor");
-                                System.out.println(" 0 -> Sair");
-                                switch (Integer.valueOf(sc.nextLine())) {
-                                    case 1:
-                                        LimpaTela();
-                                        System.out.println(" < Busca de Livro >");
-                                        System.out.print(" Id: ");
-                                        buscaLivro = Livro.buscaLivroId(Integer.valueOf(sc.nextLine()));
-                                        System.out.println(buscaLivro);
-                                        break;
-                                    case 2:
-                                        LimpaTela();
-                                        System.out.println(" < Busca de Livro >");
-                                        System.out.print(" Titulo: ");
-                                        livrosBuscados = Livro.buscaLivroTitulo(sc.nextLine());
-                                        for (int i = 0; i < livrosBuscados.size(); i++) {
-                                            System.out.println(livrosBuscados.get(i) + "\n");
-                                        }
-                                        break;
-                                    case 3:
-                                        LimpaTela();
-                                        System.out.println(" < Busca de Livro >");
-                                        System.out.print(" Genero: ");
-                                        livrosBuscados = Livro.buscaLivroGenero(sc.nextLine());
-                                        for (int i = 0; i < livrosBuscados.size(); i++) {
-                                            System.out.println(livrosBuscados.get(i) + "\n");
-                                        }
-                                        break;
-                                    case 4:
-                                        LimpaTela();
-                                        System.out.println(" < Busca de Livro >");
-                                        System.out.print(" Autor: ");
-                                        livrosBuscados = Livro.buscaLivroAutor(sc.nextLine());
-                                        for (int i = 0; i < livrosBuscados.size(); i++) {
-                                            System.out.println(livrosBuscados.get(i) + "\n");
-                                        }
-                                        break;
-                                    case 0:
-                                        break;
-                                }
-                                System.out.println("Aperte Enter para Continuar");
-                                sc.nextLine();
-                                break;
-                            case 3:
-
-                            case 4:
-
-                                break;
-                            case 0:
-                            default:
-                                break;
-                        }
+                    case 3: // Manter Livro
+                        manterLivros(sc);
                         break;
-                    case 4:
-                        LimpaTela();
-                        System.out.println(" < Manter Emprestimos >");
-                        System.out.println(" 1 -> Cadastrar");
-                        System.out.println(" 2 -> Buscar");
-                        System.out.println(" 3 -> Listar");
-                        System.out.println(" 4 -> Editar");
-                        System.out.println(" 5 -> Excluir");
-                        System.out.println(" 0 -> Voltar");
-                        sc.nextLine();
-                        // Falta Implementar
+                    case 4: // Manter Emprestimo
+                        manterEmprestimo(sc);
                         break;
                     case 0:
                         System.out.println(" Saindo da Conta Adm");
@@ -409,33 +378,37 @@ public class MainProjeto {
                         case 1:
                             System.out.print(" Novo Nome: ");
                             String nome = sc.nextLine();
-                            if (validarNome(nome))
-                                admin.editarUsuario(nome, null, null, null);
-                            else
+                            if (ValidarDados.validarNome(nome)) {
+                                admin.editarUsuario("nome", nome);
+                                admin.setNome(nome);
+                            } else
                                 System.out.println(" Formato inválido ");
                             break;
                         case 2:
                             System.out.print(" Novo Email: ");
                             String email = sc.nextLine();
-                            if (validarEmail(email))
-                                admin.editarUsuario(null, null, email, null);
-                            else
+                            if (ValidarDados.validarEmail(email)) {
+                                admin.editarUsuario("email", email);
+                                admin.setEmail(email);
+                            } else
                                 System.out.println(" Formato inválido ");
                             break;
                         case 3:
                             System.out.print(" Nova Senha: ");
                             String senha = sc.nextLine();
-                            if (validarSenha(senha))
-                                admin.editarUsuario(null, senha, null, null);
-                            else
+                            if (ValidarDados.validarSenha(senha)) {
+                                admin.editarUsuario("senha", senha);
+                                admin.setSenha(senha);
+                            } else
                                 System.out.println(" Formato inválido ");
                             break;
                         case 4:
                             System.out.print(" Novo Telefone: ");
                             String telefone = sc.nextLine();
-                            if (validarTelefone(telefone))
-                                admin.editarUsuario(null, null, null, telefone);
-                            else
+                            if (ValidarDados.validarTelefone(telefone)) {
+                                admin.editarUsuario("telefone", telefone);
+                                admin.setTelefone(telefone);
+                            } else
                                 System.out.println(" Formato inválido ");
                             break;
                         case 0:
@@ -507,33 +480,37 @@ public class MainProjeto {
                         case 1:
                             System.out.print(" Novo Nome: ");
                             String nome = sc.nextLine();
-                            if (validarNome(nome))
-                                usuario.editarUsuario(nome, null, null, null);
-                            else
+                            if (ValidarDados.validarNome(nome)) {
+                                usuario.editarUsuario("nome", nome);
+                                usuario.setNome(nome);
+                            } else
                                 System.out.println(" Formato inválido ");
                             break;
                         case 2:
                             System.out.print(" Novo Email: ");
                             String email = sc.nextLine();
-                            if (validarEmail(email))
-                                usuario.editarUsuario(null, null, email, null);
-                            else
+                            if (ValidarDados.validarEmail(email)) {
+                                usuario.editarUsuario("email", email);
+                                usuario.setEmail(email);
+                            } else
                                 System.out.println(" Formato inválido ");
                             break;
                         case 3:
                             System.out.print(" Nova Senha: ");
                             String senha = sc.nextLine();
-                            if (validarSenha(senha))
-                                usuario.editarUsuario(null, senha, null, null);
-                            else
+                            if (ValidarDados.validarSenha(senha)) {
+                                usuario.editarUsuario("senha", senha);
+                                usuario.setSenha(senha);
+                            } else
                                 System.out.println(" Formato inválido ");
                             break;
                         case 4:
                             System.out.print(" Novo Telefone: ");
                             String telefone = sc.nextLine();
-                            if (validarTelefone(telefone))
-                                usuario.editarUsuario(null, null, null, telefone);
-                            else
+                            if (ValidarDados.validarTelefone(telefone)) {
+                                usuario.editarUsuario("telefone", telefone);
+                                usuario.setTelefone(telefone);
+                            } else
                                 System.out.println(" Formato inválido ");
                             break;
                         case 0:
@@ -583,81 +560,498 @@ public class MainProjeto {
      * @throws InterruptedException
      * @throws IOException
      */
-    public static void manterUsuarios(Scanner sc) throws InterruptedException, IOException {
-        try {
-            LimpaTela();
-            System.out.println(" < Manter Usuários >");
-            System.out.println(" 1 -> Cadastrar");
-            System.out.println(" 2 -> Buscar");
-            System.out.println(" 3 -> Listar");
-            System.out.println(" 4 -> Editar");
-            System.out.println(" 5 -> Excluir");
-            System.out.println(" 0 -> Voltar");
-            System.out.print(" > ");
-            switch (Integer.valueOf(sc.nextLine())) {
+    public static void manterUsuarios(Scanner sc, Adm admin) throws InterruptedException, IOException {
+        boolean sair = false;
+        do {
+            try {
+                LimpaTela();
+                System.out.println(" < Manter Usuários >");
+                System.out.println(" 1 -> Cadastrar");
+                System.out.println(" 2 -> Buscar");
+                System.out.println(" 3 -> Listar");
+                System.out.println(" 4 -> Editar");
+                System.out.println(" 5 -> Excluir");
+                System.out.println(" 0 -> Voltar");
+                System.out.print(" > ");
 
-                case 1:
-                    boolean sair = false;
-                    String nome = null, cpf = null, email = null, senha = null, senhaConfirma = null, telefone = null;
-                    LimpaTela();
+                String nome = null, cpf = null, email = null, senha = null, senhaConfirma = null, telefone = null;
+                Usuario usuario = null;
+                Adm adm = null;
 
-                    System.out.println(" < Cadastrar >");
-                    System.out.println(" 1 -> Cadastrar Administrador");
-                    System.out.println(" 2 -> Cadastrar Usuario");
-                    System.out.println(" 0 -> Voltar ");
-                    System.out.print(" > ");
+                switch (Integer.valueOf(sc.nextLine())) {
 
-                    switch (Integer.valueOf(sc.nextLine())) {
-                        case 1:
-                            LimpaTela();
-                            System.out.println(" < Cadastrar Administrador >");
-                            System.out.println(" 1 -> Cadastrar Novo");
-                            System.out.println(" 2 -> Tornar Administrador");
-                            System.out.println(" 0 -> Voltar");
-                            System.out.print(" > ");
+                    case 1:
+                        LimpaTela();
 
-                            switch (Integer.valueOf(sc.nextLine())) {
-                                case 1:
-                                    sair = false;
-                                    do {
-                                        LimpaTela();
-                                        System.out.println(" < Cadastrar Novo Administrador >");
-                                        if (!validarNome(nome)) {
-                                            System.out.print(" Nome: ");
-                                            nome = sc.nextLine();
-                                        } else {
-                                            System.out.println(" Nome: " + nome);
-                                            if (!validarCpf(cpf)) {
-                                                System.out.print(" Cpf (11 digitos): ");
-                                                cpf = sc.nextLine();
+                        System.out.println(" < Cadastrar >");
+                        System.out.println(" 1 -> Cadastrar Administrador");
+                        System.out.println(" 2 -> Cadastrar Usuario");
+                        System.out.println(" 0 -> Voltar ");
+                        System.out.print(" > ");
+
+                        switch (Integer.valueOf(sc.nextLine())) {
+                            case 1:
+                                LimpaTela();
+                                System.out.println(" < Cadastrar Administrador >");
+                                System.out.println(" 1 -> Cadastrar Novo");
+                                System.out.println(" 2 -> Tornar Administrador");
+                                System.out.println(" 0 -> Voltar");
+                                System.out.print(" > ");
+
+                                switch (Integer.valueOf(sc.nextLine())) {
+                                    case 1:
+                                        sair = false;
+                                        do {
+                                            LimpaTela();
+                                            System.out.println(" < Cadastrar Novo Administrador >");
+                                            if (!ValidarDados.validarNome(nome)) {
+                                                System.out.print(" Nome: ");
+                                                nome = sc.nextLine();
                                             } else {
-                                                System.out.println(" Cpf: " + cpf);
-                                                if (!validarEmail(email)) {
-                                                    System.out.print(" Email: ");
-                                                    email = sc.nextLine();
+                                                System.out.println(" Nome: " + nome);
+                                                if (!ValidarDados.validarCpf(cpf)) {
+                                                    System.out.print(" Cpf (11 digitos): ");
+                                                    cpf = sc.nextLine();
                                                 } else {
-                                                    System.out.println(" Email: " + email);
-                                                    if (!validarSenha(senha)) {
-                                                        System.out.print(" Senha (minimo de 6 digitos): ");
-                                                        senha = sc.nextLine();
-                                                        System.out.print(" Confirme a Senha: ");
-                                                        senhaConfirma = sc.nextLine();
-                                                        if (!senha.equals(senhaConfirma)) {
-                                                            senha = null;
-                                                        }
+                                                    System.out.println(" Cpf: " + cpf);
+                                                    if (!ValidarDados.validarEmail(email)) {
+                                                        System.out.print(" Email: ");
+                                                        email = sc.nextLine();
                                                     } else {
-                                                        System.out.println(" Senha: " + senha);
-                                                        if (!validarTelefone(telefone)) {
-                                                            System.out.print(" Telefone (11 digitos)): ");
-                                                            telefone = sc.nextLine();
+                                                        System.out.println(" Email: " + email);
+                                                        if (!ValidarDados.validarSenha(senha)) {
+                                                            System.out.print(" Senha (minimo de 6 digitos): ");
+                                                            senha = sc.nextLine();
+                                                            System.out.print(" Confirme a Senha: ");
+                                                            senhaConfirma = sc.nextLine();
+                                                            if (!senha.equals(senhaConfirma)) {
+                                                                senha = null;
+                                                            }
                                                         } else {
-                                                            System.out.println(" Telefone: " + telefone);
+                                                            System.out.println(" Senha: " + senha);
+                                                            if (!ValidarDados.validarTelefone(telefone)) {
+                                                                System.out.print(" Telefone (11 digitos)): ");
+                                                                telefone = sc.nextLine();
+                                                            } else {
+                                                                System.out.println(" Telefone: " + telefone);
+                                                                System.out.print(
+                                                                        " Cadastrar Conta (1 -> Sim, 2 - > Não): ");
+                                                                if (Integer.valueOf(sc.nextLine()) == 1) {
+                                                                    adm = new Adm(cpf, nome, senha, email,
+                                                                            telefone);
+                                                                    adm.criarAdm();
+                                                                }
+                                                                System.out.print(" Aperte Enter para Continuar! ");
+                                                                sc.nextLine();
+                                                                sair = true;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } while (!sair);
+                                        sair = false;
+                                        break;
+                                    case 2:
+                                        LimpaTela();
+                                        System.out.println(" < Tornar Administrador >");
+                                        System.out.print(" Cpf: ");
+                                        cpf = sc.nextLine();
+                                        if (Adm.buscaAdm(cpf) == null) {
+                                            if (Usuario.buscaUsuario(cpf) != null) {
+                                                System.out.println(Usuario.buscaUsuario(cpf).toString());
+                                                System.out
+                                                        .print(" Cadastrar Como Administrador (1 -> Sim, 2 -> Não): ");
+                                                if (Integer.valueOf(sc.nextLine()) == 1) {
+                                                    Usuario user = Usuario.buscaUsuario(cpf);
+                                                    adm = new Adm(user);
+                                                    adm.criarAdm();
+                                                } else
+                                                    break;
+                                            } else {
+                                                System.out.println(" Usuário não Existe! ");
+                                            }
+                                        } else {
+                                            System.out.println(" Administrador já Cadastrado! ");
+                                        }
+                                        System.out.print(" Aperte Enter para Continuar! ");
+                                        sc.nextLine();
+                                        break;
+                                    case 0:
+                                        break;
+                                }
+                                break;
+                            case 2:
+                                do {
+                                    LimpaTela();
+                                    System.out.println(" < Cadastro de Usuário >");
+                                    if (!ValidarDados.validarNome(nome)) {
+                                        System.out.print(" Nome: ");
+                                        nome = sc.nextLine();
+                                    } else {
+                                        System.out.println(" Nome: " + nome);
+                                        if (!ValidarDados.validarCpf(cpf)) {
+                                            System.out.print(" Cpf (11 digitos): ");
+                                            cpf = sc.nextLine();
+                                        } else {
+                                            System.out.println(" Cpf: " + cpf);
+                                            if (!ValidarDados.validarEmail(email)) {
+                                                System.out.print(" Email: ");
+                                                email = sc.nextLine();
+                                            } else {
+                                                System.out.println(" Email: " + email);
+                                                if (!ValidarDados.validarSenha(senha)) {
+                                                    System.out.print(" Senha (minimo de 6 digitos): ");
+                                                    senha = sc.nextLine();
+                                                    System.out.print(" Confirme a Senha: ");
+                                                    senhaConfirma = sc.nextLine();
+                                                    if (!senha.equals(senhaConfirma)) {
+                                                        senha = null;
+                                                    }
+                                                } else {
+                                                    System.out.println(" Senha: " + senha);
+                                                    if (!ValidarDados.validarTelefone(telefone)) {
+                                                        System.out.print(" Telefone (11 digitos)): ");
+                                                        telefone = sc.nextLine();
+                                                    } else {
+                                                        System.out.println(" Telefone: " + telefone);
+                                                        System.out.print(
+                                                                " Cadastrar Conta (1 -> Sim, 2 - > Não): ");
+                                                        if (Integer.valueOf(sc.nextLine()) == 1) {
+                                                            usuario = new Usuario(cpf, nome, senha, email,
+                                                                    telefone);
+                                                            usuario.criarConta();
+                                                        }
+                                                        System.out.print(" Aperte Enter para Continuar! ");
+                                                        sc.nextLine();
+                                                        sair = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } while (!sair);
+                                sair = false;
+                                break;
+                            case 0:
+                                break;
+                        }
+
+                        break;
+                    case 2:
+                        LimpaTela();
+                        System.out.println(" < Buscar Usuário >");
+                        System.out.print(" Cpf: ");
+                        cpf = sc.nextLine();
+                        if (Adm.buscaAdm(cpf) != null) {
+                            System.out.println(Adm.buscaAdm(cpf).toString());
+                        } else if (Usuario.buscaUsuario(cpf) != null) {
+                            System.out.println(Usuario.buscaUsuario(cpf));
+                        } else {
+                            System.out.println(" Usuário não encontrado!");
+                        }
+                        System.out.print("\n Aperte Enter para Continuar! ");
+                        sc.nextLine();
+                        break;
+                    case 3:
+                        LimpaTela();
+                        System.out.println(" < Listar Usuários >");
+                        System.out.println(" 1 -> Usuários");
+                        System.out.println(" 2 -> Administradores");
+                        System.out.println(" 0 -> Sair");
+                        System.out.print(" > ");
+                        switch (Integer.valueOf(sc.nextLine())) {
+                            case 1:
+                                LimpaTela();
+                                System.out.println(" Usuários do Acervo");
+                                ArrayList<Usuario> usuarios = Usuario.listaUsuario();
+
+                                for (int i = 0; i < usuarios.size(); i++) {
+                                    System.out.println("\n" + usuarios.get(i));
+                                }
+
+                                System.out.print("\n Aperte Enter para Continuar! ");
+                                sc.nextLine();
+                                break;
+                            case 2:
+                                LimpaTela();
+                                System.out.println("Administradores do Acervo");
+                                ArrayList<Adm> adms = Adm.listaAdm();
+
+                                for (int i = 0; i < adms.size(); i++) {
+                                    System.out.println("\n" + adms.get(i));
+                                }
+
+                                System.out.print("\n Aperte Enter para Continuar! ");
+                                sc.nextLine();
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case 4: // Editar Usuários
+                        LimpaTela();
+                        System.out.println(" < Editar Usuários >");
+                        System.out.print(" Cpf: ");
+                        cpf = sc.nextLine();
+                        if (cpf.equals(admin.getCpf())) {
+                            System.out.println(" Erro! você não pode editar seus dados por aqui! ");
+                            System.out.print(" Aperte Enter para Continuar! ");
+                            sc.nextLine();
+                            break;
+                        }
+                        if (Adm.buscaAdm(cpf) != null) {
+                            System.out.println(Adm.buscaAdm(cpf).toString());
+                            System.out.print(" Editar Adm (1 -> Sim, 2 -> Não): ");
+                            if (Integer.valueOf(sc.nextLine()) == 1) {
+                                LimpaTela();
+                                adm = Adm.buscaAdm(cpf);
+                                System.out.println("Qual dado quer editar?");
+                                System.out.println(" 1 -> Nome");
+                                System.out.println(" 2 -> Email");
+                                System.out.println(" 3 -> Senha");
+                                System.out.println(" 4 -> Telefone");
+                                System.out.println(" 0 -> Voltar");
+                                System.out.print(" > ");
+                                switch (Integer.valueOf(sc.nextLine())) {
+                                    case 1:
+                                        System.out.print(" Novo Nome: ");
+                                        nome = sc.nextLine();
+                                        if (ValidarDados.validarNome(nome)) {
+                                            adm.editarUsuario("nome", nome);
+                                            adm.setNome(nome);
+                                        } else
+                                            System.out.println(" Formato inválido ");
+                                        break;
+                                    case 2:
+                                        System.out.print(" Novo Email: ");
+                                        email = sc.nextLine();
+                                        if (ValidarDados.validarEmail(email)) {
+                                            adm.editarUsuario("email", email);
+                                            adm.setEmail(email);
+                                        } else
+                                            System.out.println(" Formato inválido ");
+                                        break;
+                                    case 3:
+                                        System.out.print(" Nova Senha: ");
+                                        senha = sc.nextLine();
+                                        if (ValidarDados.validarSenha(senha)) {
+                                            adm.editarUsuario("senha", senha);
+                                            adm.setSenha(senha);
+                                        } else
+                                            System.out.println(" Formato inválido ");
+                                        break;
+                                    case 4:
+                                        System.out.print(" Novo Telefone: ");
+                                        telefone = sc.nextLine();
+                                        if (ValidarDados.validarTelefone(telefone)) {
+                                            adm.editarUsuario("telefone", telefone);
+                                            adm.setTelefone(telefone);
+                                        } else
+                                            System.out.println(" Formato inválido ");
+                                        break;
+                                    case 0:
+                                    default:
+                                        System.out.print("\n Aperte Enter para Continuar! ");
+                                        sc.nextLine();
+                                        break;
+                                }
+                            }
+                        } else if (Usuario.buscaUsuario(cpf) != null) {
+                            System.out.println(Usuario.buscaUsuario(cpf));
+                            System.out.print(" Editar Usuário (1 -> Sim, 2 -> Não): ");
+                            if (Integer.valueOf(sc.nextLine()) == 1) {
+                                LimpaTela();
+                                usuario = Usuario.buscaUsuario(cpf);
+                                System.out.println(" Qual dado quer editar?");
+                                System.out.println(" 1 -> Nome");
+                                System.out.println(" 2 -> Email");
+                                System.out.println(" 3 -> Senha");
+                                System.out.println(" 4 -> Telefone");
+                                System.out.println(" 0 -> Voltar");
+                                System.out.print(" > ");
+                                switch (Integer.valueOf(sc.nextLine())) {
+                                    case 1:
+                                        System.out.print(" Novo Nome: ");
+                                        nome = sc.nextLine();
+                                        if (ValidarDados.validarNome(nome)) {
+                                            usuario.editarUsuario("nome", nome);
+                                            usuario.setNome(nome);
+                                        } else
+                                            System.out.println(" Formato inválido ");
+                                        break;
+                                    case 2:
+                                        System.out.print(" Novo Email: ");
+                                        email = sc.nextLine();
+                                        if (ValidarDados.validarEmail(email)) {
+                                            usuario.editarUsuario("email", email);
+                                            usuario.setEmail(email);
+                                        } else
+                                            System.out.println(" Formato inválido ");
+                                        break;
+                                    case 3:
+                                        System.out.print(" Nova Senha: ");
+                                        senha = sc.nextLine();
+                                        if (ValidarDados.validarSenha(senha)) {
+                                            usuario.editarUsuario("senha", senha);
+                                            usuario.setSenha(senha);
+                                        } else
+                                            System.out.println(" Formato inválido ");
+                                        break;
+                                    case 4:
+                                        System.out.print(" Novo Telefone: ");
+                                        telefone = sc.nextLine();
+                                        if (ValidarDados.validarTelefone(telefone)) {
+                                            usuario.editarUsuario("telefone", telefone);
+                                            usuario.setTelefone(telefone);
+                                        } else
+                                            System.out.println(" Formato inválido ");
+                                        break;
+                                    case 0:
+                                    default:
+                                        System.out.print("\n Aperte Enter para Continuar! ");
+                                        sc.nextLine();
+                                        break;
+                                }
+                            }
+                        } else {
+                            System.out.println(" Usuário não encontrado!");
+                        }
+                        System.out.print("\n Aperte Enter para Continuar! ");
+                        sc.nextLine();
+                        break;
+                    case 5:
+                        LimpaTela();
+                        System.out.println(" < Excluir Usuário >");
+                        System.out.println(" 1 -> Excluir");
+                        System.out.println(" 0 -> Voltar");
+                        System.out.print(" > ");
+                        switch (Integer.valueOf(sc.nextLine())) {
+                            case 1:
+                                LimpaTela();
+                                System.out.println(" < Excluir Usuário >");
+                                System.out.print(" Cpf: ");
+                                cpf = sc.nextLine();
+                                if (cpf.equals(admin.getCpf())) {
+                                    System.out.println(" Erro! você não pode excluir sua conta por aqui! ");
+                                    System.out.print(" Aperte Enter para Continuar! ");
+                                    sc.nextLine();
+                                    break;
+                                }
+                                if (Adm.buscaAdm(cpf) != null) {
+                                    System.out.println(Adm.buscaAdm(cpf).toString());
+                                } else if (Usuario.buscaUsuario(cpf) != null) {
+                                    System.out.println(Usuario.buscaUsuario(cpf));
+                                } else {
+                                    System.out.println(" Usuário não encontrado!");
+                                    break;
+                                }
+                                System.out.print(" Excluir o Usuário (1 -> Sim, 2 - > Não): ");
+                                if (Integer.valueOf(sc.nextLine()) == 1) {
+                                    Adm.excluirAdm(cpf);
+                                    System.out.print("\n Aperte Enter para Continuar! ");
+                                    sc.nextLine();
+                                }
+                                break;
+
+                            case 0:
+                            default:
+                                break;
+                        }
+                        break;
+                    case 0:
+                        sair = true;
+                        break;
+                    default:
+                        break;
+                }
+            } catch (NumberFormatException e) {
+            }
+        } while (!sair);
+    }
+
+    /**
+     * Método que fazer as operações relacionadas a Livro: Cadastrar, Buscar,
+     * Listar,
+     * Editar e Excluir
+     * 
+     * @param sc
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    public static void manterLivros(Scanner sc) throws InterruptedException, IOException {
+        boolean sair = false;
+        do {
+            String titulo = null, genero = null, autor = null, dataPublicacao = null,
+                    edicao = null, editora = null, isbn = null;
+            int quantLivros = 0, idLivro = 0;
+            Livro livro = null;
+            ArrayList<Livro> listaLivro = new ArrayList<>();
+
+            try {
+                LimpaTela();
+                System.out.println(" < Manter Acervo >");
+                System.out.println(" 1 -> Cadastrar");
+                System.out.println(" 2 -> Buscar");
+                System.out.println(" 3 -> Listar");
+                System.out.println(" 4 -> Editar");
+                System.out.println(" 5 -> Excluir");
+                System.out.println(" 0 -> Voltar");
+                System.out.print(" > ");
+
+                switch (Integer.valueOf(sc.nextLine())) {
+                    case 1:
+                        do {
+                            LimpaTela();
+                            System.out.println(" < Cadastro de Livro >");
+                            if (!ValidarDados.validarTitulo(titulo)) {
+                                System.out.print(" Titulo: ");
+                                titulo = sc.nextLine();
+                            } else {
+                                System.out.println(" Titulo: " + titulo);
+                                if (!ValidarDados.validarGenero(genero)) {
+                                    System.out.print(" Genero: ");
+                                    genero = sc.nextLine();
+                                } else {
+                                    System.out.println(" Genero: " + genero);
+                                    if (!ValidarDados.validarAutor(autor)) {
+                                        System.out.print(" Autor: ");
+                                        autor = sc.nextLine();
+                                    } else {
+                                        System.out.println(" Autor: " + autor);
+                                        if (!ValidarDados.validarDataPublicacao(dataPublicacao)) {
+                                            System.out.print(" Data da Publicação (dd/mm/aaaa): ");
+                                            dataPublicacao = sc.nextLine();
+                                        } else {
+                                            System.out.println(" Data da Publicação: " + dataPublicacao);
+                                            if (!ValidarDados.validarEdicao(edicao)) {
+                                                System.out.print(" Edicao: ");
+                                                edicao = sc.nextLine();
+                                            } else {
+                                                System.out.println(" Edicao: " + edicao);
+                                                if (!ValidarDados.validarEditora(editora)) {
+                                                    System.out.print(" Editora: ");
+                                                    editora = sc.nextLine();
+                                                } else {
+                                                    System.out.println(" Editora: " + editora);
+                                                    if (!ValidarDados.validarIsbn(isbn)) {
+                                                        System.out.print(" Isbn (13 digitos): ");
+                                                        isbn = sc.nextLine();
+                                                    } else {
+                                                        System.out.println(" Isbn: " + isbn);
+                                                        if (!ValidarDados.validarQuantLivros(quantLivros)) {
+                                                            System.out.print(" Quantidade de Livros (>= 1): ");
+                                                            quantLivros = Integer.valueOf(sc.nextLine());
+                                                        } else {
+                                                            System.out.println(" Quantidade de Livros: " + quantLivros);
                                                             System.out.print(
-                                                                    " Cadastrar Conta (1 -> Sim, 2 - > Não): ");
+                                                                    " Cadastrar Livro (1 -> Sim, 2 - > Não): ");
                                                             if (Integer.valueOf(sc.nextLine()) == 1) {
-                                                                Adm adm = new Adm(cpf, nome, senha, email,
-                                                                        telefone);
-                                                                adm.criarAdm();
+                                                                livro = new Livro(quantLivros, titulo, genero, autor,
+                                                                        dataPublicacao, edicao, editora, isbn,
+                                                                        quantLivros,
+                                                                        quantLivros - 1);
+                                                                livro.cadastrarLivro();
                                                             }
                                                             System.out.print(" Aperte Enter para Continuar! ");
                                                             sc.nextLine();
@@ -667,207 +1061,286 @@ public class MainProjeto {
                                                 }
                                             }
                                         }
-                                    } while (!sair);
-                                    break;
-                                case 2:
-                                    LimpaTela();
-                                    System.out.println(" < Tornar Administrador >");
-                                    System.out.print(" Cpf: ");
-                                    cpf = sc.nextLine();
-                                    if (Adm.buscaAdm(cpf) != null) {
-                                        System.out.println(" Administrador já Cadastrado! ");
-                                    } else {
-                                        if (Usuario.buscaUsuario(cpf) == null) {
-                                            System.out.println(" Usuário Não Existente! ");
-                                        }
-                                        try {
-                                            Usuario user = Usuario.buscaUsuario(cpf);
-                                            Adm admin = new Adm(user.getCpf(), user.getNome(), user.getSenha(),
-                                                    user.getEmail(), user.getTelefone());
-                                            admin.criarAdm();
-                                        } catch (NullPointerException e) {
-                                            e.printStackTrace();
-                                        }
+                                    }
+                                }
+                            }
+                        } while (!sair);
+                        sair = false;
+                        break;
+
+                    case 2:
+                        LimpaTela();
+                        System.out.println(" < Pesquisar Livros > ");
+                        System.out.print(" ~Pesquise por um título, por autor ou por gênero!~ ");
+                        System.out.print(" > ");
+                        listaLivro = Livro.pesquisarLivro(sc.nextLine());
+                        if (listaLivro != null) {
+                            for (int i = 0; i < listaLivro.size(); i++) {
+                                System.out.println(listaLivro.get(i).toString() + "\n");
+                            }
+                        } else
+                            System.out.println(" Livro não Encontrado! ");
+
+                        System.out.print("\n Aperte Enter para Continuar");
+                        sc.nextLine();
+                        break;
+
+                    case 3:
+                        LimpaTela();
+                        System.out.println(" < Listando Acervo >");
+                        listaLivro = Livro.listarLivros();
+                        if (listaLivro != null && listaLivro.size() > 0) {
+                            for (int i = 0; i < listaLivro.size(); i++) {
+                                System.out.println(listaLivro.get(i).toString() + "\n");
+                            }
+                        } else
+                            System.out.println("\n Nenhum livro encontrado! ");
+                        System.out.print(" Aperte Enter para Continuar");
+                        sc.nextLine();
+                        break;
+                    case 4:
+                        LimpaTela();
+                        System.out.println(" < Editar Livro >");
+                        System.out.print(" Id do Livro: ");
+                        livro = Livro.buscaLivroId(Integer.valueOf(sc.nextLine()));
+                        if (livro != null) {
+                            System.out.println(" \n" + livro.toString());
+                            System.out.println(" Editar Livro (1 -> Sim, 2 -> Não)");
+                            if (Integer.valueOf(sc.nextLine()) == 1) {
+                                do {
+                                    System.out.println(" < Editar Livro >");
+                                    System.out.println(" 1 -> Editar Titulo");
+                                    System.out.println(" 2 -> Editar Genero");
+                                    System.out.println(" 3 -> Editar Autor");
+                                    System.out.println(" 4 -> Editar Data da Publicação");
+                                    System.out.println(" 5 -> Editar Edição");
+                                    System.out.println(" 6 -> Editar Editora");
+                                    System.out.println(" 7 -> Editar ISBN");
+                                    System.out.println(" 8 -> Editar Quantidade");
+                                    System.out.println(" 0 -> Voltar");
+                                    System.out.print(" > ");
+                                    switch (Integer.valueOf(sc.nextLine())) {
+                                        case 1:
+                                            System.out.print(" Novo Titulo: ");
+                                            titulo = sc.nextLine();
+                                            if (ValidarDados.validarNome(titulo)) {
+                                                livro.editarLivro("titulo", titulo);
+                                                livro.setTitulo(titulo);
+                                                sair = true;
+                                            } else
+                                                System.out.println(" Formato inválido ");
+                                            break;
+                                        case 2:
+                                            System.out.print(" Novo Genero: ");
+                                            genero = sc.nextLine();
+                                            if (ValidarDados.validarGenero(genero)) {
+                                                livro.editarLivro("genero", genero);
+                                                livro.setGenero(genero);
+                                                sair = true;
+                                            } else
+                                                System.out.println(" Formato inválido ");
+                                            break;
+                                        case 3:
+                                            System.out.print(" Novo Autor: ");
+                                            autor = sc.nextLine();
+                                            if (ValidarDados.validarAutor(autor)) {
+                                                livro.editarLivro("autor", autor);
+                                                livro.setAutor(autor);
+                                                sair = true;
+                                            } else
+                                                System.out.println(" Formato inválido ");
+                                            break;
+                                        case 4:
+                                            System.out.print(" Nova Data de Publicação: ");
+                                            dataPublicacao = sc.nextLine();
+                                            if (ValidarDados.validarDataPublicacao(dataPublicacao)) {
+                                                livro.editarLivro("dataPublicacao", dataPublicacao);
+                                                livro.setDataPublicacao(dataPublicacao);
+                                                sair = true;
+                                            } else
+                                                System.out.println(" Formato inválido ");
+                                            break;
+                                        case 5:
+                                            System.out.print(" Nova Edicao: ");
+                                            edicao = sc.nextLine();
+                                            if (ValidarDados.validarEdicao(edicao)) {
+                                                livro.editarLivro("edicao", edicao);
+                                                livro.setEdicao(edicao);
+                                                sair = true;
+                                            } else
+                                                System.out.println(" Formato inválido ");
+                                            break;
+                                        case 6:
+                                            System.out.print(" Nova Editora: ");
+                                            editora = sc.nextLine();
+                                            if (ValidarDados.validarEditora(editora)) {
+                                                livro.editarLivro("editora", editora);
+                                                livro.setEditora(editora);
+                                                sair = true;
+                                            } else
+                                                System.out.println(" Formato inválido ");
+                                            break;
+                                        case 7:
+                                            System.out.print(" Novo Isbn: ");
+                                            isbn = sc.nextLine();
+                                            if (ValidarDados.validarIsbn(isbn)) {
+                                                livro.editarLivro("isbn", isbn);
+                                                livro.setIsbn(isbn);
+                                                sair = true;
+                                            } else
+                                                System.out.println(" Formato inválido ");
+                                            break;
+                                        case 8:
+                                            System.out.print(" Nova Quantidade: ");
+                                            quantLivros = Integer.valueOf(sc.nextLine());
+                                            if (ValidarDados.validarQuantLivros(quantLivros)) {
+                                                livro.editarLivro("quantLivros", quantLivros);
+                                                livro.setQuantLivros(quantLivros);
+                                                sair = true;
+                                            } else
+                                                System.out.println(" Formato inválido ");
+                                            break;
+                                        case 0:
+                                            break;
                                     }
                                     System.out.print(" Aperte Enter para Continuar! ");
                                     sc.nextLine();
-                                    break;
-                                case 0:
-
-                                    break;
+                                } while (!sair);
                             }
-
-                            break;
-                        case 2:
-                            sair = false;
-                            do {
-                                LimpaTela();
-                                System.out.println(" < Cadastro de Usuário >");
-                                if (!validarNome(nome)) {
-                                    System.out.print(" Nome: ");
-                                    nome = sc.nextLine();
-                                } else {
-                                    System.out.println(" Nome: " + nome);
-                                    if (!validarCpf(cpf)) {
-                                        System.out.print(" Cpf (11 digitos): ");
-                                        cpf = sc.nextLine();
-                                    } else {
-                                        System.out.println(" Cpf: " + cpf);
-                                        if (!validarEmail(email)) {
-                                            System.out.print(" Email: ");
-                                            email = sc.nextLine();
-                                        } else {
-                                            System.out.println(" Email: " + email);
-                                            if (!validarSenha(senha)) {
-                                                System.out.print(" Senha (minimo de 6 digitos): ");
-                                                senha = sc.nextLine();
-                                                System.out.print(" Confirme a Senha: ");
-                                                senhaConfirma = sc.nextLine();
-                                                if (!senha.equals(senhaConfirma)) {
-                                                    senha = null;
-                                                }
-                                            } else {
-                                                System.out.println(" Senha: " + senha);
-                                                if (!validarTelefone(telefone)) {
-                                                    System.out.print(" Telefone (11 digitos)): ");
-                                                    telefone = sc.nextLine();
-                                                } else {
-                                                    System.out.println(" Telefone: " + telefone);
-                                                    System.out.print(
-                                                            " Cadastrar Conta (1 -> Sim, 2 - > Não): ");
-                                                    if (Integer.valueOf(sc.nextLine()) == 1) {
-                                                        Usuario usuario = new Usuario(cpf, nome, senha, email,
-                                                                telefone);
-                                                        usuario.criarConta();
-                                                    }
-                                                    System.out.print(" Aperte Enter para Continuar! ");
-                                                    sc.nextLine();
-                                                    sair = true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } while (!sair);
-
-                            break;
-                        case 0:
-                            break;
-                    }
-
-                    break;
-                case 2:
-                    LimpaTela();
-                    System.out.println(" < Buscar Usuário >");
-                    System.out.print(" Cpf: ");
-                    cpf = sc.nextLine();
-                    if (Adm.buscaAdm(cpf) != null) {
-                        System.out.println(Adm.buscaAdm(cpf).toString());
-                    } else if (Usuario.buscaUsuario(cpf) != null) {
-                        System.out.println(Usuario.buscaUsuario(cpf));
-                    } else {
-                        System.out.println(" Usuário não encontrado!");
-                    }
-                    System.out.print("\n Aperte Enter para Continuar! ");
-                    sc.nextLine();
-                    break;
-                case 3:
-                    LimpaTela();
-                    System.out.println(" < Listar Usuários >");
-                    System.out.println(" 1 -> Usuários");
-                    System.out.println(" 2 -> Administradores");
-                    System.out.println(" 0 -> Sair");
-                    System.out.print(" > ");
-                    switch (Integer.valueOf(sc.nextLine())) {
-                        case 1:
-                            LimpaTela();
-                            System.out.println(" Usuários do Acervo");
-                            ArrayList<Usuario> usuarios = Usuario.listaUsuario();
-
-                            for (int i = 0; i < usuarios.size(); i++) {
-                                System.out.println("\n" + usuarios.get(i));
-                            }
-
-                            System.out.print("\n Aperte Enter para Continuar! ");
+                        } else {
+                            System.out.println(" Livro não Encontrado! ");
+                            System.out.print("\n Aperte Enter para Continuar");
                             sc.nextLine();
-                            break;
-                        case 2:
-                            LimpaTela();
-                            System.out.println("Administradores do Acervo");
-                            ArrayList<Adm> adms = Adm.listaAdm();
-
-                            for (int i = 0; i < adms.size(); i++) {
-                                System.out.println("\n" + adms.get(i));
+                        }
+                        sair = false;
+                        break;
+                    case 5:
+                        LimpaTela();
+                        System.out.println(" < Excluir Livro >");
+                        System.out.print(" Id do Livro: ");
+                        idLivro = Integer.valueOf(sc.nextLine());
+                        if (Livro.buscaLivroId(idLivro).toString() != null) {
+                            System.out.println(Livro.buscaLivroId(idLivro).toString());
+                            System.out.print(" Excluir Livro (1 -> Sim, 2 -> Não): ");
+                            if (Integer.valueOf(sc.nextLine()) == 1) {
+                                Livro.excluirLivro(idLivro);
                             }
-
-                            System.out.print("\n Aperte Enter para Continuar! ");
-                            sc.nextLine();
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 4: // Editar Usuários
-                    LimpaTela();
-                    System.out.println(" < Editar Usuários >");
-                    System.out.print(" Cpf: ");
-                    cpf = sc.nextLine();
-
-                    break;
-                case 5:
-                    LimpaTela();
-                    System.out.println(" < Excluir Usuário >");
-                    System.out.println(" 1 -> Excluir");
-                    System.out.println(" 0 -> Voltar");
-                    System.out.print(" > ");
-                    switch (Integer.valueOf(sc.nextLine())) {
-                        case 1:
-                            LimpaTela();
-                            System.out.println(" < Excluir Usuário >");
-                            System.out.print(" Cpf: ");
-                            cpf = sc.nextLine();
-                            if (Adm.buscaAdm(cpf) != null) {
-                                System.out.println(Adm.buscaAdm(cpf).toString());
-                            } else if (Usuario.buscaUsuario(cpf) != null) {
-                                System.out.println(Usuario.buscaUsuario(cpf));
-                            } else {
-                                System.out.println(" Usuário não encontrado!");
-                                break;
-                            }
-                            System.out.print(" Excluir o Usuário (1 -> Sim, 2 - > Não): ");
-                            switch (sc.nextInt()) {
-                                case 1:
-                                    sc.nextLine();
-                                    Adm.excluirAdm(cpf);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-
-                        case 0:
-                        default:
-                            break;
-                    }
-                    System.out.print("\n Aperte Enter para Continuar! ");
-                    sc.nextLine();
-                    break;
-                case 0:
-                default:
-                    System.out.print("\n Aperte Enter para Continuar! ");
-                    sc.nextLine();
-                    break;
+                        } else
+                            System.out.println(" Livro não Encontrado!");
+                        System.out.print("\n Aperte Enter para Continuar");
+                        sc.nextLine();
+                        break;
+                    case 0:
+                        sair = true;
+                        break;
+                    default:
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
-        } catch (NumberFormatException e) {
-        }
+        } while (!sair);
     }
 
-    /*
-     *
-     * Validação de dados e correções de impressão
-     * 
-     */
+    public static void manterEmprestimo(Scanner sc) throws InterruptedException, IOException {
+        boolean sair = false;
+        String cpf = null;
+        int idLivro;
+        ArrayList<Emprestimo> emprestimos = null;
+        do {
+            try {
+                LimpaTela();
+                System.out.println(" < Manter Emprestimo >");
+                System.out.println(" 1 -> Receber Livro");
+                System.out.println(" 2 -> -Extender Prazo");
+                System.out.println(" 3 -> Listar Emprestimos por Usuário");
+                System.out.println(" 4 -> -Listar Emprestimos Atrazados");
+                System.out.println(" 5 -> Listar Emprestimos Gerais");
+                System.out.println(" 0 -> Sair");
+                System.out.print(" > ");
+                switch (Integer.valueOf(sc.nextLine())) {
+                    case 1:
+                        LimpaTela();
+                        System.out.println(" < Receber Livro >");
+                        System.out.print(" Cpf: ");
+                        cpf = sc.nextLine();
+                        System.out.print(" IdLivro: ");
+                        idLivro = Integer.valueOf(sc.nextLine());
+                        Emprestimo emprestimo = Emprestimo.buscaEmprestimo(cpf, idLivro);
+                        System.out.println(emprestimo.toString());
+                        System.out.print(" Devolver (1 -> Sim, 2 -> Não): ");
+                        if (Integer.valueOf(sc.nextLine()) == 1) {
+                            LocalDate dataAtual = LocalDate.now();
 
+                            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            String dataDevolucao = dataAtual.format(formato);
+                            emprestimo.devolverLivro(dataDevolucao);
+                        }
+                        System.out.print(" Aperte Enter para Continuar! ");
+                        sc.nextLine();
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+                        LimpaTela();
+                        System.out.println(" < Empréstimos por Usuário > ");
+                        System.out.print(" Cpf: ");
+                        cpf = sc.nextLine();
+                        emprestimos = Emprestimo.buscaMeusEmprestimos(cpf);
+                        if (emprestimos.size() != 0) {
+                            System.out.println(" - Empréstimos -");
+                            for (int i = 0; i < emprestimos.size(); i++) {
+                                System.out.println(emprestimos.get(i).toString());
+                            }
+                        } else {
+                            System.out.println(" Sem Emprestimos Cadastrados! ");
+                        }
+                        System.out.print(" Aperte Enter para Continuar! ");
+                        sc.nextLine();
+                        break;
+                    case 4:
+                        // LimpaTela();
+                        // System.out.println(" < Empréstimos Atrazados > ");
+                        // emprestimos = Emprestimo.listarAtrazados();
+                        // if (emprestimos.size() != 0) {
+                        //     System.out.println(" - Empréstimos -");
+                        //     for (int i = 0; i < emprestimos.size(); i++) {
+                        //         System.out.println(emprestimos.get(i).toString());
+                        //     }
+                        // } else {
+                        //     System.out.println(" Sem Emprestimos Cadastrados! ");
+                        // }
+                        // System.out.print(" Aperte Enter para Continuar! ");
+                        // sc.nextLine();
+                        // break;
+                        System.out.println(" Não Implemetado! ");
+                    case 5:
+                        LimpaTela();
+                        emprestimos = Emprestimo.ListaEmprestimo();
+                        System.out.println(" < Listar Emprestimos >");
+                        for (int i = 0; i < emprestimos.size(); i++) {
+                            System.out.println(emprestimos.get(i).toString());
+                        }
+                        System.out.print(" Aperte Enter Para Continuar! ");
+                        sc.nextLine();
+                        break;
+                    case 0:
+                        sair = true;
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } while (!sair);
+    }
+
+    /**
+     * Método para limpar a tela do terminal
+     * 
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public static void LimpaTela() throws InterruptedException, IOException {
         // Isso aqui funciona pra identificar qual SO está sendo usado
         String osName = System.getProperty("os.name").toLowerCase();
@@ -876,57 +1349,6 @@ public class MainProjeto {
         } else {
             new ProcessBuilder("sh", "-c", "clear").inheritIO().start().waitFor();
         }
-    }
-
-    public static boolean validarNome(String nome) {
-        if (nome == null || nome.trim().isEmpty()) {
-            return false;
-        }
-        if (!nome.matches("^[A-Za-zÀ-ÖØ-öø-ÿ\\s-]+$")) {
-            return false;
-        }
-        return true;
-
-    }
-
-    public static boolean validarCpf(String cpf) {
-        if (cpf == null || cpf.trim().isEmpty()) {
-            return false;
-        }
-        if (!cpf.matches("\\d{11}")) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean validarTelefone(String telefone) {
-        if (telefone == null || telefone.isEmpty()) {
-            return false;
-        }
-        if (!telefone.matches("\\d{11}")) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean validarEmail(String email) {
-        if (email == null || email.trim().isEmpty()) {
-            return false;
-        }
-        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            return false;
-        }
-        return true;
-
-    }
-
-    public static boolean validarSenha(String senha) {
-        if (senha == null || senha.trim().isEmpty() || senha.length() < 6) {
-            return false;
-        } else {
-            return true;
-        }
-
     }
 
 }
