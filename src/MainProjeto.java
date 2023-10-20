@@ -1045,7 +1045,7 @@ public class MainProjeto {
                                                                 livro = new Livro(quantLivros, titulo, genero, autor,
                                                                         dataPublicacao, edicao, editora, isbn,
                                                                         quantLivros,
-                                                                        quantLivros - 1);
+                                                                        quantLivros - 1, 0);
                                                                 livro.cadastrarLivro();
                                                             }
                                                             System.out.print(" Aperte Enter para Continuar! ");
@@ -1214,7 +1214,7 @@ public class MainProjeto {
                         System.out.println(" < Excluir Livro >");
                         System.out.print(" Id do Livro: ");
                         idLivro = Integer.valueOf(sc.nextLine());
-                        if (Livro.buscaLivroId(idLivro).toString() != null) {
+                        if (Livro.buscaLivroId(idLivro) != null) {
                             System.out.println(Livro.buscaLivroId(idLivro).toString());
                             System.out.print(" Excluir Livro (1 -> Sim, 2 -> Não): ");
                             if (Integer.valueOf(sc.nextLine()) == 1) {

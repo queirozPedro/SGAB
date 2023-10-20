@@ -239,41 +239,44 @@ public class Emprestimo {
             }
         }
     }
-
-    // public static void finalizarEmprestimos(String cpf) {
-    // Connection connection = PostgreSQLConnection.getInstance().getConnection();
-    // PreparedStatement state = null;
-
-    // try {
-    // ArrayList<Emprestimo> emprestimos = buscaMeusEmprestimos(cpf);
-    // java.sql.Date dataAtual = new java.sql.Date(System.currentTimeMillis());
-
-    // String query = "UPDATE emprestimo SET dataDevolucao = ? WHERE cpf = ?";
-    // state = connection.prepareStatement(query);
-    // state.setDate(1, dataAtual);
-    // state.setString(2, cpf);
-    // state.executeUpdate();
-
-    // // livro.editarLivro("quantDisponivel", livro.getQuantDisponivel() + 1);
-    // // System.out.println(" Livro Devolvido ao Acervo! ");
-
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // } finally {
-    // try {
-    // if (state != null) {
-    // state.close();
-    // }
-    // } catch (SQLException e) {
-    // e.printStackTrace();
-    // }
-    // }
-    // }
-
+    
+    public void setDataEmprestimo(String dataEmprestimo) {
+        try {
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date utilDate = formatoData.parse(dataEmprestimo);
+            this.dataEmprestimo = new java.sql.Date(utilDate.getTime());
+        } catch (ParseException e) {
+            System.err.println("Erro ao converter a data");
+        }
+    }
+    
+    
+    public void setDataPrevista(String dataPrevista) {
+        try {
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date utilDate = formatoData.parse(dataPrevista);
+            this.dataPrevista = new java.sql.Date(utilDate.getTime());
+        } catch (ParseException e) {
+            System.err.println("Erro ao converter a data");
+        }
+    }
+    
+    public void setDataDevolucao(String dataDevolucao) {
+        if (dataDevolucao == null) {
+            try {
+                SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+                java.util.Date utilDate = formatoData.parse(dataDevolucao);
+                this.dataDevolucao = new java.sql.Date(utilDate.getTime());
+            } catch (ParseException e) {
+                System.err.println("Erro ao converter a data");
+            }
+        }
+    }
+    
     public String getCpf() {
         return cpf;
     }
-
+    
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
@@ -286,37 +289,6 @@ public class Emprestimo {
         this.idLivro = idLivro;
     }
 
-    public void setDataEmprestimo(String dataEmprestimo) {
-        try {
-            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date utilDate = formatoData.parse(dataEmprestimo);
-            this.dataEmprestimo = new java.sql.Date(utilDate.getTime());
-        } catch (ParseException e) {
-            System.err.println("Erro ao converter a data");
-        }
-    }
-
-    public void setDataPrevista(String dataPrevista) {
-        try {
-            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date utilDate = formatoData.parse(dataPrevista);
-            this.dataPrevista = new java.sql.Date(utilDate.getTime());
-        } catch (ParseException e) {
-            System.err.println("Erro ao converter a data");
-        }
-    }
-
-    public void setDataDevolucao(String dataDevolucao) {
-        if (dataDevolucao == null) {
-            try {
-                SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-                java.util.Date utilDate = formatoData.parse(dataDevolucao);
-                this.dataDevolucao = new java.sql.Date(utilDate.getTime());
-            } catch (ParseException e) {
-                System.err.println("Erro ao converter a data");
-            }
-        }
-    }
 
     public java.sql.Date getDataEmprestimo() {
         return dataEmprestimo;

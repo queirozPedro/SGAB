@@ -15,9 +15,10 @@ public class Livro {
     private String isbn;
     private int quantLivros;
     private int quantDisponivel;
+    private int quantEmprestada;
 
     public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
-            String editora, String isbn, int quantLivros, int quantDisponivel) {
+            String editora, String isbn, int quantLivros, int quantDisponivel, int quantEmprestada) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -28,10 +29,11 @@ public class Livro {
         this.isbn = isbn;
         this.quantLivros = quantLivros;
         this.quantDisponivel = quantDisponivel;
+        this.quantEmprestada = quantEmprestada;
     }
 
     public Livro(int idLivro, String titulo, String genero, String autor, Date dataPublicacao, String edicao,
-            String editora, String isbn, int quantLivros, int quantDisponivel) {
+            String editora, String isbn, int quantLivros, int quantDisponivel, int quantEmprestada) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -42,6 +44,7 @@ public class Livro {
         this.isbn = isbn;
         this.quantLivros = quantLivros;
         this.quantDisponivel = quantDisponivel;
+        this.quantEmprestada = quantEmprestada;
     }
 
     /**
@@ -113,7 +116,7 @@ public class Livro {
             if (result.next()) {// enquanto houverem respostas, imprima-as
                 return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4),
                         result.getDate(5), result.getString(6), result.getString(7), result.getString(8),
-                        result.getInt(9), result.getInt(10));
+                        result.getInt(9), result.getInt(10), result.getInt(11));
             }
         } catch (Exception e) {// se der erro, mostre qual foi
             System.out.println(e);
@@ -162,7 +165,8 @@ public class Livro {
                         result.getString("Editora"),
                         result.getString("ISBN"),
                         result.getInt("quantLivros"),
-                        result.getInt("quantDisponivel"));
+                        result.getInt("quantDisponivel"),
+                        result.getInt("quantEmprestados"));
 
                 livrosEncontrados.add(livro);
             }
@@ -208,8 +212,8 @@ public class Livro {
                         result.getString("Editora"),
                         result.getString("ISBN"),
                         result.getInt("quantLivros"),
-                        result.getInt("quantDisponivel"));
-
+                        result.getInt("quantDisponivel"),
+                        result.getInt("quantEmprestados"));
                 listaLivro.add(livro);
             }
             return listaLivro;
@@ -262,48 +266,49 @@ public class Livro {
     public void editarLivro(String campo, String valor) {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
+        try {
+            String query = "UPDATE Livro SET " + campo + " = ? WHERE idLivro = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, valor);
+            state.setInt(2, getIdLivro());
+            state.executeUpdate();
 
-        if (campo == "dataPublicacao") {
-            setDataPublicacao(dataPublicacao);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             try {
-                String query = "UPDATE Livro SET DataPublicacao = ? WHERE idLivro = ?";
-                state = connection.prepareStatement(query);
-                state.setDate(1, getDataPublicacao());
-                state.setInt(2, getIdLivro());
-                state.executeUpdate();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (state != null) {
-                        state.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                if (state != null) {
+                    state.close();
                 }
-            }
-        } else {
-            try {
-                String query = "UPDATE Livro SET " + campo + " = ? WHERE idLivro = ?";
-                state = connection.prepareStatement(query);
-                state.setString(1, valor);
-                state.setInt(2, getIdLivro());
-                state.executeUpdate();
-
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    if (state != null) {
-                        state.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
 
+    }
+
+    public void editarLivro(String campo, java.sql.Date valor) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+
+            try {
+                String query = "UPDATE Livro SET DataPublicacao = ? WHERE idLivro = ?";
+                state = connection.prepareStatement(query);
+                state.setDate(1, valor);
+                state.setInt(2, getIdLivro());
+                state.executeUpdate();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (state != null) {
+                        state.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
     public void editarLivro(String campo, int valor) {
@@ -332,10 +337,10 @@ public class Livro {
 
     @Override
     public String toString() {
-        return "\n Livro: " + titulo + "\n Id: "+ idLivro +"\n Autor: " + autor + "\n Gênero: " + genero + 
+        return "\n Livro: " + titulo + "\n Id: " + idLivro + "\n Autor: " + autor + "\n Gênero: " + genero +
                 "\n Data da Publicação: " + dataPublicacao + "\n Edição: " + edicao + "\n Editora: " +
-                 editora + "\n ISBN: " + isbn + "\n Quantidade de Livros: " + quantLivros + 
-                 "\n Quantidade Disponivel: " + quantDisponivel;
+                editora + "\n ISBN: " + isbn + "\n Quantidade de Livros: " + quantLivros +
+                "\n Quantidade Disponivel: " + quantDisponivel + "\n Quantidade Emprestada: "+ quantEmprestada;
     }
 
     public int getIdLivro() {
@@ -416,6 +421,14 @@ public class Livro {
 
     public void setQuantDisponivel(int quantDisponivel) {
         this.quantDisponivel = quantDisponivel;
+    }
+
+    public int getQuantEmprestada() {
+        return quantEmprestada;
+    }
+
+    public void setQuantEmprestada(int quantEmprestada) {
+        this.quantEmprestada = quantEmprestada;
     }
 
 }
