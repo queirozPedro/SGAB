@@ -45,7 +45,7 @@ Levando em consideração a modularidade do sistema, e a disponibilidade de todo
 ## 📑 Documentação do Projeto
 <table>
   Documento do Projeto: 
-  <a href= "https://docs.google.com/document/d/1iDARX8hfD6CvpUMOUtUOb-ttJYDn8J8OdbGw0ZdQWqE/edit?usp=sharing">
+  <a href= "https://www.overleaf.com/read/dyykcdsyvqdw">
     Sistema de Gerenciamento de Acervo Bibliotecário (SGAB)
   </a>
 </table>
