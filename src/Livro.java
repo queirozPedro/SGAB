@@ -14,11 +14,10 @@ public class Livro {
     private String editora;
     private String isbn;
     private int quantLivros;
-    private int quantDisponivel;
     private int quantEmprestados;
 
     public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
-            String editora, String isbn, int quantLivros, int quantDisponivel, int quantEmprestados) {
+            String editora, String isbn,int quantLivros) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -28,12 +27,10 @@ public class Livro {
         this.editora = editora;
         this.isbn = isbn;
         this.quantLivros = quantLivros;
-        this.quantDisponivel = quantDisponivel;
-        this.quantEmprestados = quantEmprestados;
     }
 
     public Livro(int idLivro, String titulo, String genero, String autor, Date dataPublicacao, String edicao,
-            String editora, String isbn, int quantLivros, int quantDisponivel, int quantEmprestados) {
+            String editora, String isbn, int quantLivros, int quantEmprestados) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -43,7 +40,6 @@ public class Livro {
         this.editora = editora;
         this.isbn = isbn;
         this.quantLivros = quantLivros;
-        this.quantDisponivel = quantDisponivel;
         this.quantEmprestados = quantEmprestados;
     }
 
@@ -55,7 +51,7 @@ public class Livro {
         PreparedStatement state = null;
 
         try {
-            String query = "INSERT Into Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, quantLivros, quantDisponivel) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT Into Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, quantLivros) VALUES  (?, ?, ?, ?, ?, ?, ?, ?)";
             state = connection.prepareStatement(query);
             state.setString(1, titulo);
             state.setString(2, genero);
@@ -65,7 +61,6 @@ public class Livro {
             state.setString(6, editora);
             state.setString(7, isbn);
             state.setInt(8, quantLivros);
-            state.setInt(9, quantDisponivel);
             state.executeUpdate();
             System.out.println(" Livro Cadastrado! ");
 
@@ -101,7 +96,7 @@ public class Livro {
             if (result.next()) {// enquanto houverem respostas, imprima-as
                 return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4),
                         result.getDate(5), result.getString(6), result.getString(7), result.getString(8),
-                        result.getInt(9), result.getInt(10), result.getInt(11));
+                        result.getInt(9), result.getInt(10));
             }
         } catch (Exception e) {// se der erro, mostre qual foi
             System.out.println(e);
@@ -150,7 +145,6 @@ public class Livro {
                         result.getString("Editora"),
                         result.getString("ISBN"),
                         result.getInt("quantLivros"),
-                        result.getInt("quantDisponivel"),
                         result.getInt("quantEmprestados"));
 
                 livrosEncontrados.add(livro);
@@ -197,7 +191,6 @@ public class Livro {
                         result.getString("Editora"),
                         result.getString("ISBN"),
                         result.getInt("quantLivros"),
-                        result.getInt("quantDisponivel"),
                         result.getInt("quantEmprestados"));
                 listaLivro.add(livro);
             }
@@ -324,8 +317,8 @@ public class Livro {
     public String toString() {
         return "\n Livro: " + titulo + "\n Id: " + idLivro + "\n Autor: " + autor + "\n Gênero: " + genero +
                 "\n Data da Publicação: " + dataPublicacao + "\n Edição: " + edicao + "\n Editora: " +
-                editora + "\n ISBN: " + isbn + "\n Quantidade de Livros: " + quantLivros +
-                "\n Quantidade Disponivel: " + quantDisponivel + "\n Quantidade Emprestada: "+ quantEmprestados;
+                editora + "\n ISBN: " + isbn + "\n Quantidade de Livros: " + quantLivros + 
+                "\n Quantidade Emprestada: "+ quantEmprestados;
     }
 
     /**
@@ -413,14 +406,6 @@ public class Livro {
 
     public void setQuantLivros(int quantLivros) {
         this.quantLivros = quantLivros;
-    }
-
-    public int getQuantDisponivel() {
-        return quantDisponivel;
-    }
-
-    public void setQuantDisponivel(int quantDisponivel) {
-        this.quantDisponivel = quantDisponivel;
     }
 
     public int getQuantEmprestados() {

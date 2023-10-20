@@ -40,7 +40,7 @@ public class Emprestimo {
 
         if (emprestimos.size() < 3) {
             Livro livro = Livro.buscaLivroId(getIdLivro());
-            if (livro.getQuantDisponivel() > livro.getQuantEmprestados()) {
+            if (livro.getQuantLivros() >= livro.getQuantEmprestados() || livro.getQuantLivros() > 0) {
                 try {
                     String query = "INSERT Into emprestimo (cpf, idLivro, dataEmprestimo, dataPrevista) VALUES (?, ?, ?, ?)";
                     state = connection.prepareStatement(query);

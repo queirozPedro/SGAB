@@ -1047,8 +1047,7 @@ public class MainProjeto {
                                                             if (Integer.valueOf(sc.nextLine()) == 1) {
                                                                 livro = new Livro(quantLivros, titulo, genero, autor,
                                                                         dataPublicacao, edicao, editora, isbn,
-                                                                        quantLivros,
-                                                                        quantLivros - 1, 0);
+                                                                        quantLivros);
                                                                 livro.cadastrarLivro();
                                                             }
                                                             System.out.print(" Aperte Enter para Continuar! ");
@@ -1114,7 +1113,6 @@ public class MainProjeto {
                                     System.out.println(" 5 -> Editar Edição");
                                     System.out.println(" 6 -> Editar Editora");
                                     System.out.println(" 7 -> Editar ISBN");
-                                    System.out.println(" 8 -> Editar Quantidade");
                                     System.out.println(" 0 -> Voltar");
                                     System.out.print(" > ");
                                     switch (Integer.valueOf(sc.nextLine())) {
@@ -1184,16 +1182,6 @@ public class MainProjeto {
                                             if (ValidarDados.validarIsbn(isbn)) {
                                                 livro.editarLivro("isbn", isbn);
                                                 livro.setIsbn(isbn);
-                                                sair = true;
-                                            } else
-                                                System.out.println(" Formato inválido ");
-                                            break;
-                                        case 8:
-                                            System.out.print(" Nova Quantidade: ");
-                                            quantLivros = Integer.valueOf(sc.nextLine());
-                                            if (ValidarDados.validarQuantLivros(quantLivros)) {
-                                                livro.editarLivro("quantLivros", quantLivros);
-                                                livro.setQuantLivros(quantLivros);
                                                 sair = true;
                                             } else
                                                 System.out.println(" Formato inválido ");
