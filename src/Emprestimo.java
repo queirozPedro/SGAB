@@ -1,7 +1,10 @@
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class Emprestimo {
 
@@ -34,11 +37,11 @@ public class Emprestimo {
     public void criarEmprestimo() {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
-
         ArrayList<Emprestimo> emprestimos = listaAbertos(getCpf());
+
         if (emprestimos.size() < 3) {
             Livro livro = Livro.buscaLivroId(getIdLivro());
-            if (livro.getQuantDisponivel() > 0) {
+            if (livro.getQuantDisponivel() > livro.getQuantEmprestados()) {
                 try {
                     String query = "INSERT Into emprestimo (cpf, idLivro, dataEmprestimo, dataPrevista) VALUES (?, ?, ?, ?)";
                     state = connection.prepareStatement(query);
@@ -48,7 +51,7 @@ public class Emprestimo {
                     state.setDate(4, dataPrevista);
                     state.executeUpdate();
 
-                    livro.editarLivro("quantDisponivel", livro.getQuantDisponivel() - 1);
+                    livro.editarLivro("quantEmprestados", livro.getQuantEmprestados() + 1);
                     System.out.println(" Emprestimo Cadastrado!");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -62,12 +65,54 @@ public class Emprestimo {
                     }
                 }
             } else {
-                System.out.println(" Livro Indisponível");
+                System.out.println(" Livro em Falta! ");
             }
         } else {
             System.out.println(" Quantidade Máxima de Emprestimos Atingida! ");
         }
 
+    }
+
+    /**
+     * Metodo que devolve um livro, ou seja, finaliza uma operação de emprestimo
+     * 
+     * @param dataDevolucao
+     */
+    public static void devolverLivro(String cpf, int idLivro) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+
+        if (Emprestimo.buscaEmprestimo(cpf, idLivro) != null
+                && Emprestimo.buscaEmprestimo(cpf, idLivro).getDataDevolucao() == null) {
+            try {
+                java.util.Date dataAtual = new java.util.Date();
+                java.sql.Date dataSql = new java.sql.Date(dataAtual.getTime());
+
+                String query = "UPDATE emprestimo SET dataDevolucao = ? WHERE cpf = ? AND idLivro = ?";
+                state = connection.prepareStatement(query);
+                state.setDate(1, dataSql);
+                state.setString(2, cpf);
+                state.setInt(3, idLivro);
+                state.executeUpdate();
+
+                Livro livro = Livro.buscaLivroId(idLivro);
+                livro.editarLivro("quantEmprestados", livro.getQuantEmprestados() - 1);
+                System.out.println(" Livro Devolvido ao Acervo! ");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (state != null) {
+                        state.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            System.out.println(" Empréstimo Inexistente ou Livro já Devolvido! ");
+        }
     }
 
     /**
@@ -113,6 +158,47 @@ public class Emprestimo {
             }
         }
         return null;
+    }
+
+    public static void renovarEmprestimo(String cpf, int idLivro) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+
+        try {
+            java.sql.Date dataprv = Emprestimo.buscaEmprestimo(cpf, idLivro).getDataPrevista();
+            java.sql.Date dataemp = Emprestimo.buscaEmprestimo(cpf, idLivro).getDataEmprestimo();
+
+            java.util.Date dataUtilprv = new java.util.Date(dataprv.getTime());
+            java.util.Date dataUtilemp = new java.util.Date(dataemp.getTime());
+
+            long diferencaDias = TimeUnit.DAYS.convert(dataUtilprv.getTime() - dataUtilemp.getTime(), TimeUnit.MILLISECONDS);
+            if(diferencaDias == 7){
+                
+                // Adicionar 7 dias
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dataUtilprv);
+                calendar.add(Calendar.DAY_OF_MONTH, 7);
+                java.util.Date novaDataUtil = calendar.getTime();
+                
+                // Converter de volta para java.sql.Date
+                java.sql.Date novaDataSql = new java.sql.Date(novaDataUtil.getTime());
+    
+                String query = "Update emprestimo SET dataPrevista = ? where cpf = ? AND idLivro = ?";
+                state = connection.prepareStatement(query);
+                state.setDate(1, novaDataSql);
+                state.setString(2, cpf);
+                state.setInt(3, idLivro);
+                state.executeUpdate();
+    
+                System.out.println(" Empréstimo Estendido por Mais 7 dias! ");
+            }
+            else{
+                System.out.println(" Não foi possível renovar o empréstimo! ");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -255,41 +341,6 @@ public class Emprestimo {
         return null;
     }
 
-    /**
-     * Metodo que devolve um livro, ou seja, finaliza uma operação de emprestimo
-     * 
-     * @param dataDevolucao
-     */
-    public void devolverLivro(String dataDevolucao) {
-        Connection connection = PostgreSQLConnection.getInstance().getConnection();
-        PreparedStatement state = null;
-
-        setDataDevolucao(dataDevolucao);
-        Livro livro = Livro.buscaLivroId(getIdLivro());
-
-        try {
-            String query = "UPDATE emprestimo SET dataDevolucao = ? WHERE cpf = ? AND idLivro = ?";
-            state = connection.prepareStatement(query);
-            state.setDate(1, this.dataDevolucao);
-            state.setString(2, this.cpf);
-            state.setInt(3, idLivro);
-            state.executeUpdate();
-            livro.editarLivro("quantDisponivel", livro.getQuantDisponivel() + 1);
-            System.out.println(" Livro Devolvido ao Acervo! ");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (state != null) {
-                    state.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void setDataEmprestimo(String dataEmprestimo) {
         try {
             SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
@@ -311,7 +362,7 @@ public class Emprestimo {
     }
 
     public void setDataDevolucao(String dataDevolucao) {
-        if (dataDevolucao == null) {
+        if (dataDevolucao != null) {
             try {
                 SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
                 java.util.Date utilDate = formatoData.parse(dataDevolucao);
@@ -364,13 +415,12 @@ public class Emprestimo {
 
     @Override
     public String toString() {
-        if(dataDevolucao != null){
-        return "\n Cpf: " + cpf + "\n idLivro: " + idLivro + "\n Data do Emprestimo: " + dataEmprestimo
-                + "\n Data Prevista para Entrega: " + dataPrevista + "\n Data da Devolucao: " + dataDevolucao;
-        }
-        else{
+        if (dataDevolucao != null) {
             return "\n Cpf: " + cpf + "\n idLivro: " + idLivro + "\n Data do Emprestimo: " + dataEmprestimo
-                + "\n Data Prevista para Entrega: " + dataPrevista + "\n Ainda não devolvido! ";
+                    + "\n Data Prevista para Entrega: " + dataPrevista + "\n Data da Devolucao: " + dataDevolucao;
+        } else {
+            return "\n Cpf: " + cpf + "\n idLivro: " + idLivro + "\n Data do Emprestimo: " + dataEmprestimo
+                    + "\n Data Prevista para Entrega: " + dataPrevista + "\n Ainda não devolvido! ";
         }
     }
 }
