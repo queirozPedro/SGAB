@@ -529,16 +529,19 @@ public class MainProjeto {
                                 String senha = sc.nextLine();
                                 if (Usuario.loginUsuario(email, senha) != null) {
                                     Usuario.excluirConta(usuario.getCpf());
-                                    System.out.println("Conta Excluida!");
-                                    return;
+                                    System.out.println(" Conta Excluida!");
+                                    System.out.print("\n Aperte Enter para Continuar! ");
+                                    sc.nextLine();
+                                    sair = true;
+                                    break;
                                 } else
                                     System.out.println(" Email ou Senha Incorretos");
                             default:
-                                System.out.print("\n Aperte Enter para Continuar! ");
-                                sc.nextLine();
+
                                 break;
                         }
-                        return;
+
+                        break;
                     case 0:
                         sair = true;
                         break;
