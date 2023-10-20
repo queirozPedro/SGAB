@@ -1,7 +1,6 @@
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -339,6 +338,24 @@ public class Emprestimo {
             }
         }
         return null;
+    }
+
+    public static void finalizaEmprestimos(String cpf){
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+
+        try {
+            String query = "Delete from emprestimo where cpf = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            state.executeUpdate();
+
+            System.out.println(" Usuário desvilculado com Empréstimos! ");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void setDataEmprestimo(String dataEmprestimo) {
