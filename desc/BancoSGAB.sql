@@ -22,7 +22,8 @@ CREATE TABLE Livro (
     Editora VARCHAR(255) NOT NULL,
     ISBN VARCHAR(13) NOT NULL, 
     quantLivros int NOT NULL,
-    quantDisponivel int NOT NULL
+    quantDisponivel int NOT NULL,
+    quantEmprestados int NOT NULL
 );
 
 CREATE TABLE Emprestimo (
