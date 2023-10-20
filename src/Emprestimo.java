@@ -356,6 +356,24 @@ public class Emprestimo {
             e.printStackTrace();
         }
 
+    
+    }
+    public static void finalizaEmprestimos(int idLivro){
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+
+        try {
+            String query = "Delete from emprestimo where idLivro = ?";
+            state = connection.prepareStatement(query);
+            state.setInt(1, idLivro);
+            state.executeUpdate();
+
+            System.out.println(" Usuário desvilculado com Empréstimos! ");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void setDataEmprestimo(String dataEmprestimo) {

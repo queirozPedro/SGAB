@@ -222,6 +222,7 @@ public class Livro {
         PreparedStatement state = null;
 
         try {
+            Emprestimo.finalizaEmprestimos(idLivro);
             String query = "Delete From livro where idLivro = ?";
             state = connection.prepareStatement(query);
             state.setInt(1, idLivro);

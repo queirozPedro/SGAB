@@ -167,7 +167,6 @@ public class Usuario {
         PreparedStatement state = null;
 
         try {
-
             Emprestimo.finalizaEmprestimos(cpf);
             // Remove o usuário da tabela Usuario
             String query = "DELETE From usuario where cpf = ?";
