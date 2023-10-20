@@ -16,7 +16,6 @@ public class Adm extends Usuario {
         super(usuario.getCpf(), usuario.getNome(), usuario.getSenha(), usuario.getEmail(), usuario.getTelefone());
     }
 
-
     public Adm(String cpf, String nome, String senha, String email, String telefone) {
         super(cpf, nome, senha, email, telefone);
     }
@@ -140,19 +139,20 @@ public class Adm extends Usuario {
         ResultSet result = null;
 
         try {
-            Usuario adm = loginUsuario(email, senha);
-            String query = "SELECT idAdm From adm where cpf = ?";
-            state = connection.prepareStatement(query);
-            state.setString(1, adm.getCpf());
-            result = state.executeQuery();
+            if (loginUsuario(email, senha) != null) {
+                Usuario adm = loginUsuario(email, senha);
+                String query = "SELECT idAdm From adm where cpf = ?";
+                state = connection.prepareStatement(query);
+                state.setString(1, adm.getCpf());
+                result = state.executeQuery();
 
-            if (result.next()) {
-                return new Adm(result.getInt(1), adm);
+                if (result.next()) {
+                    return new Adm(result.getInt(1), adm);
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
-            
+
         } finally {
             try {
                 if (result != null) {
