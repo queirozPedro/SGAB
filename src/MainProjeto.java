@@ -1247,7 +1247,7 @@ public class MainProjeto {
                 LimpaTela();
                 System.out.println(" < Manter Emprestimo >");
                 System.out.println(" 1 -> Receber Livro");
-                System.out.println(" 2 -> -Extender Prazo");
+                System.out.println(" 2 -> Extender Prazo");
                 System.out.println(" 3 -> Listar por Usuário");
                 System.out.println(" 4 -> Listar Atrazados");
                 System.out.println(" 5 -> Listar Emprestimos");
@@ -1261,21 +1261,38 @@ public class MainProjeto {
                         cpf = sc.nextLine();
                         System.out.print(" IdLivro: ");
                         idLivro = Integer.valueOf(sc.nextLine());
-                        Emprestimo emprestimo = Emprestimo.buscaEmprestimo(cpf, idLivro);
-                        System.out.println(emprestimo.toString());
-                        System.out.print(" Devolver (1 -> Sim, 2 -> Não): ");
-                        if (Integer.valueOf(sc.nextLine()) == 1) {
-                            LocalDate dataAtual = LocalDate.now();
-
-                            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                            String dataDevolucao = dataAtual.format(formato);
-                            emprestimo.devolverLivro(dataDevolucao);
+                        if (Emprestimo.buscaEmprestimo(cpf, idLivro) != null) {
+                            Emprestimo emprestimo = Emprestimo.buscaEmprestimo(cpf, idLivro);
+                            System.out.println(emprestimo.toString());
+                            System.out.print(" Devolver (1 -> Sim, 2 -> Não): ");
+                            if (Integer.valueOf(sc.nextLine()) == 1) {
+                                Emprestimo.devolverLivro(cpf, idLivro);
+                            }
+                        } else {
+                            System.out.println("\n Empréstimo não Encontrado! ");
                         }
                         System.out.print(" Aperte Enter para Continuar! ");
                         sc.nextLine();
                         break;
                     case 2:
-                        
+                        LimpaTela();
+                        System.out.println(" < Renovar Empréstimo > ");
+                        System.out.print(" Cpf: ");
+                        cpf = sc.nextLine();
+                        System.out.print(" IdLivro: ");
+                        idLivro = Integer.valueOf(sc.nextLine());
+                        if (Emprestimo.buscaEmprestimo(cpf, idLivro) != null) {
+                            Emprestimo emprestimo = Emprestimo.buscaEmprestimo(cpf, idLivro);
+                            System.out.println(emprestimo.toString());
+                            System.out.print(" Renovar Empréstimo (1 -> Sim, 2 -> Não): ");
+                            if (Integer.valueOf(sc.nextLine()) == 1) {
+                                Emprestimo.renovarEmprestimo(cpf, idLivro);
+                            }
+                        } else {
+                            System.out.println(" Empréstimo não encontrado! ");
+                        }
+                        System.out.print(" Aperte Enter para Continuar! ");
+                        sc.nextLine();
                         break;
                     case 3:
                         LimpaTela();
@@ -1302,7 +1319,7 @@ public class MainProjeto {
                                 System.out.println(emprestimos.get(i).toString());
                             }
                         } else {
-                            System.out.println(" Sem Emprestimos Cadastrados! ");
+                            System.out.println(" Sem Emprestimos Atrazados! ");
                         }
                         System.out.print(" Aperte Enter para Continuar! ");
                         sc.nextLine();
