@@ -15,10 +15,10 @@ public class Livro {
     private String isbn;
     private int quantLivros;
     private int quantDisponivel;
-    private int quantEmprestada;
+    private int quantEmprestados;
 
     public Livro(int idLivro, String titulo, String genero, String autor, String dataPublicacao, String edicao,
-            String editora, String isbn, int quantLivros, int quantDisponivel, int quantEmprestada) {
+            String editora, String isbn, int quantLivros, int quantDisponivel, int quantEmprestados) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -29,11 +29,11 @@ public class Livro {
         this.isbn = isbn;
         this.quantLivros = quantLivros;
         this.quantDisponivel = quantDisponivel;
-        this.quantEmprestada = quantEmprestada;
+        this.quantEmprestados = quantEmprestados;
     }
 
     public Livro(int idLivro, String titulo, String genero, String autor, Date dataPublicacao, String edicao,
-            String editora, String isbn, int quantLivros, int quantDisponivel, int quantEmprestada) {
+            String editora, String isbn, int quantLivros, int quantDisponivel, int quantEmprestados) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
@@ -44,7 +44,7 @@ public class Livro {
         this.isbn = isbn;
         this.quantLivros = quantLivros;
         this.quantDisponivel = quantDisponivel;
-        this.quantEmprestada = quantEmprestada;
+        this.quantEmprestados = quantEmprestados;
     }
 
     /**
@@ -325,7 +325,7 @@ public class Livro {
         return "\n Livro: " + titulo + "\n Id: " + idLivro + "\n Autor: " + autor + "\n Gênero: " + genero +
                 "\n Data da Publicação: " + dataPublicacao + "\n Edição: " + edicao + "\n Editora: " +
                 editora + "\n ISBN: " + isbn + "\n Quantidade de Livros: " + quantLivros +
-                "\n Quantidade Disponivel: " + quantDisponivel + "\n Quantidade Emprestada: "+ quantEmprestada;
+                "\n Quantidade Disponivel: " + quantDisponivel + "\n Quantidade Emprestada: "+ quantEmprestados;
     }
 
     /**
@@ -423,12 +423,12 @@ public class Livro {
         this.quantDisponivel = quantDisponivel;
     }
 
-    public int getQuantEmprestada() {
-        return quantEmprestada;
+    public int getQuantEmprestados() {
+        return quantEmprestados;
     }
 
-    public void setQuantEmprestada(int quantEmprestada) {
-        this.quantEmprestada = quantEmprestada;
+    public void setQuantEmprestados(int quantEmprestados) {
+        this.quantEmprestados = quantEmprestados;
     }
 
 }
