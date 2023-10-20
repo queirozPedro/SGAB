@@ -167,7 +167,14 @@ public class Usuario {
         PreparedStatement state = null;
 
         try {
-            Emprestimo.finalizaEmprestimos(cpf);
+            if(Emprestimo.listarPorCpf(cpf) != null){
+                ArrayList<Emprestimo> emprestimos = Emprestimo.listarPorCpf(cpf);
+                for(int i = 0; i < emprestimos.size(); i++){
+                    Livro livro = Livro.buscaLivroId(emprestimos.get(i).getIdLivro());
+                    livro.editarLivro("quantEmprestados", livro.getQuantEmprestados() - 1);
+                }
+                Emprestimo.finalizaEmprestimos(cpf);
+            }
             // Remove o usuário da tabela Usuario
             String query = "DELETE From usuario where cpf = ?";
             state = connection.prepareStatement(query);

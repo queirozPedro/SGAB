@@ -170,28 +170,28 @@ public class Emprestimo {
             java.util.Date dataUtilprv = new java.util.Date(dataprv.getTime());
             java.util.Date dataUtilemp = new java.util.Date(dataemp.getTime());
 
-            long diferencaDias = TimeUnit.DAYS.convert(dataUtilprv.getTime() - dataUtilemp.getTime(), TimeUnit.MILLISECONDS);
-            if(diferencaDias == 7){
-                
+            long diferencaDias = TimeUnit.DAYS.convert(dataUtilprv.getTime() - dataUtilemp.getTime(),
+                    TimeUnit.MILLISECONDS);
+            if (diferencaDias == 7) {
+
                 // Adicionar 7 dias
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(dataUtilprv);
                 calendar.add(Calendar.DAY_OF_MONTH, 7);
                 java.util.Date novaDataUtil = calendar.getTime();
-                
+
                 // Converter de volta para java.sql.Date
                 java.sql.Date novaDataSql = new java.sql.Date(novaDataUtil.getTime());
-    
+
                 String query = "Update emprestimo SET dataPrevista = ? where cpf = ? AND idLivro = ?";
                 state = connection.prepareStatement(query);
                 state.setDate(1, novaDataSql);
                 state.setString(2, cpf);
                 state.setInt(3, idLivro);
                 state.executeUpdate();
-    
+
                 System.out.println(" Empréstimo Estendido por Mais 7 dias! ");
-            }
-            else{
+            } else {
                 System.out.println(" Não foi possível renovar o empréstimo! ");
             }
 
@@ -228,6 +228,47 @@ public class Emprestimo {
                 if (result.getDate(5) == null) {
                     emprestimos.add(emprestimo);
                 }
+            }
+
+            return emprestimos;
+
+        } catch (Exception e) {// se der erro, mostre qual foi o erro
+            System.out.println(e);
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (state != null) {
+                    state.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<Emprestimo> listarPorCpf(String cpf) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result = null;
+        ArrayList<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
+
+        try {
+            String query = "Select * from emprestimo where cpf = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            result = state.executeQuery();
+
+            while (result.next()) {
+                Emprestimo emprestimo = new Emprestimo(
+                        result.getString(1),
+                        result.getInt(2),
+                        result.getDate(3),
+                        result.getDate(4),
+                        result.getDate(5));
+                emprestimos.add(emprestimo);
             }
 
             return emprestimos;
@@ -340,7 +381,7 @@ public class Emprestimo {
         return null;
     }
 
-    public static void finalizaEmprestimos(String cpf){
+    public static void finalizaEmprestimos(String cpf) {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
 
@@ -356,9 +397,9 @@ public class Emprestimo {
             e.printStackTrace();
         }
 
-    
     }
-    public static void finalizaEmprestimos(int idLivro){
+
+    public static void finalizaEmprestimos(int idLivro) {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
 
@@ -368,7 +409,7 @@ public class Emprestimo {
             state.setInt(1, idLivro);
             state.executeUpdate();
 
-            System.out.println(" Usuário desvilculado com Empréstimos! ");
+            System.out.println(" Livro desvilculado com Empréstimos! ");
 
         } catch (Exception e) {
             e.printStackTrace();

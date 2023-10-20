@@ -226,7 +226,7 @@ public class Livro {
             String query = "Delete From livro where idLivro = ?";
             state = connection.prepareStatement(query);
             state.setInt(1, idLivro);
-            state.executeQuery();
+            state.executeUpdate();
             System.out.println(" Livro Excluido!");
 
         } catch (Exception e) {// se der erro, mostre qual foi
