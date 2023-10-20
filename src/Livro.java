@@ -48,21 +48,6 @@ public class Livro {
     }
 
     /**
-     * Recebe data como String e converte pra Date
-     * 
-     * @param dataPublicacao
-     */
-    public void setDataPublicacao(String dataPublicacao) {
-        try {
-            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date utilDate = formatoData.parse(dataPublicacao);
-            this.dataPublicacao = new Date(utilDate.getTime());
-        } catch (ParseException e) {
-            System.err.println("Erro ao converter a data");
-        }
-    }
-
-    /**
      * Método que cadastra uma instância de Livro no acervo da biblioteca.
      */
     public void cadastrarLivro() {
@@ -341,6 +326,21 @@ public class Livro {
                 "\n Data da Publicação: " + dataPublicacao + "\n Edição: " + edicao + "\n Editora: " +
                 editora + "\n ISBN: " + isbn + "\n Quantidade de Livros: " + quantLivros +
                 "\n Quantidade Disponivel: " + quantDisponivel + "\n Quantidade Emprestada: "+ quantEmprestada;
+    }
+
+    /**
+     * Recebe data como String e converte pra Date
+     * 
+     * @param dataPublicacao
+     */
+    public void setDataPublicacao(String dataPublicacao) {
+        try {
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date utilDate = formatoData.parse(dataPublicacao);
+            this.dataPublicacao = new Date(utilDate.getTime());
+        } catch (ParseException e) {
+            System.err.println("Erro ao converter a data");
+        }
     }
 
     public int getIdLivro() {

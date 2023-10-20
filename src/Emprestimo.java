@@ -35,7 +35,7 @@ public class Emprestimo {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
 
-        ArrayList<Emprestimo> emprestimos = buscaMeusEmprestimos(getCpf());
+        ArrayList<Emprestimo> emprestimos = listaAbertos(getCpf());
         if (emprestimos.size() < 3) {
             Livro livro = Livro.buscaLivroId(getIdLivro());
             if (livro.getQuantDisponivel() > 0) {
@@ -115,13 +115,19 @@ public class Emprestimo {
         return null;
     }
 
-    public static ArrayList<Emprestimo> buscaMeusEmprestimos(String cpf) {
+    /**
+     * Metodo que lista os Empréstimos em aberto de um Usuário.
+     * 
+     * @param cpf
+     * @return ArrayList<Emprestimo>
+     */
+    public static ArrayList<Emprestimo> listaAbertos(String cpf) {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
         ResultSet result = null;
         ArrayList<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
 
-        try {// se a conexão funcionar
+        try {
             String query = "Select * from emprestimo where cpf = ?";
             state = connection.prepareStatement(query);
             state.setString(1, cpf);
@@ -159,14 +165,11 @@ public class Emprestimo {
     }
 
     /**
-     * Cria uma lista emprestimo que irá armazenar os objetos de Emprestimo que
-     * foram criadas no banco, e depois de passar por cada um armazena na lista
-     * e retorna ela
+     * Método que retorna um ArrayList com todos os Empréstimos do Banco de Dados
      * 
-     * @param cpf
      * @return ArrayList<Emprestimo>
      */
-    public static ArrayList<Emprestimo> ListaEmprestimo() {
+    public static ArrayList<Emprestimo> listaTodos() {
         ArrayList<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
@@ -175,6 +178,53 @@ public class Emprestimo {
         try {
             String query = "SELECT * FROM emprestimo";
             state = connection.prepareStatement(query);
+            result = state.executeQuery();
+
+            while (result.next()) {
+                Emprestimo emprestimo = new Emprestimo(
+                        result.getString(1),
+                        result.getInt(2),
+                        result.getDate(3),
+                        result.getDate(4),
+                        result.getDate(5));
+                emprestimos.add(emprestimo);
+            }
+            return emprestimos;
+
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+                if (state != null) {
+                    state.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Método que lista todos os emprestimos Atrazados
+     * 
+     * @return ArrayList<Emprestimo>
+     */
+    public static ArrayList<Emprestimo> listaAtrazados() {
+        ArrayList<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result = null;
+
+        try {
+            java.util.Date dataAtual = new java.util.Date();
+            java.sql.Date dataSql = new java.sql.Date(dataAtual.getTime());
+            String query = "SELECT * FROM emprestimo WHERE dataPrevista < ? AND dataDevolucao IS NULL";
+            state = connection.prepareStatement(query);
+            state.setDate(1, dataSql);
             result = state.executeQuery();
 
             while (result.next()) {
@@ -239,7 +289,7 @@ public class Emprestimo {
             }
         }
     }
-    
+
     public void setDataEmprestimo(String dataEmprestimo) {
         try {
             SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
@@ -249,8 +299,7 @@ public class Emprestimo {
             System.err.println("Erro ao converter a data");
         }
     }
-    
-    
+
     public void setDataPrevista(String dataPrevista) {
         try {
             SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
@@ -260,7 +309,7 @@ public class Emprestimo {
             System.err.println("Erro ao converter a data");
         }
     }
-    
+
     public void setDataDevolucao(String dataDevolucao) {
         if (dataDevolucao == null) {
             try {
@@ -272,11 +321,11 @@ public class Emprestimo {
             }
         }
     }
-    
+
     public String getCpf() {
         return cpf;
     }
-    
+
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
@@ -288,7 +337,6 @@ public class Emprestimo {
     public void setIdLivro(int idLivro) {
         this.idLivro = idLivro;
     }
-
 
     public java.sql.Date getDataEmprestimo() {
         return dataEmprestimo;
@@ -316,8 +364,13 @@ public class Emprestimo {
 
     @Override
     public String toString() {
-        return "Emprestimo [cpf=" + cpf + ", idLivro=" + idLivro + ", dataEmprestimo=" + dataEmprestimo
-                + ", dataPrevista=" + dataPrevista + ", dataDevolucao=" + dataDevolucao + "]";
+        if(dataDevolucao != null){
+        return "\n Cpf: " + cpf + "\n idLivro: " + idLivro + "\n Data do Emprestimo: " + dataEmprestimo
+                + "\n Data Prevista para Entrega: " + dataPrevista + "\n Data da Devolucao: " + dataDevolucao;
+        }
+        else{
+            return "\n Cpf: " + cpf + "\n idLivro: " + idLivro + "\n Data do Emprestimo: " + dataEmprestimo
+                + "\n Data Prevista para Entrega: " + dataPrevista + "\n Ainda não devolvido! ";
+        }
     }
-
 }

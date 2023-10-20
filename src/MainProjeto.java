@@ -213,14 +213,14 @@ public class MainProjeto {
                         System.out.println(" < Pesquisar Livros > ");
                         System.out.print(" > ");
                         listaLivro = Livro.pesquisarLivro(sc.nextLine());
-                        if (listaLivro != null) {
+                        if (listaLivro.size() != 0) {
                             for (int i = 0; i < listaLivro.size(); i++) {
                                 System.out.println(listaLivro.get(i).toString() + "\n");
                             }
                         } else
                             System.out.println(" Livro não Encontrado! ");
 
-                        System.out.print(" Aperte Enter para Continuar");
+                        System.out.print("\n Aperte Enter para Continuar! ");
                         sc.nextLine();
 
                         break;
@@ -269,7 +269,7 @@ public class MainProjeto {
                     case 4:
                         LimpaTela();
                         System.out.println(" < Meus Emprestimos > ");
-                        ArrayList<Emprestimo> emprestimos = Emprestimo.buscaMeusEmprestimos(usuario.getCpf());
+                        ArrayList<Emprestimo> emprestimos = Emprestimo.listaAbertos(usuario.getCpf());
                         if (emprestimos.size() != 0) {
                             for (int i = 0; i < emprestimos.size(); i++) {
                                 System.out.println(emprestimos.get(i).toString());
@@ -1090,7 +1090,7 @@ public class MainProjeto {
                             }
                         } else
                             System.out.println("\n Nenhum livro encontrado! ");
-                        System.out.print(" Aperte Enter para Continuar");
+                        System.out.print("\n Aperte Enter para Continuar! ");
                         sc.nextLine();
                         break;
                     case 4:
@@ -1248,9 +1248,9 @@ public class MainProjeto {
                 System.out.println(" < Manter Emprestimo >");
                 System.out.println(" 1 -> Receber Livro");
                 System.out.println(" 2 -> -Extender Prazo");
-                System.out.println(" 3 -> Listar Emprestimos por Usuário");
-                System.out.println(" 4 -> -Listar Emprestimos Atrazados");
-                System.out.println(" 5 -> Listar Emprestimos Gerais");
+                System.out.println(" 3 -> Listar por Usuário");
+                System.out.println(" 4 -> Listar Atrazados");
+                System.out.println(" 5 -> Listar Emprestimos");
                 System.out.println(" 0 -> Sair");
                 System.out.print(" > ");
                 switch (Integer.valueOf(sc.nextLine())) {
@@ -1275,16 +1275,15 @@ public class MainProjeto {
                         sc.nextLine();
                         break;
                     case 2:
-
+                        
                         break;
                     case 3:
                         LimpaTela();
                         System.out.println(" < Empréstimos por Usuário > ");
                         System.out.print(" Cpf: ");
                         cpf = sc.nextLine();
-                        emprestimos = Emprestimo.buscaMeusEmprestimos(cpf);
+                        emprestimos = Emprestimo.listaAbertos(cpf);
                         if (emprestimos.size() != 0) {
-                            System.out.println(" - Empréstimos -");
                             for (int i = 0; i < emprestimos.size(); i++) {
                                 System.out.println(emprestimos.get(i).toString());
                             }
@@ -1295,27 +1294,29 @@ public class MainProjeto {
                         sc.nextLine();
                         break;
                     case 4:
-                        // LimpaTela();
-                        // System.out.println(" < Empréstimos Atrazados > ");
-                        // emprestimos = Emprestimo.listarAtrazados();
-                        // if (emprestimos.size() != 0) {
-                        // System.out.println(" - Empréstimos -");
-                        // for (int i = 0; i < emprestimos.size(); i++) {
-                        // System.out.println(emprestimos.get(i).toString());
-                        // }
-                        // } else {
-                        // System.out.println(" Sem Emprestimos Cadastrados! ");
-                        // }
-                        // System.out.print(" Aperte Enter para Continuar! ");
-                        // sc.nextLine();
-                        // break;
-                        System.out.println(" Não Implemetado! ");
+                        LimpaTela();
+                        System.out.println(" < Empréstimos Atrazados > ");
+                        emprestimos = Emprestimo.listaAtrazados();
+                        if (emprestimos.size() != 0) {
+                            for (int i = 0; i < emprestimos.size(); i++) {
+                                System.out.println(emprestimos.get(i).toString());
+                            }
+                        } else {
+                            System.out.println(" Sem Emprestimos Cadastrados! ");
+                        }
+                        System.out.print(" Aperte Enter para Continuar! ");
+                        sc.nextLine();
+                        break;
                     case 5:
                         LimpaTela();
-                        emprestimos = Emprestimo.ListaEmprestimo();
+                        emprestimos = Emprestimo.listaTodos();
                         System.out.println(" < Listar Emprestimos >");
-                        for (int i = 0; i < emprestimos.size(); i++) {
-                            System.out.println(emprestimos.get(i).toString());
+                        if (emprestimos.size() != 0) {
+                            for (int i = 0; i < emprestimos.size(); i++) {
+                                System.out.println(emprestimos.get(i).toString());
+                            }
+                        } else {
+                            System.out.println(" Nenhum Empréstimo Cadastrado! ");
                         }
                         System.out.print(" Aperte Enter Para Continuar! ");
                         sc.nextLine();
